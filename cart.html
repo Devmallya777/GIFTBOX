@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | ZARIA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="announcement-bar">
+        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA 
+    </div>
+    <header class="header">
+        <div class="logo-container">
+            <div class="logo-circle">Z</div>
+            <div class="logo-text">
+                <h1>ZARIA</h1>
+                <span>The Art of Gifting</span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="products.html">Shop</a>
+            <a href="#">Bestsellers</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <div class="header-icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-regular fa-heart"></i>
+            <a href="cart.html" style="color: inherit;"><i class="fa-solid fa-bag-shopping"></i></a>
+            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;">🌙</button>
+        </div>
+    </header>
+    <button onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
+    <main class="cart-wrapper">
+        <h2 class="cart-title">Your Shopping Cart</h2>
+        
+        <div class="cart-layout">
+            <div class="cart-items-container">
+                
+                <div class="cart-header">
+                    <span class="col-product">Product</span>
+                    <span class="col-quantity">Quantity</span>
+                    <span class="col-total">Total</span>
+                </div>
+
+                <div class="cart-item">
+                    <div class="item-info">
+                        <div class="item-image" style="background-color: #f7a8b8;"></div>
+                        <div class="item-details">
+                            <h4>The Midnight Velvet Box</h4>
+                            <p class="item-price">₹3,499</p>
+                            <button class="btn-remove">Remove</button>
+                        </div>
+                    </div>
+                    <div class="item-quantity">
+                        <div class="quantity-selector">
+                            <button class="qty-btn">-</button>
+                            <input type="number" value="1" min="1" class="qty-input">
+                            <button class="qty-btn">+</button>
+                        </div>
+                    </div>
+                    <div class="item-total">
+                        <p>₹3,499</p>
+                    </div>
+                </div>
+
+                <div class="cart-item">
+                    <div class="item-info">
+                        <div class="item-image" style="background-color: #e4c5c4;"></div>
+                        <div class="item-details">
+                            <h4>The Golden Hour Hamper</h4>
+                            <p class="item-price">₹5,200</p>
+                            <button class="btn-remove">Remove</button>
+                        </div>
+                    </div>
+                    <div class="item-quantity">
+                        <div class="quantity-selector">
+                            <button class="qty-btn">-</button>
+                            <input type="number" value="1" min="1" class="qty-input">
+                            <button class="qty-btn">+</button>
+                        </div>
+                    </div>
+                    <div class="item-total">
+                        <p>₹5,200</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="cart-summary">
+                <h3>Order Summary</h3>
+                
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹8,699</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: green;">Free</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (GST 18%)</span>
+                    <span>₹1,565</span>
+                </div>
+                
+                <div class="promo-box">
+                    <input type="text" placeholder="Enter Promo Code">
+                    <button>Apply</button>
+                </div>
+
+                <div class="summary-total">
+                    <span>Estimated Total</span>
+                    <span>₹10,264</span>
+                </div>
+
+                <a href="checkout.html" class="btn-checkout">Proceed to Checkout <i class="fa-solid fa-lock"></i></a>
+                
+                <div class="secure-checkout">
+                    <i class="fa-solid fa-shield-halved"></i> Secure Encrypted Checkout
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="zaria-footer">
+        <div class="footer-bottom" style="padding-top: 40px; text-align: center;">
+            <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
