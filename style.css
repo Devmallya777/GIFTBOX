@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /* =========================================
    1. GLOBAL VARIABLES & RESET
    ========================================= */
@@ -2054,7 +2054,7 @@ body.wishlist-body {
 #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 99999; }
 .toast { background: var(--bg-wine); color: white; padding: 15px 25px; margin-top: 10px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); animation: slideIn 0.3s ease-out; }
 @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-=======
+
 /* =========================================
    1. GLOBAL VARIABLES & RESET
    ========================================= */
@@ -3800,4 +3800,4 @@ body.faq-body {
 .btn-go-back:hover {
     color: var(--bg-wine);
 }
->>>>>>> 0260079728ac1199b6244234002175db1949fb84
+
