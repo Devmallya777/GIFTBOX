@@ -1,7 +1,6 @@
 /* ==========================================================
    ZARIA ULTIMATE BACKEND (server.js)
    ========================================================== */
-
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
@@ -10,6 +9,7 @@ const path = require("path");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 
+// --- INITIALIZATION ---
 const app = express();
 
 // --- MIDDLEWARE ---
@@ -17,6 +17,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Serve static frontend files
+app.use(express.static(__dirname));
 
 // --- MONGODB CONNECTION ---
 mongoose.connect(process.env.MONGO_URI)
@@ -40,8 +42,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // --- MODELS ---
+// Note: Changed field name 'collection' to 'categoryName' to avoid MongoDB reserved word conflict
 const Product = mongoose.model("Product", new mongoose.Schema({
-    name: String, description: String, category: String, collection: String,
+    name: String, description: String, category: String, categoryName: String,
     price: Number, oldPrice: Number, discount: Number, rating: Number,
     reviews: Number, image: String, gallery: [String], featured: Boolean,
     trending: Boolean, stock: Number, sku: String, createdAt: { type: Date, default: Date.now }
@@ -60,6 +63,11 @@ const Order = mongoose.model("Order", new mongoose.Schema({
 }));
 
 // --- API ROUTES ---
+
+// Root route
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
 
 // Products
 app.get("/api/products", async (req, res) => {
@@ -109,5 +117,5 @@ app.post("/api/order", async (req, res) => {
 });
 
 // --- SERVER START ---
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log("ZARIA Server Running on port: " + PORT));
