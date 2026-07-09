@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -289,4 +290,208 @@
 
     <script src="script.js"></script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | ZARIA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="checkout-body">
+
+    <!-- Simplified Checkout Header (NO NAVIGATION LINKS!) -->
+    <header class="header" style="justify-content: center; padding: 25px 5%;">
+        <div class="logo-container">
+            <div class="logo-circle">Z</div>
+            <div class="logo-text">
+                <h1>ZARIA</h1>
+                <span>Secure Checkout</span>
+            </div>
+        </div>
+    </header>
+    <button onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
+    <main class="checkout-wrapper">
+        <div class="checkout-layout">
+            
+            <!-- Left Side: Forms -->
+            <div class="checkout-forms">
+                
+                <!-- Contact Info -->
+                <section class="form-section">
+                    <h3>Contact Information</h3>
+                    <div class="input-group">
+                        <input type="email" placeholder="Email Address" value="user@example.com" required>
+                    </div>
+                    <label class="custom-checkbox" style="margin-top: 10px;">
+                        <input type="checkbox" checked>
+                        <span class="checkmark"></span>
+                        Email me with news and exclusive offers
+                    </label>
+                </section>
+
+                <!-- Shipping Details -->
+                <section class="form-section">
+                    <h3>Shipping Address</h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="text" placeholder="First Name" value="Devmallya" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Street Address (e.g., House No, Street name)" required>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="text" placeholder="City" value="Durgapur" required>
+                        </div>
+                        <div class="input-group">
+                            <select required>
+                                <option value="WB" selected>West Bengal</option>
+                                <option value="MH">Maharashtra</option>
+                                <option value="DL">Delhi</option>
+                                <option value="KA">Karnataka</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" placeholder="PIN Code" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="tel" placeholder="Phone Number" required>
+                    </div>
+                </section>
+
+                <!-- Payment Details -->
+                <section class="form-section">
+                    <h3>Payment</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">All transactions are secure and encrypted.</p>
+                    
+                    <div class="payment-methods">
+                        <!-- Credit Card Option -->
+                        <div class="payment-option active-payment">
+                            <label class="radio-label">
+                                <input type="radio" name="payment" checked>
+                                <span>Credit / Debit Card</span>
+                                <div class="payment-icons-small">
+                                    <i class="fa-brands fa-cc-visa"></i>
+                                    <i class="fa-brands fa-cc-mastercard"></i>
+                                </div>
+                            </label>
+                            <div class="payment-details">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Card Number">
+                                </div>
+                                <div class="input-row">
+                                    <div class="input-group"><input type="text" placeholder="MM / YY"></div>
+                                    <div class="input-group"><input type="text" placeholder="CVV"></div>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Name on Card">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- UPI Option -->
+                        <div class="payment-option">
+                            <label class="radio-label">
+                                <input type="radio" name="payment">
+                                <span>UPI (Google Pay, PhonePe, Paytm)</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <button class="btn-pay-now">Pay ₹10,264 Now <i class="fa-solid fa-lock"></i></button>
+
+            </div>
+
+            <!-- Right Side: Order Summary -->
+            <aside class="checkout-summary">
+                <div class="checkout-item-list">
+                    <!-- Item 1 -->
+                    <div class="checkout-item">
+                        <div class="checkout-item-img">
+                            <div class="qty-badge">1</div>
+                            <div class="img-box" style="background-color: #f7a8b8;"></div>
+                        </div>
+                        <div class="checkout-item-info">
+                            <h4>The Midnight Velvet Box</h4>
+                        </div>
+                        <p class="checkout-item-price" data-price="3499">₹3,499</p>
+                        <button class="remove-checkout-item" style="background:none; border:none; color:red; cursor:pointer; margin-left:10px;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+
+                    <div class="checkout-item">
+                        <div class="checkout-item-img">
+                            <div class="qty-badge">1</div>
+                            <div class="img-box" style="background-color: #e4c5c4;"></div>
+                        </div>
+                        <div class="checkout-item-info">
+                            <h4>The Golden Hour Hamper</h4>
+                        </div>
+                        <p class="checkout-item-price" data-price="5200">₹5,200</p>
+                        <button class="remove-checkout-item" style="background:none; border:none; color:red; cursor:pointer; margin-left:10px;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                        <div class="checkout-item-info">
+                            <h4>The Midnight Velvet Box</h4>
+                        </div>
+                        <p class="checkout-item-price">₹3,499</p>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="checkout-item">
+                        <div class="checkout-item-img">
+                            <div class="qty-badge">1</div>
+                            <div class="img-box" style="background-color: #e4c5c4;"></div>
+                        </div>
+                        <div class="checkout-item-info">
+                            <h4>The Golden Hour Hamper</h4>
+                        </div>
+                        <p class="checkout-item-price">₹5,200</p>
+                    </div>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹8,699</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: green;">Free</span>
+                </div>
+                <div class="summary-row">
+                    <span>Taxes</span>
+                    <span>₹1,565</span>
+                </div>
+                
+                <div class="summary-divider"></div>
+
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span style="font-size: 1.5rem;">₹10,264</span>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="zaria-footer">
+        <div class="footer-bottom" style="padding-top: 40px; text-align: center;">
+            <p>&copy; 2026 ZARIA. All Rights Reserved. Secure Checkout processed via Stripe.</p>
+        </div>
+    </footer>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script src="script.js"></script>
+</body>
+>>>>>>> 0260079728ac1199b6244234002175db1949fb84
 </html>
