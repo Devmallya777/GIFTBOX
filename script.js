@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-/* ==========================================================
-   ZARIA ULTIMATE FUNCTIONAL SCRIPT (script.js)
-   ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -161,7 +157,7 @@ document.querySelectorAll('.qty-btn').forEach(btn => {
         updateCartTotals(); 
     });
 });
-=======
+
 /* ==========================================
    ZARIA ULTIMATE FUNCTIONAL SCRIPT (script.js)
    ========================================== */
@@ -370,6 +366,4 @@ document.addEventListener("DOMContentLoaded", () => {
             rzp1.open();
         });
     }
-
->>>>>>> 0260079728ac1199b6244234002175db1949fb84
 });
