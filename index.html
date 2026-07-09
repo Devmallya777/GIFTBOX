@@ -287,33 +287,49 @@
 </head>
 <body>
 
-    <div class="announcement-bar">
-        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA &nbsp;&nbsp;&nbsp;+ SAME-DAY DISPATCH ON SELECT CITIES &nbsp;&nbsp;&nbsp;+ PERSONALISED GIFTING AVAILABLE
-    </div>
-
     <header class="header">
         <div class="logo-container">
-            <div class="logo-circle">Z</div>
-            <div class="logo-text">
-                <h1>ZARIA</h1>
-                <span>The Art of Gifting</span>
-            </div>
+            <a href="index.html" style="display: block; text-decoration: none;">
+                <img src="logo.png" alt="ZARIA - The Art of Gifting" class="site-logo">
+            </a>
         </div>
 
         <nav class="nav-links">
-            <a href="#" class="active">Home</a>
+            <a href="index.html">Home</a>
             <a href="products.html">Shop</a>
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
         </nav>
 
-        <div class="header-icons">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-regular fa-heart"></i>
-            <i class="fa-solid fa-bag-shopping"></i>
-            <i class="fa-regular fa-user"></i>
+        <div class="header-icons" style="display: flex; gap: 20px; align-items: center; font-size: 1.2rem;">
+            <div class="search-container" style="display: flex; align-items: center; position: relative;">
+                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts...">
+                <button id="nav-search-btn" title="Search" style="background: none; border: none; color: inherit; cursor: pointer; font-size: 1.2rem; padding: 0;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+            
+            <a href="wishlist.html" title="Wishlist" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-heart"></i></a>
+            <a href="cart.html" title="Shopping Cart" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-bag-shopping"></i></a>
+            <a href="login.html" title="My Account" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-user"></i></a>
+            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit; margin-left: 10px;">🌙</button>
         </div>
     </header>
+    <!-- ========================================== -->
+    <!-- HOMEPAGE MOVING NEWS TICKER -->
+    <!-- ========================================== -->
+    <div class="news-ticker-container">
+        <div class="news-ticker-content">
+            <span>🌟 LATEST NEWS: ZARIA featured in Vogue India's 'Top Luxury Gifts 2026' 🌟</span>
+            <span>✦</span>
+            <span>Pre-book your Winter 2026 Wedding Hampers now and get a complimentary silk ribbon upgrade!</span>
+            <span>✦</span>
+            <span>Corporate Gifting: Bulk order discounts now live for the upcoming festive season!</span>
+            <span>✦</span>
+            <!-- We repeat the first one so the loop looks endless on massive screens! -->
+            <span>🌟 LATEST NEWS: ZARIA featured in Vogue India's 'Top Luxury Gifts 2026' 🌟</span>
+        </div>
+    </div>
 
     <section class="hero">
         <div class="hero-left">
@@ -322,8 +338,10 @@
             <p class="hero-desc">Handcrafted hampers for the moments that matter — weddings, festivals, milestones, and everything in between. Each ZARIA box is composed with intention, tied with silk, and delivered with warmth.</p>
             
             <div class="hero-buttons">
-                <a href="#" class="btn btn-primary">Explore Collection &rarr;</a>
-                <a href="#" class="btn btn-secondary">Our Story</a>
+                <!-- Changed href from # to products.html -->
+                <a href="products.html" class="btn btn-primary">Explore Collection &rarr;</a>
+                <!-- Changed href from # to about.html -->
+                <a href="about.html" class="btn btn-secondary">Our Story</a>
             </div>
 
             <div class="hero-stats">
@@ -344,7 +362,7 @@
 
         <div class="hero-right">
             <div class="center-badge">
-                <div class="logo-circle" style="background:transparent; border: 1px solid var(--text-gold);">Z</div>
+                <img src="logo.png" alt="ZARIA Logo" class="logo-img">
             </div>
             <div class="product-image-container">
                 <div class="floating-card">
@@ -357,6 +375,82 @@
             </div>
         </div>
     </section>
+    <!-- ========================================== -->
+    <!-- GLOBAL MASSIVE FOOTER -->
+    <!-- ========================================== -->
+    <footer class="zaria-footer">
+        <div class="footer-top">
+            <div class="footer-column brand-column">
+                <div class="logo-container" style="margin-bottom: 20px;">
+                    <img src="logo.png" alt="ZARIA Logo" class="logo-img">
+                    <div class="logo-text">
+                        <h1 style="color: var(--text-gold);">ZARIA</h1>
+                    </div>
+                </div>
+                <p>The Art of Gifting. Handcrafted hampers for the moments that matter, curated with intention and delivered with warmth.</p>
+                <div class="social-icons">
+                    <a href="#" onclick="alert('Opening Facebook...')"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" onclick="alert('Opening Instagram...')"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" onclick="alert('Opening X/Twitter...')"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" onclick="alert('Opening YouTube...')"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="#" onclick="alert('Careers page coming soon!')">Careers</a></li>
+                    <li><a href="#" onclick="alert('Press page coming soon!')">Press</a></li>
+                    <li><a href="#" onclick="alert('Investors page coming soon!')">Investors</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="products.html">All Products</a></li>
+                    <li><a href="products.html">Categories</a></li>
+                    <li><a href="products.html">Deals</a></li>
+                    <li><a href="#" onclick="alert('Digital Gift Cards coming soon!')">Gift Cards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="faq.html">Help Center</a></li>
+                    <li><a href="faq.html">Shipping Details</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column newsletter-column">
+                <h4>Stay in the loop</h4>
+                <p>Subscribe for exclusive updates, new arrivals, and insider-only discounts.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <div class="payment-icons">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-cc-amex"></i>
+                    <i class="fa-brands fa-cc-paypal"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
+            <div class="legal-links">
+                <a href="#" onclick="alert('Privacy Policy: We keep your data safe and luxurious.')">Privacy Policy</a>
+                <a href="#" onclick="alert('Terms & Conditions: Stay classy, gift beautiful things.')">Terms & Conditions</a>
+                <a href="#" onclick="alert('Cookie Policy: We only use the delicious kind.')">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
     
     <script src="script.js"></script>
 </body>

@@ -18,24 +18,31 @@
     </div>
     <header class="header">
         <div class="logo-container">
-            <div class="logo-circle">Z</div>
-            <div class="logo-text">
-                <h1>ZARIA</h1>
-                <span>The Art of Gifting</span>
-            </div>
+            <a href="index.html" style="display: block; text-decoration: none;">
+                <img src="logo.png" alt="ZARIA - The Art of Gifting" class="site-logo">
+            </a>
         </div>
+
         <nav class="nav-links">
             <a href="index.html">Home</a>
-            <a href="products.html" class="active">Shop</a>
-            <a href="#">Bestsellers</a>
+            <a href="products.html">Shop</a>
+            <a href="products.html">Bestsellers</a>
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
         </nav>
-        <div class="header-icons">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-regular fa-heart"></i>
-            <i class="fa-solid fa-bag-shopping"></i>
-            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;">🌙</button>
+
+        <div class="header-icons" style="display: flex; gap: 20px; align-items: center; font-size: 1.2rem;">
+            <div class="search-container" style="display: flex; align-items: center; position: relative;">
+                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts...">
+                <button id="nav-search-btn" title="Search" style="background: none; border: none; color: inherit; cursor: pointer; font-size: 1.2rem; padding: 0;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+            
+            <a href="wishlist.html" title="Wishlist" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-heart"></i></a>
+            <a href="cart.html" title="Shopping Cart" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-bag-shopping"></i></a>
+            <a href="login.html" title="My Account" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-user"></i></a>
+            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit; margin-left: 10px;">🌙</button>
         </div>
     </header>
     <button onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
@@ -84,35 +91,123 @@
                     <li><i class="fa-solid fa-check"></i> 100% plastic-free packaging</li>
                 </ul>
 
-                <!-- Add to Cart Actions -->
-                <div class="purchase-actions">
-                    <div class="quantity-selector">
-                        <button class="qty-btn">-</button>
-                        <input type="number" value="1" min="1" class="qty-input">
-                        <button class="qty-btn">+</button>
-                    </div>
+                <!-- QUANTITY AND BUTTONS -->
+            <div class="product-actions" style="margin-top: 20px;">
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <!-- Add to Cart Button -->
+                    <button class="btn-add-cart" style="flex: 1; padding: 15px; background: transparent; border: 1px solid var(--bg-wine); color: var(--bg-wine); font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;">
+                        Add to Cart
+                    </button>
                     
-                    <div class="action-buttons">
-                        <button class="btn-add-cart">Add to Cart</button>
-                        <button class="btn-buy-now">Buy It Now</button>
-                    </div>
+                    <!-- Buy it Now Button -->
+                    <button class="btn-buy-now" style="flex: 1; padding: 15px; background: var(--bg-wine); border: 1px solid var(--bg-wine); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;">
+                        Buy it Now
+                    </button>
                 </div>
 
-                <button class="btn-wishlist"><i class="fa-regular fa-heart"></i> Add to Wishlist</button>
+                <!-- Add to Wishlist Link -->
+                <a href="#" class="btn-add-wishlist" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa-regular fa-heart"></i> Add to Wishlist
+                </a>
+            </div>
 
-                <!-- Accordion details (Extra info) -->
-                <div class="product-accordion">
-                    <div class="accordion-item">
-                        <h4>What's Inside? <i class="fa-solid fa-chevron-down"></i></h4>
-                    </div>
-                    <div class="accordion-item">
-                        <h4>Shipping & Returns <i class="fa-solid fa-chevron-down"></i></h4>
-                    </div>
-                </div>
+                
+
+                <!-- Add this wrapper around your accordions -->
+    <div class="accordion-wrapper">
+        
+        <button class="accordion">What's Inside? <i class="fa-solid fa-chevron-down"></i></button>
+        <div class="panel">
+            <p style="padding: 15px 0;">Each Midnight Velvet Box contains 12 artisan dark chocolates, one vintage brass candle holder, and a signature ZARIA hand-tied silk ribbon.</p>
+        </div>
+
+        <button class="accordion">Shipping & Returns <i class="fa-solid fa-chevron-down"></i></button>
+        <div class="panel">
+            <p style="padding: 15px 0;">We offer free shipping on all orders over ₹2,499. Returns are accepted within 7 days of delivery if the item is in original condition.</p>
+        </div>
+        
+    </div>
 
             </div>
         </div>
     </main>
+    <!-- ========================================== -->
+    <!-- GLOBAL MASSIVE FOOTER -->
+    <!-- ========================================== -->
+    <footer class="zaria-footer">
+        <div class="footer-top">
+            <div class="footer-column brand-column">
+                <div class="logo-container" style="margin-bottom: 20px;">
+                    <img src="logo.png" alt="ZARIA Logo" class="logo-img">
+                    <div class="logo-text">
+                        <h1 style="color: var(--text-gold);">ZARIA</h1>
+                    </div>
+                </div>
+                <p>The Art of Gifting. Handcrafted hampers for the moments that matter, curated with intention and delivered with warmth.</p>
+                <div class="social-icons">
+                    <a href="#" onclick="alert('Opening Facebook...')"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" onclick="alert('Opening Instagram...')"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" onclick="alert('Opening X/Twitter...')"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" onclick="alert('Opening YouTube...')"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="#" onclick="alert('Careers page coming soon!')">Careers</a></li>
+                    <li><a href="#" onclick="alert('Press page coming soon!')">Press</a></li>
+                    <li><a href="#" onclick="alert('Investors page coming soon!')">Investors</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="products.html">All Products</a></li>
+                    <li><a href="products.html">Categories</a></li>
+                    <li><a href="products.html">Deals</a></li>
+                    <li><a href="#" onclick="alert('Digital Gift Cards coming soon!')">Gift Cards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="faq.html">Help Center</a></li>
+                    <li><a href="faq.html">Shipping Details</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column newsletter-column">
+                <h4>Stay in the loop</h4>
+                <p>Subscribe for exclusive updates, new arrivals, and insider-only discounts.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <div class="payment-icons">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-cc-amex"></i>
+                    <i class="fa-brands fa-cc-paypal"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
+            <div class="legal-links">
+                <a href="#" onclick="alert('Privacy Policy: We keep your data safe and luxurious.')">Privacy Policy</a>
+                <a href="#" onclick="alert('Terms & Conditions: Stay classy, gift beautiful things.')">Terms & Conditions</a>
+                <a href="#" onclick="alert('Cookie Policy: We only use the delicious kind.')">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

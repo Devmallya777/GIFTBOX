@@ -11,6 +11,63 @@
     --shop-text: #333333;
     --border-color: #e0e0e0;
 }
+/* =========================================
+   DARK MODE OVERRIDES (DAY/NIGHT)
+   ========================================= */
+
+/* 1. Swap the main CSS Variables when Night Mode is active */
+body.dark-mode {
+    --bg-wine: #1a080c;         /* Ultra-dark wine, almost black */
+    --bg-wine-dark: #000000;    /* Pure black for depth */
+    --text-pink: #fcebeb;       /* Brighter pink for contrast */
+    --text-gold: #e6b87d;       /* Brighter gold for visibility */
+    --text-muted: #b38b93;      
+    --shop-bg: #121212;         /* Deep charcoal instead of cream */
+    --shop-text: #f0f0f0;       /* Off-white text instead of dark grey */
+    --border-color: #333333;    /* Dark borders */
+}
+
+/* 2. Fix specific white boxes (Login, Contact, Cart, FAQ) */
+body.dark-mode .auth-box,
+body.dark-mode .cart-summary,
+body.dark-mode .contact-form-container,
+body.dark-mode .value-card,
+body.dark-mode .panel,
+body.dark-mode .accordion,
+body.dark-mode .payment-details {
+    background-color: #1e1e1e !important;
+    border-color: var(--border-color) !important;
+    color: var(--shop-text) !important;
+}
+
+/* 3. Fix Inputs and Textareas so they aren't blinding white */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border-color: var(--border-color);
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #888888;
+}
+
+/* 4. Fix specific text colors for readability */
+body.dark-mode .auth-subtitle,
+body.dark-mode .info-block p,
+body.dark-mode .panel p,
+body.dark-mode .item-price {
+    color: #aaaaaa;
+}
+
+body.dark-mode .cart-title,
+body.dark-mode .checkout-forms h3,
+body.dark-mode .auth-title,
+body.dark-mode .contact-header h2 {
+    color: var(--text-gold); /* Make headers gold in dark mode for luxury vibe */
+}
 
 * {
     margin: 0;
@@ -62,17 +119,15 @@ body:has(.shop-wrapper) {
     gap: 15px;
 }
 
-.logo-circle {
-    width: 40px;
-    height: 40px;
-    background-color: var(--text-gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    color: var(--bg-wine);
-    font-weight: bold;
+/* =========================================
+   ZARIA OFFICIAL BRAND LOGO
+   ========================================= */
+.logo-img {
+    width: 50px;       /* Keeps the logo the perfect size for the header */
+    height: 50px;
+    border-radius: 50%; /* Cuts off the white background to make it perfectly round! */
+    object-fit: cover;
+    border: 1px solid var(--text-gold); /* Adds a luxurious gold ring around the image */
 }
 
 .logo-text h1 {
@@ -1743,3 +1798,258 @@ body.faq-body {
 .btn-go-back:hover {
     color: var(--bg-wine);
 }
+/* =========================================
+   14. ADVANCED EXPANDING SEARCH BAR
+   ========================================= */
+.nav-search-input {
+    width: 0;
+    opacity: 0;
+    padding: 0;
+    border: none;
+    border-bottom: 1px solid var(--text-gold);
+    background: transparent;
+    color: var(--text-pink);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    transition: width 0.4s ease, opacity 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+    outline: none;
+}
+
+/* Make it look good in the Shop (Cream background) */
+body:has(.shop-wrapper) .nav-search-input,
+body.cart-body .nav-search-input,
+body.checkout-body .nav-search-input {
+    color: var(--shop-text);
+    border-bottom: 1px solid var(--bg-wine);
+}
+
+.nav-search-input::placeholder {
+    color: rgba(228, 197, 196, 0.6);
+}
+
+body:has(.shop-wrapper) .nav-search-input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+/* The magic class that JavaScript triggers */
+.nav-search-input.active {
+    width: 180px;
+    opacity: 1;
+    padding: 5px;
+    margin-right: 10px;
+}
+/* =========================================
+   15. WISHLIST PAGE
+   ========================================= */
+body.wishlist-body {
+    background: var(--shop-bg);
+    color: var(--shop-text);
+}
+
+.wishlist-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 5% 120px;
+    min-height: 60vh;
+}
+
+.wishlist-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--bg-wine-dark);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.wishlist-card {
+    position: relative;
+}
+
+/* The circular red 'X' button */
+.btn-remove-wishlist {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    color: #ff4444;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.btn-remove-wishlist:hover {
+    background: #ff4444;
+    color: white;
+}
+
+.btn-move-cart {
+    width: 100%;
+    padding: 12px;
+    background-color: transparent;
+    color: var(--bg-wine);
+    border: 1px solid var(--bg-wine);
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-move-cart:hover {
+    background-color: var(--bg-wine);
+    color: #fff;
+}
+/* =========================================
+   16. HOMEPAGE MOVING NEWS TICKER
+   ========================================= */
+.news-ticker-container {
+    background-color: var(--text-gold); /* A nice contrasting gold bar */
+    color: var(--bg-wine-dark);
+    padding: 12px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.news-ticker-content {
+    display: inline-block;
+    padding-left: 100%; /* Starts the text off-screen to the right */
+    animation: marquee 25s linear infinite; /* 25 seconds for a smooth, readable speed */
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* Adds spacing between your news items */
+.news-ticker-content span {
+    margin: 0 40px;
+}
+
+/* PRO-TIP: Pauses the scrolling when the user hovers over it! */
+.news-ticker-container:hover .news-ticker-content {
+    animation-play-state: paused;
+    cursor: default;
+}
+
+/* The CSS Engine that moves the text */
+@keyframes marquee {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(-100%, 0);
+    }
+}
+/* =========================================
+   17. LUXURY PRELOADER
+   ========================================= */
+.zaria-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-wine);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999; /* Forces it to the absolute top layer */
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loader-logo {
+    text-align: center;
+    animation: pulseLogo 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes pulseLogo {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    100% { transform: scale(1.05); opacity: 1; }
+}
+
+/* JavaScript will add this class to fade it out smoothly */
+.zaria-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.site-logo {
+    height: 50px; /* Adjust this number to make your logo bigger or smaller */
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.site-logo:hover {
+    transform: scale(1.05); /* Gives it a slight pop when hovered */
+}
+/* =========================================
+   18. PRODUCT PAGE ACCORDION (FIXED)
+   ========================================= */
+.accordion-wrapper {
+    margin-top: 40px;
+}
+
+.accordion {
+    background-color: transparent !important; /* Force transparent */
+    color: var(--shop-text);
+    cursor: pointer;
+    padding: 15px 0;
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--border-color);
+    text-align: left;
+    outline: none;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    z-index: 10;
+}
+
+/* Remove hover background color changes */
+.accordion:hover {
+    color: var(--bg-wine);
+    background-color: transparent !important; 
+}
+
+/* Ensure the panel itself has no background */
+.panel {
+    padding: 0 5px;
+    background-color: transparent !important; /* Force transparent */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    position: relative;
+    z-index: 5; /* Keep text below the accordion button */
+}
+
+/* If the chevron icon is causing issues, make sure it is transparent too */
+.accordion i {
+    pointer-events: none; /* Icon won't catch hover events */
+}
+#toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 99999; }
+.toast { background: var(--bg-wine); color: white; padding: 15px 25px; margin-top: 10px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); animation: slideIn 0.3s ease-out; }
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }

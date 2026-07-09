@@ -16,16 +16,36 @@
     </div>
     <header class="header">
         <div class="logo-container">
-            <div class="logo-circle">Z</div>
-            <div class="logo-text">
-                <h1>ZARIA</h1>
-                <span>The Art of Gifting</span>
-            </div>
+            <a href="index.html" style="display: block; text-decoration: none;">
+                <img src="logo.png" alt="ZARIA - The Art of Gifting" class="site-logo">
+            </a>
         </div>
+
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="products.html">Shop</a>
-            <a href="#">Bestsellers</a>
+            <a href="products.html">Bestsellers</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="header-icons" style="display: flex; gap: 20px; align-items: center; font-size: 1.2rem;">
+            <div class="search-container" style="display: flex; align-items: center; position: relative;">
+                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts...">
+                <button id="nav-search-btn" title="Search" style="background: none; border: none; color: inherit; cursor: pointer; font-size: 1.2rem; padding: 0;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+            
+            <a href="wishlist.html" title="Wishlist" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-heart"></i></a>
+            <a href="cart.html" title="Shopping Cart" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-bag-shopping"></i></a>
+            <a href="login.html" title="My Account" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-user"></i></a>
+            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit; margin-left: 10px;">🌙</button>
+        </div>
+    </header>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="products.html">Shop</a>
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
         </nav>
