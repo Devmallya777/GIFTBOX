@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,11 +17,7 @@
             --text-muted: #9c6c75;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -39,8 +34,7 @@
             font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            overflow: hidden;
-            white-space: nowrap;
+            text-align: center;
             color: var(--text-muted);
             border-bottom: 1px solid rgba(228, 197, 196, 0.1);
         }
@@ -51,702 +45,56 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 5%;
-            background-color: rgba(255, 255, 255, 0.05); /* Very faint background for header */
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
         .logo-circle {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             background-color: var(--text-gold);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            color: var(--bg-wine);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.6rem; color: var(--bg-wine);
         }
 
-        .logo-text h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: var(--text-pink);
-            letter-spacing: 2px;
-        }
+        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-pink); letter-spacing: 2px; }
+        .logo-text span { font-size: 0.6rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; }
 
-        .logo-text span {
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-pink); }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-pink);
-        }
-
-        .header-icons {
-            display: flex;
-            gap: 20px;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-        }
+        .header-icons { display: flex; gap: 20px; font-size: 1.1rem; color: var(--text-muted); }
 
         /* Hero Section */
-        .hero {
-            display: flex;
-            padding: 60px 5% 0;
-            height: calc(100vh - 120px);
-        }
-
-        .hero-left {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-right: 50px;
-            position: relative;
-        }
-
-        .collection-tag {
-            font-size: 0.8rem;
-            letter-spacing: 4px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .collection-tag::before {
-            content: '';
-            width: 40px;
-            height: 1px;
-            background-color: var(--text-muted);
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 4.5rem;
-            line-height: 1.1;
-            margin-bottom: 30px;
-            color: var(--text-pink);
-        }
-
-        .hero-title span {
-            color: var(--text-gold);
-        }
-
-        .hero-desc {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: var(--text-muted);
-            max-width: 80%;
-            margin-bottom: 40px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 60px;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background-color: var(--text-gold);
-            color: var(--bg-wine-dark);
-            border: none;
-            font-weight: 600;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--text-pink);
-            border: 1px solid var(--text-muted);
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 50px;
-            margin-top: auto;
-            padding-bottom: 40px;
-        }
-
-        .stat h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--text-gold);
-            margin-bottom: 5px;
-        }
-
-        .stat p {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        /* Hero Right - Image Area */
-        .hero-right {
-            flex: 1;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .product-image-container {
-            width: 450px;
-            height: 550px;
-            background-color: #f7a8b8; /* Placeholder pink color */
-            border-radius: 20px;
-            transform: rotate(5deg);
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            /* If you have the actual image, replace the background color with this: */
-            /* background: url('your-pink-box-image.jpg') center/cover; */
-        }
-
-        .floating-card {
-            position: absolute;
-            bottom: -30px;
-            left: -50px;
-            background-color: rgba(255,255,255,0.8);
-            padding: 20px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transform: rotate(-5deg); /* Counter the container rotation */
-            backdrop-filter: blur(10px);
-        }
-
-        .floating-card-icon {
-            width: 30px;
-            height: 40px;
-            background-color: var(--bg-wine);
-            border-radius: 20px;
-        }
-
-        .floating-card-text h4 {
-            color: var(--bg-wine-dark);
-            font-size: 0.9rem;
-            margin-bottom: 3px;
-        }
-
-        .floating-card-text p {
-            color: #666;
-            font-size: 0.7rem;
-            max-width: 120px;
-        }
+        .hero { display: flex; padding: 60px 5% 0; height: calc(100vh - 120px); }
+        .hero-left { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-right: 50px; }
         
-        .center-badge {
-            position: absolute;
-            left: -50px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100px;
-            height: 100px;
-            border: 1px solid var(--text-gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-</head>
-<body>
+        .collection-tag { font-size: 0.8rem; letter-spacing: 4px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
+        .collection-tag::before { content: ''; width: 40px; height: 1px; background-color: var(--text-muted); }
 
-    <header class="header">
-        <div class="logo-container">
-            <a href="index.html" style="display: block; text-decoration: none;">
-                <img src="logo.png" alt="ZARIA - The Art of Gifting" class="site-logo">
-            </a>
-        </div>
+        .hero-title { font-family: 'Playfair Display', serif; font-size: 4.5rem; line-height: 1.1; margin-bottom: 30px; color: var(--text-pink); }
+        .hero-title span { color: var(--text-gold); }
 
-        <nav class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="products.html">Shop</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
-        </nav>
+        .hero-desc { font-size: 1rem; line-height: 1.6; color: var(--text-muted); max-width: 80%; margin-bottom: 40px; }
 
-        <div class="header-icons" style="display: flex; gap: 20px; align-items: center; font-size: 1.2rem;">
-            <div class="search-container" style="display: flex; align-items: center; position: relative;">
-                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts...">
-                <button id="nav-search-btn" title="Search" style="background: none; border: none; color: inherit; cursor: pointer; font-size: 1.2rem; padding: 0;">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </div>
-            
-            <a href="wishlist.html" title="Wishlist" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-heart"></i></a>
-            <a href="cart.html" title="Shopping Cart" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-bag-shopping"></i></a>
-            <a href="login.html" title="My Account" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-user"></i></a>
-            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit; margin-left: 10px;">🌙</button>
-        </div>
-    </header>
-    <!-- ========================================== -->
-    <!-- HOMEPAGE MOVING NEWS TICKER -->
-    <!-- ========================================== -->
-    <div class="news-ticker-container">
-        <div class="news-ticker-content">
-            <span>🌟 LATEST NEWS: ZARIA featured in Vogue India's 'Top Luxury Gifts 2026' 🌟</span>
-            <span>✦</span>
-            <span>Pre-book your Winter 2026 Wedding Hampers now and get a complimentary silk ribbon upgrade!</span>
-            <span>✦</span>
-            <span>Corporate Gifting: Bulk order discounts now live for the upcoming festive season!</span>
-            <span>✦</span>
-            <!-- We repeat the first one so the loop looks endless on massive screens! -->
-            <span>🌟 LATEST NEWS: ZARIA featured in Vogue India's 'Top Luxury Gifts 2026' 🌟</span>
-        </div>
-    </div>
+        .hero-buttons { display: flex; gap: 20px; margin-bottom: 60px; }
+        .btn { padding: 15px 30px; border-radius: 30px; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background-color: var(--text-gold); color: var(--bg-wine-dark); border: none; font-weight: 600; }
+        .btn-secondary { background-color: transparent; color: var(--text-pink); border: 1px solid var(--text-muted); }
 
-    <section class="hero">
-        <div class="hero-left">
-            <div class="collection-tag">New Winter Collection</div>
-            <h2 class="hero-title">Gifts that carry<br><span>meaning.</span></h2>
-            <p class="hero-desc">Handcrafted hampers for the moments that matter — weddings, festivals, milestones, and everything in between. Each ZARIA box is composed with intention, tied with silk, and delivered with warmth.</p>
-            
-            <div class="hero-buttons">
-                <!-- Changed href from # to products.html -->
-                <a href="products.html" class="btn btn-primary">Explore Collection &rarr;</a>
-                <!-- Changed href from # to about.html -->
-                <a href="about.html" class="btn btn-secondary">Our Story</a>
-            </div>
+        .hero-stats { display: flex; gap: 50px; margin-top: auto; padding-bottom: 40px; }
+        .stat h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--text-gold); margin-bottom: 5px; }
+        .stat p { font-size: 0.7rem; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
 
-            <div class="hero-stats">
-                <div class="stat">
-                    <h3>10K+</h3>
-                    <p>Gifts Delivered</p>
-                </div>
-                <div class="stat">
-                    <h3>4.9 <i class="fa-solid fa-star" style="font-size: 1rem;"></i></h3>
-                    <p>Customer Rating</p>
-                </div>
-                <div class="stat">
-                    <h3>120+</h3>
-                    <p>Cities Served</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="hero-right">
-            <div class="center-badge">
-                <img src="logo.png" alt="ZARIA Logo" class="logo-img">
-            </div>
-            <div class="product-image-container">
-                <div class="floating-card">
-                    <div class="floating-card-icon"></div>
-                    <div class="floating-card-text">
-                        <h4>Wrapped in Wine</h4>
-                        <p>Curated with care since 2020</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ========================================== -->
-    <!-- GLOBAL MASSIVE FOOTER -->
-    <!-- ========================================== -->
-    <footer class="zaria-footer">
-        <div class="footer-top">
-            <div class="footer-column brand-column">
-                <div class="logo-container" style="margin-bottom: 20px;">
-                    <img src="logo.png" alt="ZARIA Logo" class="logo-img">
-                    <div class="logo-text">
-                        <h1 style="color: var(--text-gold);">ZARIA</h1>
-                    </div>
-                </div>
-                <p>The Art of Gifting. Handcrafted hampers for the moments that matter, curated with intention and delivered with warmth.</p>
-                <div class="social-icons">
-                    <a href="#" onclick="alert('Opening Facebook...')"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" onclick="alert('Opening Instagram...')"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" onclick="alert('Opening X/Twitter...')"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#" onclick="alert('Opening YouTube...')"><i class="fa-brands fa-youtube"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-column">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="#" onclick="alert('Careers page coming soon!')">Careers</a></li>
-                    <li><a href="#" onclick="alert('Press page coming soon!')">Press</a></li>
-                    <li><a href="#" onclick="alert('Investors page coming soon!')">Investors</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Shop</h4>
-                <ul>
-                    <li><a href="products.html">All Products</a></li>
-                    <li><a href="products.html">Categories</a></li>
-                    <li><a href="products.html">Deals</a></li>
-                    <li><a href="#" onclick="alert('Digital Gift Cards coming soon!')">Gift Cards</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="contact.html">Contact Us</a></li>
-                    <li><a href="faq.html">Help Center</a></li>
-                    <li><a href="faq.html">Shipping Details</a></li>
-                    <li><a href="faq.html">FAQs</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column newsletter-column">
-                <h4>Stay in the loop</h4>
-                <p>Subscribe for exclusive updates, new arrivals, and insider-only discounts.</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Enter your email address" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-                <div class="payment-icons">
-                    <i class="fa-brands fa-cc-visa"></i>
-                    <i class="fa-brands fa-cc-mastercard"></i>
-                    <i class="fa-brands fa-cc-amex"></i>
-                    <i class="fa-brands fa-cc-paypal"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
-            <div class="legal-links">
-                <a href="#" onclick="alert('Privacy Policy: We keep your data safe and luxurious.')">Privacy Policy</a>
-                <a href="#" onclick="alert('Terms & Conditions: Stay classy, gift beautiful things.')">Terms & Conditions</a>
-                <a href="#" onclick="alert('Cookie Policy: We only use the delicious kind.')">Cookie Policy</a>
-            </div>
-        </div>
-    </footer>
-    
-    <script src="script.js"></script>
-</body>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZARIA | The Art of Gifting</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    
-    <style>
-        :root {
-            --bg-wine: #5b1d2a;
-            --bg-wine-dark: #3a1119;
-            --text-pink: #e4c5c4;
-            --text-gold: #c69c6d;
-            --text-muted: #9c6c75;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at center, var(--bg-wine) 0%, var(--bg-wine-dark) 100%);
-            color: var(--text-pink);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Announcement Bar */
-        .announcement-bar {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 8px 0;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            overflow: hidden;
-            white-space: nowrap;
-            color: var(--text-muted);
-            border-bottom: 1px solid rgba(228, 197, 196, 0.1);
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background-color: rgba(255, 255, 255, 0.05); /* Very faint background for header */
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-circle {
-            width: 40px;
-            height: 40px;
-            background-color: var(--text-gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            color: var(--bg-wine);
-        }
-
-        .logo-text h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: var(--text-pink);
-            letter-spacing: 2px;
-        }
-
-        .logo-text span {
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-pink);
-        }
-
-        .header-icons {
-            display: flex;
-            gap: 20px;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-        }
-
-        /* Hero Section */
-        .hero {
-            display: flex;
-            padding: 60px 5% 0;
-            height: calc(100vh - 120px);
-        }
-
-        .hero-left {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-right: 50px;
-            position: relative;
-        }
-
-        .collection-tag {
-            font-size: 0.8rem;
-            letter-spacing: 4px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .collection-tag::before {
-            content: '';
-            width: 40px;
-            height: 1px;
-            background-color: var(--text-muted);
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 4.5rem;
-            line-height: 1.1;
-            margin-bottom: 30px;
-            color: var(--text-pink);
-        }
-
-        .hero-title span {
-            color: var(--text-gold);
-        }
-
-        .hero-desc {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: var(--text-muted);
-            max-width: 80%;
-            margin-bottom: 40px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 60px;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background-color: var(--text-gold);
-            color: var(--bg-wine-dark);
-            border: none;
-            font-weight: 600;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--text-pink);
-            border: 1px solid var(--text-muted);
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 50px;
-            margin-top: auto;
-            padding-bottom: 40px;
-        }
-
-        .stat h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--text-gold);
-            margin-bottom: 5px;
-        }
-
-        .stat p {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        /* Hero Right - Image Area */
-        .hero-right {
-            flex: 1;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .product-image-container {
-            width: 450px;
-            height: 550px;
-            background-color: #f7a8b8; /* Placeholder pink color */
-            border-radius: 20px;
-            transform: rotate(5deg);
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            /* If you have the actual image, replace the background color with this: */
-            /* background: url('your-pink-box-image.jpg') center/cover; */
-        }
-
-        .floating-card {
-            position: absolute;
-            bottom: -30px;
-            left: -50px;
-            background-color: rgba(255,255,255,0.8);
-            padding: 20px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transform: rotate(-5deg); /* Counter the container rotation */
-            backdrop-filter: blur(10px);
-        }
-
-        .floating-card-icon {
-            width: 30px;
-            height: 40px;
-            background-color: var(--bg-wine);
-            border-radius: 20px;
-        }
-
-        .floating-card-text h4 {
-            color: var(--bg-wine-dark);
-            font-size: 0.9rem;
-            margin-bottom: 3px;
-        }
-
-        .floating-card-text p {
-            color: #666;
-            font-size: 0.7rem;
-            max-width: 120px;
-        }
-        
-        .center-badge {
-            position: absolute;
-            left: -50px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100px;
-            height: 100px;
-            border: 1px solid var(--text-gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .hero-right { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; }
+        .product-image-container { width: 450px; height: 550px; background-color: #f7a8b8; border-radius: 20px; transform: rotate(5deg); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
 
     <div class="announcement-bar">
-        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA &nbsp;&nbsp;&nbsp;+ SAME-DAY DISPATCH ON SELECT CITIES &nbsp;&nbsp;&nbsp;+ PERSONALISED GIFTING AVAILABLE
+        + FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA &nbsp;&nbsp;&nbsp;+ PERSONALISED GIFTING AVAILABLE
     </div>
 
     <header class="header">
@@ -780,43 +128,21 @@
             <p class="hero-desc">Handcrafted hampers for the moments that matter — weddings, festivals, milestones, and everything in between. Each ZARIA box is composed with intention, tied with silk, and delivered with warmth.</p>
             
             <div class="hero-buttons">
-                <a href="#" class="btn btn-primary">Explore Collection &rarr;</a>
-                <a href="#" class="btn btn-secondary">Our Story</a>
+                <a href="products.html" class="btn btn-primary">Explore Collection &rarr;</a>
+                <a href="about.html" class="btn btn-secondary">Our Story</a>
             </div>
 
             <div class="hero-stats">
-                <div class="stat">
-                    <h3>10K+</h3>
-                    <p>Gifts Delivered</p>
-                </div>
-                <div class="stat">
-                    <h3>4.9 <i class="fa-solid fa-star" style="font-size: 1rem;"></i></h3>
-                    <p>Customer Rating</p>
-                </div>
-                <div class="stat">
-                    <h3>120+</h3>
-                    <p>Cities Served</p>
-                </div>
+                <div class="stat"><h3>10K+</h3><p>Gifts Delivered</p></div>
+                <div class="stat"><h3>4.9 <i class="fa-solid fa-star" style="font-size: 1rem;"></i></h3><p>Customer Rating</p></div>
+                <div class="stat"><h3>120+</h3><p>Cities Served</p></div>
             </div>
         </div>
-
         <div class="hero-right">
-            <div class="center-badge">
-                <div class="logo-circle" style="background:transparent; border: 1px solid var(--text-gold);">Z</div>
-            </div>
-            <div class="product-image-container">
-                <div class="floating-card">
-                    <div class="floating-card-icon"></div>
-                    <div class="floating-card-text">
-                        <h4>Wrapped in Wine</h4>
-                        <p>Curated with care since 2020</p>
-                    </div>
-                </div>
-            </div>
+            <div class="product-image-container"></div>
         </div>
     </section>
     
     <script src="script.js"></script>
 </body>
->>>>>>> 0260079728ac1199b6244234002175db1949fb84
 </html>
