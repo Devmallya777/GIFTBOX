@@ -6,115 +6,63 @@
     <title>Secure Checkout | ZARIA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        /* --- HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
-        :root {
-            --bg-wine: #5b1d2a;
-            --bg-wine-dark: #3a1119;
-            --text-gold: #c69c6d;
-            --text-pink: #f9f0f0;
-            --text-muted: #d0b8bc;
-        }
-
+        :root { --bg-wine: #5b1d2a; --bg-wine-dark: #3a1119; --text-gold: #c69c6d; --text-pink: #f9f0f0; --text-muted: #d0b8bc; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
-
-        /* --- HEADER --- */
+        
         .header { display: flex; justify-content: center; padding: 25px 5%; background-color: var(--bg-wine); }
-        .logo-container { text-align: center; }
-        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--bg-wine); font-weight: bold; margin: 0 auto 5px; }
-        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); letter-spacing: 2px; }
-        .logo-text span { font-size: 0.65rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; }
-
-        .btn-go-back { background: none; border: none; color: var(--text-gold); cursor: pointer; padding: 15px 5% 0; font-size: 0.95rem; font-weight: 600; }
-        .btn-go-back:hover { color: var(--text-pink); }
-
-        /* --- CHECKOUT LAYOUT --- */
+        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bg-wine); font-weight: bold; margin: 0 auto 5px; }
+        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); }
+        
         .checkout-wrapper { padding: 40px 5% 80px; flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; }
         .checkout-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 50px; }
-        
         .form-section { background: var(--bg-wine-dark); padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid rgba(208, 184, 188, 0.1); }
-        .form-section h3 { font-family: 'Playfair Display', serif; color: var(--text-gold); margin-bottom: 20px; }
         .input-group { margin-bottom: 15px; }
-        .input-group input, .input-group select { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--text-muted); color: var(--text-pink); border-radius: 4px; outline: none; }
-        .input-row { display: flex; gap: 15px; }
+        .input-group input { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--text-muted); color: var(--text-pink); border-radius: 4px; }
         
-        /* Payment Options */
-        .payment-option { border: 1px solid var(--text-muted); padding: 15px; border-radius: 4px; margin-bottom: 10px; cursor: pointer; }
-        .payment-option.active-payment { border-color: var(--text-gold); }
-
-        /* Summary Styling */
-        .checkout-summary { background: var(--bg-wine-dark); padding: 30px; border-radius: 12px; height: fit-content; border: 1px solid rgba(208, 184, 188, 0.1); }
+        .checkout-summary { background: var(--bg-wine-dark); padding: 30px; border-radius: 12px; height: fit-content; }
         .checkout-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .img-box { width: 60px; height: 60px; border-radius: 4px; }
         .summary-row { display: flex; justify-content: space-between; margin: 10px 0; color: var(--text-pink); }
-        .summary-total { display: flex; justify-content: space-between; color: var(--text-gold); font-weight: 700; font-size: 1.2rem; margin-top: 20px; }
+        .summary-total { font-weight: 700; color: var(--text-gold); font-size: 1.5rem; margin-top: 20px; }
         
-        .btn-pay-now { width: 100%; padding: 15px; background: var(--text-gold); border: none; color: var(--bg-wine-dark); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 20px; border-radius: 4px; }
-        .btn-pay-now:hover { background: #dfba8c; }
-
+        .btn-pay-now { width: 100%; padding: 15px; background: var(--text-gold); border: none; color: var(--bg-wine-dark); font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
         @media (max-width: 768px) { .checkout-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
-<body class="checkout-body">
+<body>
 
     <header class="header">
         <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
-            <div class="logo-text">
-                <h1>ZARIA</h1>
-                <span>Secure Checkout</span>
-            </div>
+            <div class="logo-text"><h1>ZARIA</h1><span>Secure Checkout</span></div>
         </div>
     </header>
-    
-    <button onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
 
     <main class="checkout-wrapper">
         <div class="checkout-layout">
             <div class="checkout-forms">
                 <section class="form-section">
                     <h3>Contact Information</h3>
-                    <div class="input-group"><input type="email" placeholder="Email Address" required></div>
+                    <div class="input-group"><input type="email" id="email" placeholder="Email Address" required></div>
                 </section>
-
                 <section class="form-section">
                     <h3>Shipping Address</h3>
-                    <div class="input-row">
-                        <div class="input-group"><input type="text" placeholder="First Name" required></div>
-                        <div class="input-group"><input type="text" placeholder="Last Name" required></div>
-                    </div>
-                    <div class="input-group"><input type="text" placeholder="Street Address" required></div>
-                    <div class="input-group"><input type="text" placeholder="PIN Code" required></div>
+                    <div class="input-group"><input type="text" id="address" placeholder="Street Address" required></div>
+                    <div class="input-group"><input type="text" id="pin" placeholder="PIN Code" required></div>
                 </section>
-
-                <button class="btn-pay-now">Pay ₹10,264 Now <i class="fa-solid fa-lock"></i></button>
+                <button class="btn-pay-now" id="pay-btn">Pay Now</button>
             </div>
 
             <aside class="checkout-summary">
-                <div class="checkout-item-list">
-                    <div class="checkout-item">
-                        <div class="img-box" style="background-color: #f7a8b8;"></div>
-                        <div class="checkout-item-info"><h4>The Midnight Velvet Box</h4></div>
-                        <p>₹3,499</p>
+                <div id="checkout-items">
                     </div>
-                    <div class="checkout-item">
-                        <div class="img-box" style="background-color: #e4c5c4;"></div>
-                        <div class="checkout-item-info"><h4>The Golden Hour Hamper</h4></div>
-                        <p>₹5,200</p>
-                    </div>
-                </div>
-                <div class="summary-row"><span>Subtotal</span><span>₹8,699</span></div>
-                <div class="summary-row"><span>Shipping</span><span style="color: green;">Free</span></div>
-                <div class="summary-total"><span>Total</span><span>₹10,264</span></div>
+                <div class="summary-divider"></div>
+                <div class="summary-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+                <div class="summary-total"><span>Total</span><span id="total">₹0</span></div>
             </aside>
         </div>
     </main>
-
-    <footer class="zaria-footer" style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
-        <p>&copy; 2026 ZARIA. All Rights Reserved. Secure Checkout.</p>
-    </footer>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="script.js"></script>

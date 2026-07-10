@@ -1,60 +1,95 @@
 /* ==========================================================
-   ZARIA ULTIMATE FUNCTIONAL SCRIPT (script.js)
-   Fully integrated for all pages and components
+   ZARIA ULTIMATE FUNCTIONAL SCRIPT (MongoDB Enabled)
    ========================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    // --- 1. SESSION & ROUTE PROTECTION ---
-    const isLoggedIn = localStorage.getItem('zaria-logged-in') === 'true';
-    const isGuest = localStorage.getItem('zaria-guest') === 'true';
-    const currentPage = window.location.pathname.split('/').pop();
-
-    if (!isLoggedIn && !isGuest && currentPage !== 'login.html' && currentPage !== 'register.html') {
-        window.location.href = 'login.html';
+// --- 1. TOAST SYSTEM ---
+window.showToast = (message, type = 'success') => {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        Object.assign(container.style, { position: 'fixed', bottom: '20px', right: '20px', zIndex: '10000', display: 'flex', flexDirection: 'column', gap: '10px' });
+        document.body.appendChild(container);
     }
+    const toast = document.createElement('div');
+    toast.innerText = message;
+    Object.assign(toast.style, { background: '#c69c6d', color: '#3a1119', padding: '12px 24px', borderRadius: '4px', fontWeight: 'bold' });
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+};
 
-    // --- 2. PREMIUM TOAST SYSTEM ---
-    function showToast(message, type = 'success') {
-        let container = document.getElementById('toast-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'toast-container';
-            Object.assign(container.style, { position: 'fixed', bottom: '20px', right: '20px', zIndex: '10000', display: 'flex', flexDirection: 'column', gap: '10px' });
-            document.body.appendChild(container);
-        }
-        const toast = document.createElement('div');
-        toast.innerText = message;
-        Object.assign(toast.style, { background: '#c69c6d', color: '#3a1119', padding: '12px 24px', borderRadius: '4px', boxShadow: '0 5px 15px rgba(0,0,0,0.3)', fontWeight: '600', fontSize: '0.9rem' });
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
-    }
+// --- 2. MONGODB DATA FETCHING (Products & Cart) ---
+async function fetchProducts() {
+    const grid = document.getElementById('product-grid');
+    if (!grid) return;
+    try {
+        const response = await fetch('/api/products');
+        const products = await response.json();
+        grid.innerHTML = products.map(p => `
+            <div class="product-card">
+                ${p.isNew ? '<div class="badge badge-new">NEW</div>' : ''}
+                <a href="product.html?id=${p._id}">
+                    <div class="product-image" style="background-color: ${p.color};">
+                        <div class="hover-actions">
+                            <button onclick="event.preventDefault(); toggleWishlist('${p._id}')"><i class="fa-regular fa-heart"></i></button>
+                            <button onclick="event.preventDefault(); quickView('${p._id}')"><i class="fa-regular fa-eye"></i></button>
+                        </div>
+                    </div>
+                </a>
+                <div class="product-info">
+                    <h4>${p.name}</h4>
+                    <p class="price">₹${p.price}</p>
+                    <button class="add-to-cart" onclick="addToCart('${p._id}', '${p.name}', ${p.price}, '${p.color}')">Add to Cart</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (err) { console.error("Error loading products:", err); }
+}
 
-    // --- 3. PRELOADER ---
-    const loader = document.getElementById('zaria-loader');
-    if (loader) {
-        window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
-    }
+async function loadCheckoutSummary() {
+    const container = document.getElementById('checkout-items');
+    if (!container) return;
+    try {
+        const response = await fetch('/api/cart');
+        const cart = await response.json();
+        let subtotal = 0;
+        container.innerHTML = cart.map(item => {
+            subtotal += (item.price * item.quantity);
+            return `
+                <div class="checkout-item">
+                    <div class="img-box" style="background-color: ${item.color};"></div>
+                    <div class="checkout-item-info"><h4>${item.name}</h4></div>
+                    <p>₹${item.price}</p>
+                </div>`;
+        }).join('');
+        document.getElementById('subtotal').innerText = `₹${subtotal}`;
+        document.getElementById('total').innerText = `₹${subtotal}`;
+    } catch (err) { console.error("Checkout Load Error:", err); }
+}
 
-    // --- 4. AUTH LOGIC ---
-    const loginForm = document.getElementById('zaria-login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            localStorage.setItem('zaria-logged-in', 'true');
-            localStorage.setItem('zaria-guest', 'false');
-            showToast("Welcome back to ZARIA!");
-            setTimeout(() => window.location.href = "index.html", 1000);
+// --- 3. MONGODB CART LOGIC ---
+window.addToCart = async (productId, name, price, color) => {
+    try {
+        const response = await fetch('/api/cart/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId, name, price, color, quantity: 1 })
         });
-    }
+        if (response.ok) showToast(`${name} added to cart!`);
+    } catch (err) { console.error("Cart Error:", err); }
+};
 
-    window.skipLogin = () => {
-        localStorage.setItem('zaria-guest', 'true');
-        window.location.href = "index.html";
-    };
+// --- 4. DOM EVENT LISTENERS ---
+document.addEventListener("DOMContentLoaded", () => {
+    // Initialization
+    fetchProducts();
+    loadCheckoutSummary();
 
-    // --- 5. CART & QUANTITY LOGIC ---
-    // Handle +/- buttons
+    // Preloader
+    const loader = document.getElementById('zaria-loader');
+    if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
+
+    // General Click Listeners
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('qty-btn')) {
             const input = e.target.parentElement.querySelector('.qty-input');
@@ -62,118 +97,23 @@ document.addEventListener("DOMContentLoaded", () => {
             if (e.target.innerText === '+') input.value = val + 1;
             else if (e.target.innerText === '-' && val > 1) input.value = val - 1;
         }
+        if (e.target.closest('.fa-heart')) {
+            e.preventDefault();
+            e.target.closest('.fa-heart').classList.toggle('fa-solid');
+            showToast("Updated Wishlist!");
+        }
     });
 
-    // Add to Cart
-    document.querySelectorAll('.add-to-cart').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const card = e.target.closest('.product-card') || e.target.closest('.product-details');
-            const name = card.querySelector('h4').innerText;
-            showToast(`${name} added to cart!`);
-        });
-    });
-
-    // --- 6. DARK MODE ---
+    // Dark Mode
     const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        if (localStorage.getItem('zaria-dark-mode') === 'true') document.body.classList.add('dark-mode');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('zaria-dark-mode', document.body.classList.contains('dark-mode'));
-        });
-    }
+    if (themeToggle) themeToggle.addEventListener('click', () => document.body.classList.toggle('dark-mode'));
 
-    // --- 7. ACCORDIONS (FAQ & Product) ---
+    // Accordions
     document.querySelectorAll(".accordion").forEach(acc => {
         acc.addEventListener("click", function() {
             this.classList.toggle("active");
             const panel = this.nextElementSibling;
-            const icon = this.querySelector('i');
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-                icon.classList.replace('fa-minus', 'fa-plus');
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
-                icon.classList.replace('fa-plus', 'fa-minus');
-            }
+            panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
         });
     });
-
-    // --- 8. SEARCH ---
-    const searchBtn = document.getElementById('nav-search-btn');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', () => {
-            const term = document.getElementById('nav-search-input').value;
-            if(term) alert("Searching for: " + term);
-        });
-    }
-
-    // --- 9. RAZORPAY ---
-    const payBtn = document.querySelector('.btn-pay-now');
-    if (payBtn) {
-        payBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const options = {
-                key: "rzp_test_YOUR_API_KEY",
-                amount: 1026400,
-                currency: "INR",
-                name: "ZARIA",
-                description: "Order Payment",
-                handler: (res) => window.location.href = "order-success.html"
-            };
-            new Razorpay(options).open();
-        });
-    }
-    // --- ADD TO CART FUNCTION ---
-function addToCart(product) {
-    let cart = JSON.parse(localStorage.getItem('zaria-cart')) || [];
-    cart.push(product);
-    localStorage.setItem('zaria-cart', JSON.stringify(cart));
-    showToast(`${product.name} added!`);
-}
-
-// --- RENDER CART ON cart.html ---
-function renderCart() {
-    const cartContainer = document.querySelector('.cart-items-container');
-    if (!cartContainer) return;
-    
-    let cart = JSON.parse(localStorage.getItem('zaria-cart')) || [];
-    
-    if (cart.length === 0) {
-        cartContainer.innerHTML = "<p>Your cart is empty.</p>";
-        return;
-    }
-
-    cartContainer.innerHTML = ""; // Clear existing hard-coded HTML
-    cart.forEach((item, index) => {
-        cartContainer.innerHTML += `
-            <div class="cart-item">
-                <div class="item-info">
-                    <div class="item-image" style="background-color: ${item.color};"></div>
-                    <div class="item-details">
-                        <h4>${item.name}</h4>
-                        <p class="item-price">₹${item.price}</p>
-                        <button class="btn-remove" onclick="removeFromCart(${index})">Remove</button>
-                    </div>
-                </div>
-                <div class="item-quantity">
-                    <div class="quantity-selector">
-                        <button class="qty-btn">-</button>
-                        <input type="number" value="1" class="qty-input">
-                        <button class="qty-btn">+</button>
-                    </div>
-                </div>
-                <div class="item-total"><p>₹${item.price}</p></div>
-            </div>
-        `;
-    });
-}
-
-// --- REMOVE FROM CART ---
-function removeFromCart(index) {
-    let cart = JSON.parse(localStorage.getItem('zaria-cart')) || [];
-    cart.splice(index, 1);
-    localStorage.setItem('zaria-cart', JSON.stringify(cart));
-    renderCart(); // Refresh view
-}
 });

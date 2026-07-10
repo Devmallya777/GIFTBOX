@@ -8,401 +8,110 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
         :root {
-            --bg-wine: #5b1d2a;       /* Your exact original ZARIA wine */
-            --bg-wine-dark: #3a1119;  /* Your exact original dark wine */
-            
-            /* YOUR EXACT ORIGINAL GOLD - No yellow! */
-            --text-gold: #c69c6d;     
-            
-            /* Brightened these two so they don't camouflage into the wine background */
-            --text-pink: #f9f0f0;     /* Soft ivory-pink for readable paragraphs */
-            --text-muted: #d0b8bc;    /* Lightened just enough for footer/secondary text */
+            --bg-wine: #5b1d2a;
+            --bg-wine-dark: #3a1119;
+            --text-gold: #c69c6d;
+            --text-pink: #f9f0f0;
+            --text-muted: #d0b8bc;
         }
-
-        /* --- GLOBAL RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
         
-        /* --- PRELOADER (Optional, handled by script.js) --- */
         #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
         #zaria-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
 
-        /* --- HEADER & ANNOUNCEMENT --- */
-        .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: var(--text-muted); border-bottom: 1px solid rgba(208, 184, 188, 0.1); }
+        .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; text-align: center; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(228, 197, 196, 0.1); }
         .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
-        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
-        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--bg-wine); font-weight: bold;}
-        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); letter-spacing: 2px; }
-        .logo-text span { font-size: 0.65rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; }
+        .logo-container { cursor: pointer; display: flex; align-items: center; gap: 15px; }
+        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bg-wine); font-weight: bold; }
+        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); }
         
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; font-weight: 600; }
-        .nav-links a:hover, .nav-links a.active { color: var(--text-pink); }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; margin-right: 20px; font-weight: 600; }
+        .nav-links a:hover { color: var(--text-pink); }
         
-        .header-icons { display: flex; gap: 20px; font-size: 1.2rem; color: var(--text-muted); align-items: center; }
-        .header-icons i { cursor: pointer; transition: 0.3s; }
-        .header-icons i:hover { color: var(--text-gold); }
-
-        .btn-go-back { background: none; border: none; color: var(--text-gold); cursor: pointer; padding: 15px 5% 0; font-size: 0.95rem; font-weight: 600; transition: 0.3s; text-align: left; display: inline-block; }
-        .btn-go-back:hover { color: var(--text-pink); transform: translateX(-5px); }
-
-        /* --- SHOP LAYOUT (Untouched Structure) --- */
         .shop-wrapper { display: flex; gap: 40px; padding: 20px 5% 60px; flex: 1; }
-        
-        /* Sidebar */
-        .shop-sidebar { width: 250px; flex-shrink: 0; }
-        .filter-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); margin-bottom: 20px; border-bottom: 1px solid rgba(208, 184, 188, 0.2); padding-bottom: 10px; }
-        .filter-group { margin-bottom: 30px; }
-        .filter-group h4 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: var(--text-pink); font-weight: 600; }
-        .custom-checkbox { display: flex; align-items: center; margin-bottom: 12px; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; transition: color 0.3s; }
-        .custom-checkbox:hover { color: var(--text-pink); }
-        .custom-checkbox input { margin-right: 10px; accent-color: var(--text-gold); transform: scale(1.1); cursor: pointer; }
-        
-        .price-inputs { display: flex; align-items: center; gap: 10px; }
-        .price-inputs input { width: 100%; padding: 10px; border: 1px solid rgba(208, 184, 188, 0.3); border-radius: 4px; background: transparent; color: var(--text-pink); outline: none; transition: border-color 0.3s;}
-        .price-inputs input:focus { border-color: var(--text-gold); }
-        
-        /* Working Sidebar Button */
-        .btn-apply-filters { width: 100%; padding: 12px; background: var(--text-gold); color: var(--bg-wine-dark); border: 2px solid var(--text-gold); border-radius: 25px; cursor: pointer; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .btn-apply-filters:hover { background: transparent; color: var(--text-gold); }
-
-        /* Main Shop Area */
+        .shop-sidebar { width: 250px; }
         .shop-main { flex: 1; }
-        .shop-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; color: var(--text-muted); font-size: 0.9rem; }
-        .breadcrumbs a { color: var(--text-gold); text-decoration: none; transition: 0.3s; }
-        .breadcrumbs a:hover { color: var(--text-pink); }
-        .breadcrumbs span { color: var(--text-pink); font-weight: 600; }
         
-        .sort-box { display: flex; align-items: center; gap: 15px; }
-        .sort-dropdown { background: transparent; border: 1px solid rgba(208, 184, 188, 0.3); color: var(--text-pink); padding: 8px 12px; border-radius: 4px; outline: none; cursor: pointer; transition: 0.3s; }
-        .sort-dropdown:hover { border-color: var(--text-gold); }
-        .sort-dropdown option { background: var(--bg-wine); color: var(--text-pink); }
-
-        /* Product Grid */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-bottom: 40px; }
-        .product-card { background: var(--bg-wine-dark); border-radius: 12px; overflow: hidden; position: relative; transition: transform 0.3s, box-shadow 0.3s; border: 1px solid rgba(208, 184, 188, 0.05); }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        /* The container where JS will inject products */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         
-        .badge { position: absolute; top: 15px; left: 15px; padding: 6px 12px; font-size: 0.75rem; font-weight: 700; border-radius: 4px; z-index: 2; letter-spacing: 1px; }
-        .badge-new { background: var(--text-gold); color: var(--bg-wine-dark); }
-        .badge-sale { background: #d9534f; color: white; }
-
+        .product-card { background: var(--bg-wine-dark); border-radius: 12px; overflow: hidden; position: relative; }
         .product-image { height: 280px; background-size: cover; background-position: center; position: relative; }
-        
-        /* Working Image Overlay Buttons */
-        .hover-actions { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; gap: 15px; opacity: 0; transition: opacity 0.3s; }
-        .product-image:hover .hover-actions { opacity: 1; }
-        .hover-actions button { width: 45px; height: 45px; border-radius: 50%; border: none; background: var(--text-pink); color: var(--bg-wine); font-size: 1.2rem; cursor: pointer; transition: transform 0.2s, background 0.3s, color 0.3s; }
-        .hover-actions button:hover { background: var(--text-gold); color: white; transform: scale(1.1); }
-
-        .product-info { padding: 25px 20px; text-align: center; }
-        .stars { color: var(--text-gold); font-size: 0.85rem; margin-bottom: 12px; }
-        .product-info h4 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 12px; color: var(--text-pink); transition: color 0.3s; }
-        .product-info h4:hover { color: var(--text-gold); }
-        .price { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; color: var(--text-pink); }
-        
-        /* Working Add to Cart Button */
-        .add-to-cart { width: 100%; padding: 12px; border: 2px solid var(--text-gold); background: transparent; color: var(--text-gold); border-radius: 25px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; }
+        .hover-actions { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; gap: 15px; opacity: 0; background: rgba(0,0,0,0.3); transition: 0.3s; }
+        .product-card:hover .hover-actions { opacity: 1; }
+        .product-info { padding: 20px; text-align: center; }
+        .add-to-cart { width: 100%; padding: 10px; background: transparent; border: 2px solid var(--text-gold); color: var(--text-gold); border-radius: 20px; cursor: pointer; }
         .add-to-cart:hover { background: var(--text-gold); color: var(--bg-wine-dark); }
-
-        /* Working Pagination Buttons */
-        .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
-        .page-btn { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background: transparent; border: 1px solid rgba(208, 184, 188, 0.3); color: var(--text-muted); border-radius: 4px; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 1rem; }
-        .page-btn:hover { border-color: var(--text-gold); color: var(--text-gold); }
-        .page-btn.active { background: var(--text-gold); border-color: var(--text-gold); color: var(--bg-wine-dark); }
-
-        /* --- FOOTER --- */
-        .zaria-footer { background-color: var(--bg-wine-dark); padding: 60px 5% 20px; border-top: 1px solid rgba(208, 184, 188, 0.1); margin-top: auto; }
-        .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 2fr; gap: 30px; margin-bottom: 40px; }
-        .footer-column h4 { color: var(--text-gold); margin-bottom: 20px; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 1px; font-weight: 700; }
-        .footer-column p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 20px; }
-        .footer-column ul { list-style: none; }
-        .footer-column ul li { margin-bottom: 12px; }
-        .footer-column ul a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s, padding-left 0.3s; display: inline-block; }
-        .footer-column ul a:hover { color: var(--text-pink); padding-left: 5px; }
         
-        .social-icons a { color: var(--text-gold); font-size: 1.3rem; margin-right: 15px; transition: transform 0.3s, color 0.3s; display: inline-block; }
-        .social-icons a:hover { color: var(--text-pink); transform: translateY(-4px); }
-        
-        /* Working Newsletter Form */
-        .newsletter-form { display: flex; margin-bottom: 20px; }
-        .newsletter-form input { flex: 1; padding: 12px; border: none; border-radius: 4px 0 0 4px; outline: none; background: #fff; color: var(--bg-wine-dark); font-weight: 600; }
-        .newsletter-form button { padding: 12px 18px; border: none; background: var(--text-gold); color: var(--bg-wine-dark); font-weight: 700; border-radius: 0 4px 4px 0; cursor: pointer; transition: background 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-        .newsletter-form button:hover { background: #dfba8c; } /* Slightly brighter gold on hover */
-        
-        .payment-icons { color: var(--text-muted); font-size: 1.8rem; display: flex; gap: 12px; }
-        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 25px; border-top: 1px solid rgba(208, 184, 188, 0.1); color: var(--text-muted); font-size: 0.85rem; }
-        .legal-links a { color: var(--text-muted); text-decoration: none; margin-left: 15px; transition: color 0.3s; }
-        .legal-links a:hover { color: var(--text-pink); }
-
-        /* Responsive Design */
-        @media (max-width: 900px) {
-            .shop-wrapper { flex-direction: column; }
-            .shop-sidebar { width: 100%; border-bottom: 1px solid rgba(208, 184, 188, 0.2); padding-bottom: 20px; margin-bottom: 20px; }
-            .footer-top { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 600px) {
-            .footer-top { grid-template-columns: 1fr; }
-            .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
-        }
+        .zaria-footer { background-color: var(--bg-wine-dark); padding: 40px 5%; text-align: center; color: var(--text-muted); margin-top: auto; }
     </style>
 </head>
 <body>
 
-    <div class="announcement-bar">
-        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA &nbsp;&nbsp;&nbsp;+ PERSONALISED GIFTING
-    </div>
+    <div id="zaria-loader"><div class="loader-logo">ZARIA</div></div>
+
+    <div class="announcement-bar">+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA</div>
 
     <header class="header">
         <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
-            <div class="logo-text">
-                <h1>ZARIA</h1>
-                <span>The Art of Gifting</span>
-            </div>
+            <div class="logo-text"><h1>ZARIA</h1></div>
         </div>
-
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="products.html" class="active">Shop</a>
-            <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
         </nav>
-
         <div class="header-icons">
-            <i class="fa-solid fa-magnifying-glass" title="Search"></i>
-            <a href="wishlist.html" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-heart" title="Wishlist"></i></a>
-            <a href="cart.html" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-bag-shopping" title="Cart"></i></a>
-            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;" title="Toggle Dark Mode">🌙</button>
+            <a href="cart.html"><i class="fa-solid fa-bag-shopping"></i></a>
         </div>
     </header>
-    
-    <button onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
-    
+
     <main class="shop-wrapper">
-        
         <aside class="shop-sidebar">
-            <h3 class="filter-title">Filter By</h3>
-            
-            <div class="filter-group">
-                <h4>Category</h4>
-                <label class="custom-checkbox">
-                    <input type="checkbox" checked>
-                    <span class="checkmark"></span>
-                    Wedding Hampers
-                </label>
-                <label class="custom-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Corporate Gifting
-                </label>
-                <label class="custom-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Anniversary
-                </label>
-                <label class="custom-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Festive Specials
-                </label>
-            </div>
-
-            <div class="filter-group">
-                <h4>Price Range</h4>
-                <div class="price-inputs">
-                    <input type="number" placeholder="Min ₹">
-                    <span>-</span>
-                    <input type="number" placeholder="Max ₹">
-                </div>
-            </div>
-
-            <button class="btn-apply-filters">Apply Filters</button>
-        </aside>
+            <h3>Filter By</h3>
+            </aside>
 
         <section class="shop-main">
-            
-            <div class="shop-topbar">
-                <div class="breadcrumbs">
-                    <a href="index.html">Home</a> / <span>Shop All</span>
+            <div class="product-grid" id="product-grid">
                 </div>
-                <div class="sort-box">
-                    <span class="result-count">Showing 1-6 of 24 results</span>
-                    <select class="sort-dropdown">
-                        <option>Sort by: Featured</option>
-                        <option>Best Selling</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="product-grid">
-                
-                <div class="product-card">
-                    <div class="badge badge-new">NEW</div>
-                    
-                    <a href="product.html" style="display: block; text-decoration: none;">
-                        <div class="product-image" style="background-color: #d0b8bc;">
-                            <div class="hover-actions">
-                                <button onclick="event.preventDefault()" title="Add to Wishlist"><i class="fa-regular fa-heart"></i></button>
-                                <button onclick="event.preventDefault()" title="Quick View"><i class="fa-regular fa-eye"></i></button>
-                            </div>
-                        </div>
-                    </a>
-
-                    <div class="product-info">
-                        <div class="stars">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        
-                        <a href="product.html" style="text-decoration: none; color: inherit;">
-                            <h4>The Midnight Velvet Box</h4>
-                        </a>
-
-                        <p class="price">₹3,499</p>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-                
-                <div class="product-card">
-                    <a href="product.html" style="display: block; text-decoration: none;">
-                        <div class="product-image" style="background-color: #f9f0f0;">
-                            <div class="hover-actions">
-                                <button onclick="event.preventDefault()" title="Add to Wishlist"><i class="fa-regular fa-heart"></i></button>
-                                <button onclick="event.preventDefault()" title="Quick View"><i class="fa-regular fa-eye"></i></button>
-                            </div>
-                        </div>
-                    </a>
-
-                    <div class="product-info">
-                        <div class="stars">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star-half-stroke"></i>
-                        </div>
-                        
-                        <a href="product.html" style="text-decoration: none; color: inherit;">
-                            <h4>The Golden Hour Hamper</h4>
-                        </a>
-
-                        <p class="price">₹5,200</p>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="badge badge-sale">SALE</div>
-                    
-                    <a href="product.html" style="display: block; text-decoration: none;">
-                        <div class="product-image" style="background-color: #c69c6d;">
-                            <div class="hover-actions">
-                                <button onclick="event.preventDefault()" title="Add to Wishlist"><i class="fa-regular fa-heart"></i></button>
-                                <button onclick="event.preventDefault()" title="Quick View"><i class="fa-regular fa-eye"></i></button>
-                            </div>
-                        </div>
-                    </a>
-
-                    <div class="product-info">
-                        <div class="stars">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        
-                        <a href="product.html" style="text-decoration: none; color: inherit;">
-                            <h4>Classic Silk Essentials</h4>
-                        </a>
-
-                        <p class="price"><span style="text-decoration: line-through; color: var(--text-muted); margin-right: 5px;">₹2,500</span> ₹2,100</p>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="pagination">
-                <button class="page-btn active">1</button>
-                <button class="page-btn">2</button>
-                <button class="page-btn">3</button>
-                <button class="page-btn"><i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-
         </section>
     </main>
 
-    <footer class="zaria-footer">
-        <div class="footer-top">
-            <div class="footer-column brand-column">
-                <div class="logo-container" style="margin-bottom: 20px;">
-                    <div class="logo-circle" style="background: transparent; border: 1px solid var(--text-gold);">Z</div>
-                    <div class="logo-text">
-                        <h1 style="color: var(--text-gold);">ZARIA</h1>
-                    </div>
-                </div>
-                <p>The Art of Gifting. Handcrafted hampers for the moments that matter, curated with intention and delivered with warmth.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-column">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Press</a></li>
-                    <li><a href="#">Investors</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Shop</h4>
-                <ul>
-                    <li><a href="products.html">All Products</a></li>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">Deals</a></li>
-                    <li><a href="#">Gift Cards</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="contact.html">Contact Us</a></li>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Shipping Details</a></li>
-                    <li><a href="faq.html">FAQs</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column newsletter-column">
-                <h4>Stay in the loop</h4>
-                <p>Subscribe for exclusive updates, new arrivals, and insider-only discounts.</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Enter your email address" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-                <div class="payment-icons">
-                    <i class="fa-brands fa-cc-visa"></i>
-                    <i class="fa-brands fa-cc-mastercard"></i>
-                    <i class="fa-brands fa-cc-amex"></i>
-                    <i class="fa-brands fa-cc-paypal"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
-            <div class="legal-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms & Conditions</a>
-                <a href="#">Cookie Policy</a>
-            </div>
-        </div>
-    </footer>
+    <footer class="zaria-footer"><p>&copy; 2026 ZARIA. All Rights Reserved.</p></footer>
 
     <script src="script.js"></script>
+    <script>
+        // Fetches products from your MongoDB API and renders them
+        async function fetchProducts() {
+            const grid = document.getElementById('product-grid');
+            try {
+                const res = await fetch('/api/products');
+                const products = await res.json();
+                grid.innerHTML = products.map(p => `
+                    <div class="product-card">
+                        <div class="product-image" style="background-color: ${p.color};">
+                            <div class="hover-actions">
+                                <button><i class="fa-regular fa-heart"></i></button>
+                                <button><i class="fa-regular fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h4>${p.name}</h4>
+                            <p class="price">₹${p.price}</p>
+                            <button class="add-to-cart" onclick="addToCart('${p._id}', '${p.name}', ${p.price}, '${p.color}')">Add to Cart</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                grid.innerHTML = "<p>No products available right now.</p>";
+            }
+        }
+        document.addEventListener("DOMContentLoaded", fetchProducts);
+    </script>
 </body>
 </html>
