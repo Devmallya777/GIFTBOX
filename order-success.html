@@ -2,12 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmed | ZARIA</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
+        :root {
+            --bg-wine: #5b1d2a;
+            --bg-wine-dark: #3a1119;
+            --text-gold: #c69c6d;
+            --text-pink: #f9f0f0;
+            --text-muted: #d0b8bc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* --- PRELOADER --- */
+        #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        #zaria-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
+
+        /* --- HEADER & TICKER --- */
+        .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(208, 184, 188, 0.1); overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
+        .scrolling-text { display: inline-block; animation: scroll-left 25s linear infinite; }
+        .scrolling-text span { margin-right: 50px; color: var(--text-gold); font-weight: 600; }
+        @keyframes scroll-left { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
+        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--bg-wine); font-weight: bold;}
+        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); letter-spacing: 2px; }
+        
+        /* --- SUCCESS CONTENT --- */
+        .success-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px 5%; text-align: center; }
+        .success-icon { font-size: 5rem; color: #4caf50; margin-bottom: 30px; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        
+        .success-title { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); margin-bottom: 20px; }
+        .success-message { font-size: 1.1rem; color: var(--text-pink); margin-bottom: 40px; max-width: 500px; line-height: 1.6; }
+        
+        .btn-continue { padding: 15px 40px; background: var(--text-gold); color: var(--bg-wine-dark); border: none; border-radius: 30px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .btn-continue:hover { background: #dfba8c; transform: translateY(-2px); }
+
+        /* --- FOOTER --- */
+        .zaria-footer { background-color: var(--bg-wine-dark); padding: 40px 5% 20px; border-top: 1px solid rgba(208, 184, 188, 0.1); margin-top: auto; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+    </style>
 </head>
-<body style="text-align: center; padding: 100px 20px;">
-    <h1 style="color: var(--text-gold);">Order Placed Successfully!</h1>
-    <p>Thank you for shopping with ZARIA. Your order confirmation has been sent to your email.</p>
-    <a href="index.html" class="btn-auth" style="display:inline-block; margin-top:20px; text-decoration:none;">Continue Shopping</a>
+<body>
+
+    <!-- PRELOADER -->
+    <div id="zaria-loader">
+        <div class="loader-logo">ZARIA</div>
+        <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;">Finalizing...</p>
+    </div>
+
+    <!-- NEWS TICKER -->
+    <div class="announcement-bar">
+        <div class="scrolling-text">
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="logo-container" onclick="window.location.href='index.html'">
+            <div class="logo-circle">Z</div>
+            <div class="logo-text"><h1>ZARIA</h1></div>
+        </div>
+    </header>
+
+    <main class="success-wrapper">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h1 class="success-title">Order Placed Successfully!</h1>
+        <p class="success-message">Thank you for choosing ZARIA. Your luxurious hamper is being prepared with love and will be dispatched shortly. A confirmation email is on its way.</p>
+        <a href="products.html" class="btn-continue">Continue Shopping</a>
+    </main>
+
+    <footer class="zaria-footer">
+        <p>&copy; 2026 ZARIA. The Art of Gifting.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.getElementById('zaria-loader');
+            if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
+        });
+    </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +6,143 @@
     <title>Contact Us | ZARIA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- 1. HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
+        :root {
+            --bg-wine: #5b1d2a;       
+            --bg-wine-dark: #3a1119;  
+            --text-gold: #c69c6d;     
+            --text-pink: #f9f0f0;     
+            --text-muted: #d0b8bc;    
+        }
+
+        /* --- GLOBAL RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* --- PRELOADER --- */
+        #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        #zaria-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
+
+        /* --- HEADER & MOVING TICKER --- */
+        .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(208, 184, 188, 0.1); overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
+        .scrolling-text { display: inline-block; animation: scroll-left 25s linear infinite; }
+        .scrolling-text span { margin-right: 50px; color: var(--text-gold); font-weight: 600; }
+        .announcement-bar:hover .scrolling-text { animation-play-state: paused; cursor: default; }
+        @keyframes scroll-left { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
+        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--bg-wine); font-weight: bold;}
+        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); letter-spacing: 2px; }
+        .logo-text span { font-size: 0.65rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; font-weight: 600; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-pink); }
+        
+        .header-icons { display: flex; gap: 20px; font-size: 1.2rem; color: var(--text-muted); align-items: center; }
+        .header-icons i { cursor: pointer; transition: 0.3s; }
+        .header-icons i:hover { color: var(--text-gold); }
+        .search-container { position: relative; display: flex; align-items: center; border-bottom: 1px solid var(--text-muted); padding-bottom: 2px;}
+        .nav-search-input { background: transparent; border: none; color: var(--text-pink); outline: none; width: 120px; font-size: 0.9rem;}
+        .nav-search-input::placeholder { color: var(--text-muted); }
+
+        /* --- CONTACT PAGE SPECIFIC STYLES --- */
+        .contact-wrapper { padding: 40px 5% 80px; flex: 1; }
+        
+        .contact-header { text-align: center; margin-bottom: 50px; }
+        .contact-header h2 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--text-gold); margin-bottom: 15px; letter-spacing: 1px; }
+        .contact-header p { font-size: 1.1rem; color: var(--text-pink); max-width: 600px; margin: 0 auto; line-height: 1.7; opacity: 0.9; }
+
+        .contact-layout { display: flex; gap: 50px; }
+        
+        .contact-info-container, .contact-form-container { flex: 1; background: var(--bg-wine-dark); padding: 40px; border-radius: 12px; border: 1px solid rgba(208, 184, 188, 0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        
+        /* Info Blocks */
+        .info-block { display: flex; gap: 20px; margin-bottom: 30px; align-items: flex-start; }
+        .info-block i { color: var(--text-gold); font-size: 1.5rem; margin-top: 5px; }
+        .info-block h4 { color: var(--text-gold); margin-bottom: 8px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .info-block p { color: var(--text-pink); line-height: 1.6; font-size: 0.95rem; }
+        .info-block small { color: var(--text-muted); }
+
+        .map-container { border-radius: 8px; overflow: hidden; border: 2px solid rgba(208, 184, 188, 0.1); margin-top: 20px; }
+
+        /* Contact Form */
+        .contact-form-container h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--text-gold); margin-bottom: 25px; }
+        .contact-form { display: flex; flex-direction: column; gap: 20px; }
+        .input-row { display: flex; gap: 20px; }
+        .input-row .input-group { flex: 1; }
+        .input-group input, .input-group textarea { width: 100%; padding: 15px; border: 1px solid rgba(208, 184, 188, 0.2); border-radius: 4px; background: transparent; color: var(--text-pink); outline: none; font-size: 0.95rem; font-family: 'Inter', sans-serif; transition: 0.3s; }
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--text-gold); background: rgba(0,0,0,0.1); }
+        .input-group input::placeholder, .input-group textarea::placeholder { color: var(--text-muted); }
+        
+        .btn-submit { padding: 16px; background: var(--text-gold); color: var(--bg-wine-dark); border: 2px solid var(--text-gold); border-radius: 4px; cursor: pointer; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; font-size: 0.95rem; display: flex; justify-content: center; align-items: center; }
+        .btn-submit:hover { background: transparent; color: var(--text-gold); }
+
+        /* --- FOOTER --- */
+        .zaria-footer { background-color: var(--bg-wine-dark); padding: 60px 5% 20px; border-top: 1px solid rgba(208, 184, 188, 0.1); margin-top: auto; }
+        .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 2fr; gap: 30px; margin-bottom: 40px; }
+        .footer-column h4 { color: var(--text-gold); margin-bottom: 20px; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 1px; font-weight: 700; }
+        .footer-column p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 20px; }
+        .footer-column ul { list-style: none; }
+        .footer-column ul li { margin-bottom: 12px; }
+        .footer-column ul a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s, padding-left 0.3s; display: inline-block; }
+        .footer-column ul a:hover { color: var(--text-pink); padding-left: 5px; }
+        
+        .social-icons a { color: var(--text-gold); font-size: 1.3rem; margin-right: 15px; transition: transform 0.3s, color 0.3s; display: inline-block; }
+        .social-icons a:hover { color: var(--text-pink); transform: translateY(-4px); }
+        
+        .newsletter-form { display: flex; margin-bottom: 20px; }
+        .newsletter-form input { flex: 1; padding: 12px; border: none; border-radius: 4px 0 0 4px; outline: none; background: #fff; color: var(--bg-wine-dark); font-weight: 600; }
+        .newsletter-form button { padding: 12px 18px; border: none; background: var(--text-gold); color: var(--bg-wine-dark); font-weight: 700; border-radius: 0 4px 4px 0; cursor: pointer; transition: background 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .newsletter-form button:hover { background: #dfba8c; }
+        
+        .payment-icons { color: var(--text-muted); font-size: 1.8rem; display: flex; gap: 12px; }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 25px; border-top: 1px solid rgba(208, 184, 188, 0.1); color: var(--text-muted); font-size: 0.85rem; }
+        .legal-links a { color: var(--text-muted); text-decoration: none; margin-left: 15px; transition: color 0.3s; }
+        .legal-links a:hover { color: var(--text-pink); }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .contact-layout { flex-direction: column; }
+            .input-row { flex-direction: column; }
+            .footer-top { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            .footer-top { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
 </head>
 <body class="contact-body">
 
-    <!-- Global Header -->
-    <div class="announcement-bar">
-        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA 
+    <!-- 1. LOADING SCREEN -->
+    <div id="zaria-loader">
+        <div class="loader-logo">ZARIA</div>
+        <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;">Curating Elegance...</p>
     </div>
+
+    <!-- 2. ANNOUNCEMENT BAR (Moving Ticker) -->
+    <div class="announcement-bar">
+        <div class="scrolling-text">
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+        </div>
+    </div>
+
+    <!-- 3. HEADER -->
     <header class="header">
-        <div class="logo-container">
+        <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
             <div class="logo-text">
                 <h1>ZARIA</h1>
@@ -26,19 +152,21 @@
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="products.html">Shop</a>
-            <a href="#">Bestsellers</a>
             <a href="about.html">About</a>
             <a href="contact.html" class="active">Contact</a>
         </nav>
         <div class="header-icons">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-regular fa-heart"></i>
-            <a href="cart.html" style="color: inherit;"><i class="fa-solid fa-bag-shopping"></i></a>
-            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;">🌙</button>
+            <div class="search-container">
+                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts...">
+                <button id="nav-search-btn" title="Search" style="background: none; border: none; color: inherit; cursor: pointer; font-size: 1.2rem; padding: 0;"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <a href="wishlist.html" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-heart" title="Wishlist"></i></a>
+            <a href="cart.html" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-bag-shopping" title="Cart"></i></a>
+            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;" title="Toggle Dark Mode">🌙</button>
         </div>
     </header>
 
-    <!-- Contact Main Section -->
+    <!-- 4. CONTACT MAIN SECTION -->
     <main class="contact-wrapper">
         <div class="contact-header">
             <h2>Get in Touch</h2>
@@ -48,6 +176,7 @@
         <div class="contact-layout">
             <!-- Left Side: Info & Map -->
             <div class="contact-info-container">
+                
                 <div class="info-block">
                     <i class="fa-solid fa-location-dot"></i>
                     <div>
@@ -84,7 +213,7 @@
             <!-- Right Side: Contact Form -->
             <div class="contact-form-container">
                 <h3>Send us a message</h3>
-                <form class="contact-form">
+                <form class="contact-form" id="zaria-contact-form">
                     <div class="input-row">
                         <div class="input-group">
                             <input type="text" placeholder="First Name" required>
@@ -108,15 +237,104 @@
         </div>
     </main>
 
-    <!-- Global Footer -->
+    <!-- 5. GLOBAL MASSIVE FOOTER -->
     <footer class="zaria-footer">
-        <!-- Assume exact same footer code is here -->
-        <div class="footer-bottom" style="padding-top: 40px; text-align: center;">
+        <div class="footer-top">
+            <div class="footer-column brand-column">
+                <div class="logo-container" style="margin-bottom: 20px;">
+                    <div class="logo-circle" style="background: transparent; border: 1px solid var(--text-gold);">Z</div>
+                    <div class="logo-text">
+                        <h1 style="color: var(--text-gold);">ZARIA</h1>
+                    </div>
+                </div>
+                <p>The Art of Gifting. Handcrafted hampers for the moments that matter, curated with intention and delivered with warmth.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Investors</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="products.html">All Products</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Deals</a></li>
+                    <li><a href="#">Gift Cards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Shipping Details</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column newsletter-column">
+                <h4>Stay in the loop</h4>
+                <p>Subscribe for exclusive updates, new arrivals, and insider-only discounts.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <div class="payment-icons">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-cc-amex"></i>
+                    <i class="fa-brands fa-cc-paypal"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
             <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
+            <div class="legal-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Cookie Policy</a>
+            </div>
         </div>
     </footer>
 
+    <!-- 6. SCRIPTS -->
     <script src="script.js"></script>
-</body>
+    <script>
+        // Preloader Logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.getElementById('zaria-loader');
+            if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
+            // Form Submit Logic for Contact Page
+            const contactForm = document.getElementById('zaria-contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // If you have the showToast function in your script.js, this will trigger it!
+                    if (typeof showToast === "function") {
+                        showToast("Message sent successfully! Our concierge will reply soon.", "success");
+                    } else {
+                        alert("Message sent successfully! Our concierge will reply soon.");
+                    }
+                    contactForm.reset();
+                });
+            }
+        });
+    </script>
+</body>
 </html>

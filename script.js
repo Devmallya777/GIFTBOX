@@ -4,129 +4,90 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // --- 1. TOAST NOTIFICATION SYSTEM ---
-    const toastContainer = document.createElement('div');
-    toastContainer.id = 'toast-container';
-    document.body.appendChild(toastContainer);
+    // --- 1. SESSION MANAGEMENT (Auth/Guest) ---
+    const isLoggedIn = localStorage.getItem('zaria-logged-in') === 'true';
+    const isGuest = localStorage.getItem('zaria-guest') === 'true';
+    const currentPage = window.location.pathname.split('/').pop();
 
-    function showToast(message) {
+    // Route Protection: If not logged in AND not a guest, force to login
+    if (!isLoggedIn && !isGuest && currentPage !== 'login.html' && currentPage !== 'register.html') {
+        window.location.href = 'login.html';
+    }
+
+    // --- 2. TOAST SYSTEM ---
+    function showToast(message, type = 'success') {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            document.body.appendChild(container);
+        }
         const toast = document.createElement('div');
-        toast.className = 'toast';
+        toast.className = `toast ${type}`;
         toast.innerText = message;
-        toastContainer.appendChild(toast);
+        container.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
 
-    // --- 2. PRELOADER ---
+    // --- 3. LOGIN/REGISTER LOGIC ---
+    const loginForm = document.querySelector('.auth-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            localStorage.setItem('zaria-logged-in', 'true');
+            localStorage.setItem('zaria-guest', 'false');
+            showToast("Welcome back to ZARIA!");
+            setTimeout(() => window.location.href = "index.html", 1000);
+        });
+    }
+
+    // "Skip for now" function (Add this to your login.html buttons)
+    window.skipLogin = () => {
+        localStorage.setItem('zaria-guest', 'true');
+        window.location.href = "index.html";
+    };
+
+    // --- 4. PRELOADER & LOGO ---
     const loader = document.getElementById('zaria-loader');
     if (loader) {
         window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
     }
 
-    // --- 3. AUTHENTICATION & ROUTE GUARD ---
-    const protectedPages = ['cart.html', 'checkout.html', 'wishlist.html'];
-    const currentPageName = window.location.pathname.split('/').pop() || 'index.html';
-    const isLoggedIn = localStorage.getItem('zaria-logged-in') === 'true';
-
-    if (protectedPages.includes(currentPageName) && !isLoggedIn) {
-        showToast('Redirecting to login for VIP access...');
-        setTimeout(() => window.location.href = 'login.html', 1500);
-    }
-
-    const authForm = document.querySelector('.auth-form');
-    if (authForm) {
-        authForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            localStorage.setItem('zaria-logged-in', 'true');
-            showToast("Login successful. Redirecting...");
-            setTimeout(() => window.location.href = "products.html", 1500);
-        });
-    }
-
-    // --- 4. GLOBAL NAVIGATION & UI ---
-    // Logo redirect
-    document.querySelectorAll('.logo-container').forEach(logo => {
-        logo.style.cursor = 'pointer';
-        logo.addEventListener('click', () => window.location.href = 'index.html');
-    });
-
-    // Dark Mode
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    if (themeToggleBtn) {
-        if (localStorage.getItem('zaria-dark-mode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            themeToggleBtn.textContent = '☀️';
-        }
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            themeToggleBtn.textContent = isDark ? '☀️' : '🌙';
-            localStorage.setItem('zaria-dark-mode', isDark ? 'enabled' : null);
-        });
-    }
-
-    // --- 5. SEARCH & FILTER LOGIC ---
-    const searchBtn = document.getElementById('nav-search-btn');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const searchInput = document.getElementById('nav-search-input');
-            if (searchInput.classList.contains('active') && searchInput.value) {
-                executeSearch(searchInput.value);
-            } else {
-                searchInput.classList.add('active');
-                searchInput.focus();
-            }
-        });
-    }
-
-    function executeSearch(term) {
-        if (window.location.pathname.includes('products.html')) {
-            filterProducts(term);
-        } else {
-            localStorage.setItem('zaria-search', term);
-            window.location.href = 'products.html';
-        }
-    }
-
-    function filterProducts(term) {
-        const query = term.toLowerCase();
-        document.querySelectorAll('.product-card').forEach(card => {
-            const title = card.querySelector('h4').innerText.toLowerCase();
-            card.style.display = title.includes(query) ? 'block' : 'none';
-        });
-    }
-
-    // --- 6. CART & QUANTITY LOGIC ---
-    document.querySelectorAll('.qty-btn').forEach(btn => {
+    // --- 5. CART LOGIC (Persistent) ---
+    // Add to Cart
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const input = e.target.parentElement.querySelector('.qty-input');
-            if (e.target.classList.contains('plus')) input.value++;
-            else if (input.value > 1) input.value--;
+            const product = e.target.closest('.product-card');
+            const name = product.querySelector('h4').innerText;
+            showToast(`${name} added to cart!`);
+            // Store in LocalStorage if needed
         });
     });
 
-    // --- 7. RAZORPAY INTEGRATION ---
+    // --- 6. DARK MODE ---
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('zaria-dark-mode', document.body.classList.contains('dark-mode'));
+        });
+    }
+
+    // --- 7. RAZORPAY (Checkout Page) ---
     const payBtn = document.querySelector('.btn-pay-now');
     if (payBtn) {
         payBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const total = payBtn.dataset.total || 3499;
-
-            var options = {
-                "key": "rzp_test_YOUR_API_KEY",
-                "amount": total * 100,
-                "currency": "INR",
-                "name": "ZARIA",
-                "description": "The Art of Gifting",
-                "handler": function (res) {
-                    showToast("Payment successful! Saving order...");
-                    // Logic to send to your backend /order API goes here
-                    window.location.href = "order-success.html";
-                },
-                "theme": { "color": "#722F37" }
+            // This triggers your payment modal
+            const options = {
+                key: "rzp_test_YOUR_API_KEY",
+                amount: 1026400, // Amount in paise
+                currency: "INR",
+                name: "ZARIA",
+                description: "Order Payment",
+                handler: (res) => window.location.href = "order-success.html"
             };
-            new window.Razorpay(options).open();
+            new Razorpay(options).open();
         });
     }
 });

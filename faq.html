@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +6,87 @@
     <title>FAQs | ZARIA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- 1. HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
+        :root {
+            --bg-wine: #5b1d2a;       
+            --bg-wine-dark: #3a1119;  
+            --text-gold: #c69c6d;     
+            --text-pink: #f9f0f0;     
+            --text-muted: #d0b8bc;    
+        }
+
+        /* --- GLOBAL RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* --- PRELOADER --- */
+        #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        #zaria-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
+
+        /* --- HEADER & TICKER --- */
+        .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(208, 184, 188, 0.1); overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
+        .scrolling-text { display: inline-block; animation: scroll-left 25s linear infinite; }
+        .scrolling-text span { margin-right: 50px; color: var(--text-gold); font-weight: 600; }
+        .announcement-bar:hover .scrolling-text { animation-play-state: paused; cursor: default; }
+        @keyframes scroll-left { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
+        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--bg-wine); font-weight: bold;}
+        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); letter-spacing: 2px; }
+        .logo-text span { font-size: 0.65rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; font-weight: 600; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-pink); }
+        
+        .header-icons { display: flex; gap: 20px; font-size: 1.2rem; color: var(--text-muted); align-items: center; }
+        .header-icons i, .header-icons button { cursor: pointer; transition: 0.3s; background: none; border: none; color: inherit; }
+        .header-icons i:hover, .header-icons button:hover { color: var(--text-gold); }
+
+        /* --- FAQ CONTENT --- */
+        .faq-wrapper { padding: 40px 5% 80px; flex: 1; max-width: 800px; margin: 0 auto; width: 100%; }
+        .faq-header { text-align: center; margin-bottom: 50px; }
+        .faq-header h2 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); margin-bottom: 15px; }
+        .faq-header p { color: var(--text-pink); opacity: 0.9; }
+        
+        .faq-category { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); margin: 40px 0 20px; border-bottom: 1px solid rgba(208, 184, 188, 0.2); padding-bottom: 10px; }
+        
+        .accordion { width: 100%; background: var(--bg-wine-dark); color: var(--text-pink); border: none; padding: 20px; text-align: left; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; margin-bottom: 10px; border-radius: 4px; }
+        .accordion:hover { color: var(--text-gold); }
+        .panel { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: var(--text-muted); font-size: 1rem; line-height: 1.7; padding: 0 20px; background: rgba(0,0,0,0.1); border-radius: 0 0 4px 4px; }
+
+        /* --- FOOTER --- */
+        .zaria-footer { background-color: var(--bg-wine-dark); padding: 50px 5% 20px; border-top: 1px solid rgba(208, 184, 188, 0.1); margin-top: auto; }
+        .footer-bottom { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding-top: 40px; }
+    </style>
 </head>
 <body class="faq-body">
 
-    <!-- Global Header -->
-    <div class="announcement-bar">
-        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA 
+    <div id="zaria-loader">
+        <div class="loader-logo">ZARIA</div>
+        <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;">Curating Elegance...</p>
     </div>
+
+    <div class="announcement-bar">
+        <div class="scrolling-text">
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+        </div>
+    </div>
+
     <header class="header">
-        <div class="logo-container">
+        <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
             <div class="logo-text">
                 <h1>ZARIA</h1>
@@ -34,11 +104,10 @@
             <i class="fa-solid fa-magnifying-glass"></i>
             <i class="fa-regular fa-heart"></i>
             <a href="cart.html" style="color: inherit;"><i class="fa-solid fa-bag-shopping"></i></a>
-            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;">🌙</button>
+            <button id="theme-toggle">🌙</button>
         </div>
     </header>
 
-    <!-- FAQ Main Section -->
     <main class="faq-wrapper">
         <div class="faq-header">
             <h2>Frequently Asked Questions</h2>
@@ -46,48 +115,45 @@
         </div>
 
         <div class="faq-container">
-            
             <h3 class="faq-category">Shipping & Delivery</h3>
-            
             <button class="accordion">How long does shipping take? <i class="fa-solid fa-plus"></i></button>
-            <div class="panel">
-                <p>We dispatch all orders from our Durgapur headquarters within 24 hours. Standard shipping across India takes 3-5 business days. Express shipping takes 1-2 business days.</p>
-            </div>
+            <div class="panel"><p style="padding: 15px 0;">We dispatch all orders from our Durgapur headquarters within 24 hours. Standard shipping across India takes 3-5 business days.</p></div>
 
             <button class="accordion">Do you offer same-day delivery? <i class="fa-solid fa-plus"></i></button>
-            <div class="panel">
-                <p>Currently, same-day delivery is only available for select pin codes in Kolkata and Asansol-Durgapur regions on orders placed before 12:00 PM IST.</p>
-            </div>
+            <div class="panel"><p style="padding: 15px 0;">Same-day delivery is available for select pin codes in Kolkata and Asansol-Durgapur regions.</p></div>
 
             <h3 class="faq-category">Products & Customization</h3>
-
             <button class="accordion">Can I customize the items inside a hamper? <i class="fa-solid fa-plus"></i></button>
-            <div class="panel">
-                <p>Absolutely! The Art of Gifting is all about personalization. You can use our "Build a Box" feature to select individual items, or contact our concierge for corporate bulk customizations.</p>
-            </div>
-
-            <button class="accordion">Is your packaging eco-friendly? <i class="fa-solid fa-plus"></i></button>
-            <div class="panel">
-                <p>Yes. Our signature wine boxes are made from 100% recycled materials. We use paper bubble wrap and biodegradable packing peanuts to ensure your fragile items arrive safely without harming the planet.</p>
-            </div>
-
-            <h3 class="faq-category">Returns & Refunds</h3>
-
-            <button class="accordion">What is your return policy? <i class="fa-solid fa-plus"></i></button>
-            <div class="panel">
-                <p>Because our hampers contain perishable items (like artisanal chocolates) and personalized notes, we do not accept returns on personalized boxes. If an item arrives damaged, please contact us within 48 hours for a replacement.</p>
-            </div>
-
+            <div class="panel"><p style="padding: 15px 0;">Yes! Use our "Build a Box" feature to select individual items, or contact our concierge for corporate bulk customizations.</p></div>
         </div>
     </main>
 
-    <!-- Global Footer -->
     <footer class="zaria-footer">
-        <div class="footer-bottom" style="padding-top: 40px; text-align: center;">
+        <div class="footer-bottom">
             <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // FAQ Accordion Logic
+            const accordions = document.querySelectorAll(".accordion");
+            accordions.forEach(acc => {
+                acc.addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    const panel = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    if (panel.style.maxHeight) {
+                        panel.style.maxHeight = null;
+                        icon.classList.replace('fa-minus', 'fa-plus');
+                    } else {
+                        panel.style.maxHeight = panel.scrollHeight + "px";
+                        icon.classList.replace('fa-plus', 'fa-minus');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

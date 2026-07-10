@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,15 +6,107 @@
     <title>Account Login | ZARIA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- 1. HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
+        :root {
+            --bg-wine: #5b1d2a;       
+            --bg-wine-dark: #3a1119;  
+            --text-gold: #c69c6d;     
+            --text-pink: #f9f0f0;     
+            --text-muted: #d0b8bc;    
+        }
+        /* Styling for the Skip button */
+.btn-secondary {
+    display: inline-block;
+    padding: 15px;
+    background: transparent;
+    border: 1px solid var(--text-gold); /* Gold outline */
+    color: var(--text-gold);            /* Gold text */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+}
+
+.btn-secondary:hover {
+    background: var(--text-gold);      /* Fills with gold on hover */
+    color: var(--bg-wine-dark);        /* Text turns dark wine */
+}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* --- PRELOADER --- */
+        #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        #zaria-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
+
+        /* --- HEADER & TICKER --- */
+        .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(208, 184, 188, 0.1); overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
+        .scrolling-text { display: inline-block; animation: scroll-left 25s linear infinite; }
+        .scrolling-text span { margin-right: 50px; color: var(--text-gold); font-weight: 600; }
+        .announcement-bar:hover .scrolling-text { animation-play-state: paused; cursor: default; }
+        @keyframes scroll-left { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
+        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--bg-wine); font-weight: bold;}
+        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); letter-spacing: 2px; }
+        .logo-text span { font-size: 0.65rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; font-weight: 600; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-pink); }
+        
+        .header-icons { display: flex; gap: 20px; font-size: 1.2rem; color: var(--text-muted); align-items: center; }
+        .header-icons i, .header-icons button { cursor: pointer; transition: 0.3s; background: none; border: none; color: inherit; }
+        .header-icons i:hover, .header-icons button:hover { color: var(--text-gold); }
+
+        /* --- AUTH BOX --- */
+        .auth-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 5%; }
+        .auth-box { background: var(--bg-wine-dark); padding: 50px; border-radius: 12px; width: 100%; max-width: 450px; border: 1px solid rgba(208, 184, 188, 0.1); }
+        .auth-title { font-family: 'Playfair Display', serif; color: var(--text-gold); margin-bottom: 10px; font-size: 2rem; }
+        .auth-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group input { width: 100%; padding: 15px; background: transparent; border: 1px solid var(--text-muted); color: var(--text-pink); border-radius: 4px; outline: none; }
+        .auth-extras { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 25px; color: var(--text-muted); }
+        .forgot-link { color: var(--text-gold); text-decoration: none; }
+        .btn-auth { width: 100%; padding: 15px; background: var(--text-gold); border: none; color: var(--bg-wine-dark); font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: 0.3s; }
+        .btn-auth:hover { background: #dfba8c; }
+        .auth-switch { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-muted); }
+        .auth-switch a { color: var(--text-gold); text-decoration: none; font-weight: 600; }
+
+        /* --- FOOTER --- */
+        .zaria-footer { background-color: var(--bg-wine-dark); padding: 40px 5%; text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: auto; border-top: 1px solid rgba(208, 184, 188, 0.1); }
+    </style>
 </head>
 <body class="auth-body">
 
-    <div class="announcement-bar">
-        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA 
+    <!-- PRELOADER -->
+    <div id="zaria-loader">
+        <div class="loader-logo">ZARIA</div>
+        <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;">Authenticating...</p>
     </div>
+
+    <!-- NEWS TICKER -->
+    <div class="announcement-bar">
+        <div class="scrolling-text">
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+        </div>
+    </div>
+
     <header class="header">
-        <div class="logo-container">
+        <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
             <div class="logo-text">
                 <h1>ZARIA</h1>
@@ -25,7 +116,6 @@
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="products.html">Shop</a>
-            <a href="#">Bestsellers</a>
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
         </nav>
@@ -33,16 +123,17 @@
             <i class="fa-solid fa-magnifying-glass"></i>
             <i class="fa-regular fa-heart"></i>
             <a href="cart.html" style="color: inherit;"><i class="fa-solid fa-bag-shopping"></i></a>
-            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;">🌙</button>
+            <button id="theme-toggle">🌙</button>
         </div>
     </header>
 
     <main class="auth-wrapper">
         <div class="auth-box">
+            <button type="button" onclick="skipLogin()" class="btn-secondary" style="margin-top:10px; width:100%;">Skip for now</button>
             <h2 class="auth-title">Welcome Back</h2>
             <p class="auth-subtitle">Sign in to access your ZARIA account, track orders, and view your wishlist.</p>
             
-            <form class="auth-form">
+            <form class="auth-form" id="zaria-login-form">
                 <div class="input-group">
                     <input type="email" placeholder="Email Address" required>
                 </div>
@@ -52,9 +143,7 @@
                 
                 <div class="auth-extras">
                     <label class="custom-checkbox">
-                        <input type="checkbox">
-                        <span class="checkmark"></span>
-                        Remember me
+                        <input type="checkbox"> Remember me
                     </label>
                     <a href="#" class="forgot-link">Forgot Password?</a>
                 </div>
@@ -69,12 +158,26 @@
     </main>
 
     <footer class="zaria-footer">
-        <div class="footer-bottom" style="padding-top: 40px; text-align: center;">
-            <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
-        </div>
+        <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
     </footer>
 
     <script src="script.js"></script>
-</body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.getElementById('zaria-loader');
+            if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
+            // Login Logic
+            document.getElementById('zaria-login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (typeof showToast === "function") {
+                    showToast("Login successful! Welcome back.", "success");
+                } else {
+                    alert("Login successful!");
+                }
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
 </html>

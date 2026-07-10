@@ -6,15 +6,104 @@
     <title>Your Cart | ZARIA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- 1. HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
+        :root {
+            --bg-wine: #5b1d2a;       
+            --bg-wine-dark: #3a1119;  
+            --text-gold: #c69c6d;     
+            --text-pink: #f9f0f0;     
+            --text-muted: #d0b8bc;    
+        }
+
+        /* --- GLOBAL RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* --- PRELOADER --- */
+        #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        #zaria-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
+
+        /* --- HEADER & TICKER --- */
+        .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(208, 184, 188, 0.1); overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; }
+        .scrolling-text { display: inline-block; animation: scroll-left 25s linear infinite; }
+        .scrolling-text span { margin-right: 50px; color: var(--text-gold); font-weight: 600; }
+        @keyframes scroll-left { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
+        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--bg-wine); font-weight: bold;}
+        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); letter-spacing: 2px; }
+        .logo-text span { font-size: 0.65rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; font-weight: 600; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-pink); }
+        
+        .header-icons { display: flex; gap: 20px; font-size: 1.2rem; color: var(--text-muted); align-items: center; }
+        .header-icons i, .header-icons button { cursor: pointer; transition: 0.3s; background: none; border: none; color: inherit; }
+        .header-icons i:hover, .header-icons button:hover { color: var(--text-gold); }
+
+        /* --- CART LAYOUT --- */
+        .cart-wrapper { padding: 40px 5% 80px; flex: 1; }
+        .cart-title { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); margin-bottom: 40px; }
+        .cart-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 50px; }
+        
+        .cart-header { display: grid; grid-template-columns: 2fr 1fr 1fr; padding-bottom: 20px; border-bottom: 1px solid rgba(208, 184, 188, 0.2); color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .cart-item { display: grid; grid-template-columns: 2fr 1fr 1fr; align-items: center; padding: 30px 0; border-bottom: 1px solid rgba(208, 184, 188, 0.1); }
+        
+        .item-info { display: flex; gap: 20px; align-items: center; }
+        .item-image { width: 100px; height: 100px; border-radius: 8px; }
+        .item-details h4 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--text-pink); margin-bottom: 5px; }
+        .btn-remove { background: none; border: none; color: #d9534f; cursor: pointer; font-size: 0.8rem; text-decoration: underline; margin-top: 5px;}
+
+        .quantity-selector { display: flex; align-items: center; gap: 10px; }
+        .qty-btn { width: 30px; height: 30px; border: 1px solid var(--text-muted); background: transparent; color: var(--text-pink); cursor: pointer; }
+        .qty-input { width: 40px; text-align: center; border: 1px solid var(--text-muted); background: transparent; color: var(--text-pink); padding: 5px; }
+
+        .cart-summary { background: var(--bg-wine-dark); padding: 30px; border-radius: 12px; }
+        .cart-summary h3 { font-family: 'Playfair Display', serif; color: var(--text-gold); margin-bottom: 25px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--text-pink); }
+        .summary-total { display: flex; justify-content: space-between; font-weight: 700; color: var(--text-gold); font-size: 1.2rem; margin-top: 20px; border-top: 1px solid rgba(208, 184, 188, 0.2); padding-top: 20px;}
+        
+        .promo-box { display: flex; gap: 10px; margin: 25px 0; }
+        .promo-box input { flex: 1; padding: 10px; background: transparent; border: 1px solid var(--text-muted); color: var(--text-pink); }
+        .promo-box button { padding: 10px 15px; background: var(--text-gold); border: none; cursor: pointer; }
+
+        .btn-checkout { display: block; text-align: center; background: var(--text-gold); color: var(--bg-wine-dark); padding: 15px; text-decoration: none; font-weight: 700; border-radius: 4px; margin-top: 20px; transition: 0.3s; }
+        .btn-checkout:hover { background: #dfba8c; }
+        
+        /* --- FOOTER --- */
+        .zaria-footer { background-color: var(--bg-wine-dark); padding: 60px 5% 20px; border-top: 1px solid rgba(208, 184, 188, 0.1); margin-top: auto; }
+        .footer-bottom { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding-top: 40px; }
+    </style>
 </head>
 <body>
 
-    <div class="announcement-bar">
-        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA 
+    <!-- PRELOADER -->
+    <div id="zaria-loader">
+        <div class="loader-logo">ZARIA</div>
     </div>
+
+    <!-- NEWS TICKER -->
+    <div class="announcement-bar">
+        <div class="scrolling-text">
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+        </div>
+    </div>
+
     <header class="header">
-        <div class="logo-container">
+        <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
             <div class="logo-text">
                 <h1>ZARIA</h1>
@@ -31,23 +120,21 @@
         <div class="header-icons">
             <i class="fa-solid fa-magnifying-glass"></i>
             <i class="fa-regular fa-heart"></i>
-            <a href="cart.html" style="color: inherit;"><i class="fa-solid fa-bag-shopping"></i></a>
-            <button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;">🌙</button>
+            <a href="cart.html" style="color: var(--text-gold);"><i class="fa-solid fa-bag-shopping"></i></a>
+            <button id="theme-toggle">🌙</button>
         </div>
     </header>
-    <button onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
+
+    <button onclick="window.history.back()" class="btn-go-back" style="padding: 15px 5%; background: none; border: none; color: var(--text-gold); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
+
     <main class="cart-wrapper">
         <h2 class="cart-title">Your Shopping Cart</h2>
-        
         <div class="cart-layout">
             <div class="cart-items-container">
-                
                 <div class="cart-header">
-                    <span class="col-product">Product</span>
-                    <span class="col-quantity">Quantity</span>
-                    <span class="col-total">Total</span>
+                    <span>Product</span><span>Quantity</span><span>Total</span>
                 </div>
-
+                <!-- Cart items would be injected here by script.js -->
                 <div class="cart-item">
                     <div class="item-info">
                         <div class="item-image" style="background-color: #f7a8b8;"></div>
@@ -59,76 +146,25 @@
                     </div>
                     <div class="item-quantity">
                         <div class="quantity-selector">
-                            <button class="qty-btn">-</button>
-                            <input type="number" value="1" min="1" class="qty-input">
-                            <button class="qty-btn">+</button>
+                            <button class="qty-btn">-</button><input type="number" value="1" class="qty-input"><button class="qty-btn">+</button>
                         </div>
                     </div>
-                    <div class="item-total">
-                        <p>₹3,499</p>
-                    </div>
+                    <div class="item-total"><p>₹3,499</p></div>
                 </div>
-
-                <div class="cart-item">
-                    <div class="item-info">
-                        <div class="item-image" style="background-color: #e4c5c4;"></div>
-                        <div class="item-details">
-                            <h4>The Golden Hour Hamper</h4>
-                            <p class="item-price">₹5,200</p>
-                            <button class="btn-remove">Remove</button>
-                        </div>
-                    </div>
-                    <div class="item-quantity">
-                        <div class="quantity-selector">
-                            <button class="qty-btn">-</button>
-                            <input type="number" value="1" min="1" class="qty-input">
-                            <button class="qty-btn">+</button>
-                        </div>
-                    </div>
-                    <div class="item-total">
-                        <p>₹5,200</p>
-                    </div>
-                </div>
-
             </div>
-
+            
             <div class="cart-summary">
                 <h3>Order Summary</h3>
-                
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span>₹8,699</span>
-                </div>
-                <div class="summary-row">
-                    <span>Shipping</span>
-                    <span style="color: green;">Free</span>
-                </div>
-                <div class="summary-row">
-                    <span>Tax (GST 18%)</span>
-                    <span>₹1,565</span>
-                </div>
-                
-                <div class="promo-box">
-                    <input type="text" placeholder="Enter Promo Code">
-                    <button>Apply</button>
-                </div>
-
-                <div class="summary-total">
-                    <span>Estimated Total</span>
-                    <span>₹10,264</span>
-                </div>
-
-                <a href="checkout.html" class="btn-checkout">Proceed to Checkout <i class="fa-solid fa-lock"></i></a>
-                
-                <div class="secure-checkout">
-                    <i class="fa-solid fa-shield-halved"></i> Secure Encrypted Checkout
-                </div>
+                <div class="summary-row"><span>Subtotal</span><span>₹3,499</span></div>
+                <div class="summary-row"><span>Shipping</span><span style="color: green;">Free</span></div>
+                <div class="summary-total"><span>Total</span><span>₹3,499</span></div>
+                <a href="checkout.html" class="btn-checkout">Proceed to Checkout</a>
             </div>
         </div>
     </main>
 
     <footer class="zaria-footer">
-        <div class="footer-bottom" style="padding-top: 40px; text-align: center;">
+        <div class="footer-bottom">
             <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
         </div>
     </footer>
