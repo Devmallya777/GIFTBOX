@@ -9,95 +9,73 @@
     
     <style>
         :root {
-            --bg-wine: #5b1d2a;
-            --bg-wine-dark: #3a1119;
-            --text-gold: #c69c6d;
-            --text-pink: #f9f0f0;
-            --text-muted: #d0b8bc;
+            --bg-wine: #5b1d2a; --bg-wine-dark: #3a1119;
+            --text-gold: #c69c6d; --text-pink: #f9f0f0; --text-muted: #d0b8bc;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
         
-        #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
-        #zaria-loader.hidden { opacity: 0; visibility: hidden; }
-        .loader-logo { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--text-gold); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
-
-        .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; text-align: center; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid rgba(228, 197, 196, 0.1); }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
-        .logo-container { cursor: pointer; display: flex; align-items: center; gap: 15px; }
-        .logo-circle { width: 40px; height: 40px; background-color: var(--text-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bg-wine); font-weight: bold; }
-        .logo-text h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-gold); }
+        #zaria-loader { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-wine-dark); display:flex; justify-content:center; align-items:center; z-index:9999; transition:0.8s; }
+        #zaria-loader.hidden { opacity:0; visibility:hidden; }
         
-        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; margin-right: 20px; font-weight: 600; }
-        .nav-links a:hover { color: var(--text-pink); }
-        
-        .shop-wrapper { display: flex; gap: 40px; padding: 20px 5% 60px; flex: 1; }
-        .shop-sidebar { width: 250px; }
-        .shop-main { flex: 1; }
-        
-        /* The container where JS will inject products */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: var(--bg-wine); }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         
+        /* FIX: Ensure buttons register clicks */
         .product-card { background: var(--bg-wine-dark); border-radius: 12px; overflow: hidden; position: relative; }
         .product-image { height: 280px; background-size: cover; background-position: center; position: relative; }
-        .hover-actions { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; gap: 15px; opacity: 0; background: rgba(0,0,0,0.3); transition: 0.3s; }
+        .hover-actions { position: absolute; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; gap:15px; opacity:0; background:rgba(0,0,0,0.4); transition:0.3s; z-index: 2; }
         .product-card:hover .hover-actions { opacity: 1; }
+        .hover-actions button { z-index: 3; cursor: pointer; background: none; border: none; color: white; font-size: 1.2rem; }
+        
         .product-info { padding: 20px; text-align: center; }
-        .add-to-cart { width: 100%; padding: 10px; background: transparent; border: 2px solid var(--text-gold); color: var(--text-gold); border-radius: 20px; cursor: pointer; }
+        .add-to-cart { width: 100%; padding: 10px; background: transparent; border: 2px solid var(--text-gold); color: var(--text-gold); border-radius: 20px; cursor: pointer; z-index: 3; position: relative; }
         .add-to-cart:hover { background: var(--text-gold); color: var(--bg-wine-dark); }
         
-        .zaria-footer { background-color: var(--bg-wine-dark); padding: 40px 5%; text-align: center; color: var(--text-muted); margin-top: auto; }
+        .shop-wrapper { padding: 40px 5%; display: flex; gap: 40px; }
+        .shop-main { flex: 1; }
     </style>
 </head>
 <body>
 
-    <div id="zaria-loader"><div class="loader-logo">ZARIA</div></div>
-
-    <div class="announcement-bar">+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA</div>
+    <div id="zaria-loader"><div class="loader-logo" style="color:var(--text-gold); font-family: 'Playfair Display'; font-size: 3rem;">ZARIA</div></div>
 
     <header class="header">
-        <div class="logo-container" onclick="window.location.href='index.html'">
-            <div class="logo-circle">Z</div>
-            <div class="logo-text"><h1>ZARIA</h1></div>
+        <div class="logo-container" onclick="window.location.href='index.html'" style="cursor:pointer; display:flex; align-items:center; gap:10px;">
+            <div class="logo-circle" style="width:40px; height:40px; background:var(--text-gold); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--bg-wine); font-weight:bold;">Z</div>
+            <h1>ZARIA</h1>
         </div>
-        <nav class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="products.html" class="active">Shop</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-        <div class="header-icons">
-            <a href="cart.html"><i class="fa-solid fa-bag-shopping"></i></a>
-        </div>
+        <nav class="nav-links"><a href="index.html">Home</a><a href="products.html">Shop</a></nav>
     </header>
 
     <main class="shop-wrapper">
-        <aside class="shop-sidebar">
-            <h3>Filter By</h3>
-            </aside>
-
         <section class="shop-main">
             <div class="product-grid" id="product-grid">
                 </div>
         </section>
     </main>
 
-    <footer class="zaria-footer"><p>&copy; 2026 ZARIA. All Rights Reserved.</p></footer>
-
     <script src="script.js"></script>
     <script>
-        // Fetches products from your MongoDB API and renders them
-        async function fetchProducts() {
+        // Use a standard fetch that gracefully handles empty states
+        async function loadProducts() {
             const grid = document.getElementById('product-grid');
             try {
                 const res = await fetch('/api/products');
+                if (!res.ok) throw new Error('API down');
                 const products = await res.json();
+                
+                if (products.length === 0) {
+                    grid.innerHTML = "<p>No products found in database.</p>";
+                    return;
+                }
+
                 grid.innerHTML = products.map(p => `
                     <div class="product-card">
-                        <div class="product-image" style="background-color: ${p.color};">
+                        <div class="product-image" style="background-color: ${p.color || '#ccc'};">
                             <div class="hover-actions">
-                                <button><i class="fa-regular fa-heart"></i></button>
-                                <button><i class="fa-regular fa-eye"></i></button>
+                                <button onclick="toggleWishlist('${p._id}')"><i class="fa-regular fa-heart"></i></button>
+                                <button onclick="alert('Quick view')"><i class="fa-regular fa-eye"></i></button>
                             </div>
                         </div>
                         <div class="product-info">
@@ -108,10 +86,17 @@
                     </div>
                 `).join('');
             } catch (err) {
-                grid.innerHTML = "<p>No products available right now.</p>";
+                console.error(err);
+                grid.innerHTML = "<p>Database connection failed. Ensure your backend is running.</p>";
             }
         }
-        document.addEventListener("DOMContentLoaded", fetchProducts);
+        
+        // Ensure this runs only once
+        window.addEventListener('load', () => {
+            loadProducts();
+            const loader = document.getElementById('zaria-loader');
+            if (loader) loader.classList.add('hidden');
+        });
     </script>
 </body>
 </html>
