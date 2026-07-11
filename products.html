@@ -6,7 +6,6 @@
     <title>Shop All | ZARIA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     
     <style>
         /* --- HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
@@ -224,8 +223,8 @@
 
         <div class="header-icons">
             <div class="search-container">
-                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts..." onkeydown="if(event.key === 'Enter'){ event.preventDefault(); performSearch(); }">
-                <button type="button" id="nav-search-btn" title="Search" onclick="performSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts...">
+                <button type="button" id="nav-search-btn" title="Search" onclick="let v = document.getElementById('nav-search-input').value; if(v) showToast('Searching for: ' + v);"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <a href="wishlist.html" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-heart" title="Wishlist"></i></a>
             <a href="cart.html" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-bag-shopping" title="Cart"></i></a>
@@ -376,22 +375,12 @@
 
     <script src="script.js"></script>
     <script>
+        // Ensure this triggers the database fetch on load
+        document.addEventListener("DOMContentLoaded", renderProducts);
         // Theme Guardian: Runs instantly on every page load
     (function() {
         if (localStorage.getItem('zaria-dark-mode') === 'true') {
             document.body.classList.add('dark-mode');
-        }
-    })();
-    // Auto-run search if arriving from another page with ?search=query
-    (function() {
-        const params = new URLSearchParams(window.location.search);
-        const q = params.get('search');
-        if (q) {
-            const input = document.getElementById('nav-search-input');
-            if (input) {
-                input.value = q;
-                document.addEventListener('DOMContentLoaded', () => performSearch());
-            }
         }
     })();
     </script>
