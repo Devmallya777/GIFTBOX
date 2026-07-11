@@ -9,19 +9,60 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="wishlist-body">
+    <style>
+        /* --- ANNOUNCEMENT BAR (MOVING TICKER) --- */
+        .announcement-bar {
+            background-color: #3a1119; /* Made slightly darker for better contrast */
+            padding: 10px 0;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(228, 197, 196, 0.1);
+            overflow: hidden; /* Hides the text before it scrolls onto the screen */
+            white-space: nowrap;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
+        .scrolling-text {
+            display: inline-block;
+            /* 25s dictates the speed. Lower = faster, Higher = slower */
+            animation: scroll-left 25s linear infinite;
+        }
+
+        .scrolling-text span {
+            margin-right: 50px; /* Gives nice breathing room between news items */
+            color: var(--text-gold); /* Highlight the text slightly */
+        }
+
+        /* Pro-Tip: Pause the animation when the user hovers over it so they can read! */
+        .announcement-bar:hover .scrolling-text {
+            animation-play-state: paused;
+            cursor: default;
+        }
+
+        /* The Magic Math for a seamless loop */
+        @keyframes scroll-left {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); } 
+        }
+    </style>
     <div class="announcement-bar">
         <div class="scrolling-text">
             <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
             <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
             <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
             <span>+ PERSONALISED GIFTING AVAILABLE</span>
+            <!-- We duplicate the text exactly so the loop is seamless! -->
             <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
             <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
             <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
             <span>+ PERSONALISED GIFTING AVAILABLE</span>
         </div>
     </div>
+    
         <header class="header">
         <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
@@ -30,7 +71,7 @@
                 <span>The Art of Gifting</span>
             </div>
         </div>
-
+        
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="products.html" class="active">Shop</a>
@@ -54,18 +95,7 @@
     <div class="product-grid" id="wishlist-grid"></div>
 </main>
 
-    <footer class="zaria-footer">
-        <div class="footer-top">
-            <div class="footer-column brand-column">
-                <div class="logo-container" style="margin-bottom: 20px;">
-                    <div class="logo-circle" style="background: transparent; border: 1px solid var(--text-gold);">Z</div>
-                    <div class="logo-text">
-                        <h1 style="color: var(--text-gold);">ZARIA</h1>
-                    </div>
-                </div>
-                <p>The Art of Gifting. Handcrafted hampers for the moments that matter.</p>
-            </div>
-        </div>
+    
         <footer class="zaria-footer">
         <div class="footer-top">
             <div class="footer-column brand-column">
