@@ -281,6 +281,23 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Page Initializers
     updateProductView();
+    // AUTO SEARCH FROM URL
+const params = new URLSearchParams(window.location.search);
+const search = params.get("search");
+
+if (search && document.getElementById("product-grid")) {
+
+    const input = document.getElementById("nav-search-input");
+    if (input) input.value = search;
+
+    currentWorkingList = allProducts.filter(product =>
+        product.name.toLowerCase().includes(search.toLowerCase()) ||
+        product.category.toLowerCase().includes(search.toLowerCase())
+    );
+
+    currentGridPage = 1;
+    updateProductView();
+}
     renderWishlist();
     renderCart();
     if (document.getElementById('checkout-items')) loadCheckoutSummary();
