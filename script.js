@@ -120,11 +120,14 @@ function applyFiltersAndSort() {
     const sortDropdown = document.querySelector('.sort-dropdown');
     if (sortDropdown) {
         const val = sortDropdown.value;
-        if (val.includes('Low')) {
-            currentWorkingList.sort((a, b) => a.price - b.price); // Lowest first
-        } else if (val.includes('High')) {
-            currentWorkingList.sort((a, b) => b.price - a.price); // Highest first
+        
+        // STRICT matching to fix the High/Low bug
+        if (val === 'Price: Low to High') {
+            currentWorkingList.sort((a, b) => a.price - b.price); // Lowest price first
+        } else if (val === 'Price: High to Low') {
+            currentWorkingList.sort((a, b) => b.price - a.price); // Highest price first
         }
+        // If "Featured" is selected, it leaves the array as-is
     }
 
     // C. Reset to Page 1 and Draw
