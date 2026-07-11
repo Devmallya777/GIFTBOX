@@ -120,9 +120,10 @@ function applyFiltersAndSort() {
     const sortDropdown = document.querySelector('.sort-dropdown');
     if (sortDropdown) {
         const val = sortDropdown.value;
-        if (val === 'Price: Low to High') {
+        // EXACT MATCHING to the HTML 'value' attribute
+        if (val === 'Low to High') {
             currentWorkingList.sort((a, b) => a.price - b.price); 
-        } else if (val === 'Price: High to Low') {
+        } else if (val === 'High to Low') {
             currentWorkingList.sort((a, b) => b.price - a.price); 
         }
     }
@@ -154,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Draw the grid when the page first loads
     updateProductView();
     
-        // --- PRELOADER ---
+    // --- PRELOADER ---
     const loader = document.getElementById('zaria-loader');
     if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
@@ -190,5 +191,3 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
-
-
