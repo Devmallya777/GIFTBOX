@@ -264,6 +264,27 @@ window.loadCheckoutSummary = () => {
     
     if (document.getElementById('subtotal')) document.getElementById('subtotal').innerText = `₹${subtotal}`;
     if (document.getElementById('total')) document.getElementById('total').innerText = `₹${subtotal}`;
+    /* ==========================================================
+   LOGIN CHECK BEFORE CHECKOUT
+========================================================== */
+
+window.proceedToCheckout = () => {
+
+    if (localStorage.getItem("zariaLoggedIn") !== "true") {
+
+        localStorage.setItem("redirectAfterLogin", "checkout.html");
+
+        showToast("Please login first.");
+
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1200);
+
+        return;
+    }
+
+    window.location.href = "checkout.html";
+};
 };
 
 // --- 6. GLOBAL EVENT LISTENERS & INITIALIZATION ---

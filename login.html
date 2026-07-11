@@ -157,15 +157,44 @@
             if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
             // Login Logic
-            document.getElementById('zaria-login-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (typeof showToast === "function") {
-                    showToast("Login successful! Welcome back.", "success");
-                } else {
-                    alert("Login successful!");
-                }
-                window.location.href = "index.html";
-            });
+            // Login Logic
+document.getElementById('zaria-login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Save login status
+    localStorage.setItem("zariaLoggedIn", "true");
+
+    if (typeof showToast === "function") {
+        showToast("Login successful! Welcome back.", "success");
+    }
+
+    setTimeout(() => {
+
+        // Check if user came here from checkout
+        const redirect = localStorage.getItem("redirectAfterLogin");
+
+        if (redirect) {
+            localStorage.removeItem("redirectAfterLogin");
+            window.location.href = redirect;
+        } else {
+            window.location.href = "index.html";
+        }
+
+    }, 1200);
+});
+function skipLogin() {
+    localStorage.removeItem("zariaLoggedIn");
+    localStorage.removeItem("redirectAfterLogin");
+    window.location.href = "index.html";
+}
+function logout() {
+    localStorage.removeItem("zariaLoggedIn");
+    showToast("Logged out successfully.");
+
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 1000);
+}
         });
         // Theme Guardian: Runs instantly on every page load
     (function() {
