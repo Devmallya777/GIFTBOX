@@ -3,7 +3,62 @@
    ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+   // --- 2. MONGODB DATA FETCHING (Now with Filter & Sort) ---
+let allProducts = []; // Store fetched products globally to filter without re-fetching
 
+async function fetchProducts() {
+    const grid = document.getElementById('product-grid');
+    if (!grid) return;
+    try {
+        const response = await fetch('/api/products');
+        allProducts = await response.json(); // Save to global array
+        renderProducts(allProducts); // Render initial state
+    } catch (err) { console.error("Error loading products:", err); }
+}
+
+function renderProducts(products) {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = products.map(p => `
+        <div class="product-card">
+            <a href="product.html?id=${p._id}">
+                <div class="product-image" style="background-color: ${p.color};">
+                    <div class="hover-actions">
+                        <button onclick="event.preventDefault(); toggleWishlist('${p._id}')"><i class="fa-regular fa-heart"></i></button>
+                    </div>
+                </div>
+            </a>
+            <div class="product-info">
+                <h4>${p.name}</h4>
+                <p class="price" data-price="${p.price}">₹${p.price}</p>
+                <button class="add-to-cart" onclick="addToCart('${p._id}', '${p.name}', ${p.price}, '${p.color}')">Add to Cart</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// --- FILTER & SORT HANDLERS ---
+document.addEventListener("DOMContentLoaded", () => {
+    // Sort Event
+    const sortDropdown = document.querySelector('.sort-dropdown');
+    if (sortDropdown) {
+        sortDropdown.addEventListener('change', (e) => {
+            let sorted = [...allProducts];
+            if (e.target.value.includes('Low to High')) sorted.sort((a, b) => a.price - b.price);
+            if (e.target.value.includes('High to Low')) sorted.sort((a, b) => b.price - a.price);
+            renderProducts(sorted);
+        });
+    }
+
+    // Filter Event
+    const filterBtn = document.querySelector('.btn-apply-filters');
+    if (filterBtn) {
+        filterBtn.addEventListener('click', () => {
+            // Example: Only show products under a certain price or specific criteria
+            // Add your logic here based on checkboxes
+            showToast("Filters Applied!");
+        });
+    }
+    
     // --- 1. TOAST SYSTEM ---
     window.showToast = (message, type = 'success') => {
         let container = document.getElementById('toast-container');
@@ -146,4 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
             panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
         });
     });
+});
+    
 });
