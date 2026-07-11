@@ -28,7 +28,43 @@
         /* --- PRELOADER (Optional, handled by script.js) --- */
         #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
         #zaria-loader.hidden { opacity: 0; visibility: hidden; }
+        .announcement-bar {
+            background-color: rgba(0, 0, 0, 0.4); /* Made slightly darker for better contrast */
+            padding: 10px 0;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(228, 197, 196, 0.1);
+            overflow: hidden; /* Hides the text before it scrolls onto the screen */
+            white-space: nowrap;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
+        .scrolling-text {
+            display: inline-block;
+            /* 25s dictates the speed. Lower = faster, Higher = slower */
+            animation: scroll-left 25s linear infinite;
+        }
+
+        .scrolling-text span {
+            margin-right: 50px; /* Gives nice breathing room between news items */
+            color: var(--text-gold); /* Highlight the text slightly */
+        }
+
+        /* Pro-Tip: Pause the animation when the user hovers over it so they can read! */
+        .announcement-bar:hover .scrolling-text {
+            animation-play-state: paused;
+            cursor: default;
+        }
+
+        /* The Magic Math for a seamless loop */
+        @keyframes scroll-left {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); } 
+        }
         /* --- HEADER & ANNOUNCEMENT --- */
         .announcement-bar { background-color: rgba(0, 0, 0, 0.4); padding: 10px 0; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: var(--text-muted); border-bottom: 1px solid rgba(208, 184, 188, 0.1); }
         .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
@@ -156,7 +192,17 @@
 <body>
 
     <div class="announcement-bar">
-        &nbsp;&nbsp;&nbsp;+ FREE SHIPPING ON ORDERS ABOVE ₹2,499 &nbsp;&nbsp;&nbsp;+ HANDCRAFTED WITH LOVE IN INDIA &nbsp;&nbsp;&nbsp;+ PERSONALISED GIFTING
+        <div class="scrolling-text">
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+            <!-- We duplicate the text exactly so the loop is seamless! -->
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+        </div>
     </div>
 
     <header class="header">
