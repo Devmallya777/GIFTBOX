@@ -342,6 +342,12 @@
             document.querySelector('.btn-add-cart').setAttribute('onclick', `addToCart('${product.id}', '${product.name}', ${product.price}, '${product.color}')`);
         }
     });
+    // Theme Guardian: Runs instantly on every page load
+    (function() {
+        if (localStorage.getItem('zaria-dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    })();
     </script>
 </body>
 </html>

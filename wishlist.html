@@ -172,5 +172,13 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Theme Guardian: Runs instantly on every page load
+    (function() {
+        if (localStorage.getItem('zaria-dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    })();
+    </script>
 </body>
 </html>

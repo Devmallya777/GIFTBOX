@@ -68,4 +68,14 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="script.js"></script>
 </body>
+<script>
+        // Ensure this triggers the database fetch on load
+        document.addEventListener("DOMContentLoaded", renderCheckout);
+        // Theme Guardian: Runs instantly on every page load
+    (function() {
+        if (localStorage.getItem('zaria-dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    })();
+    </script>
 </html>
