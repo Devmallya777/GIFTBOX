@@ -43,42 +43,13 @@
         </div>
     </header>
 
-    <main class="wishlist-wrapper">
-        <h2 class="wishlist-title">Your Saved Treasures</h2>
-        <p style="text-align: center; color: #666; margin-bottom: 50px;">Items saved to your wishlist will remain here until you move them to your cart.</p>
-        
-        <div class="product-grid" style="padding: 0 5%;">
-            
-            <div class="product-card wishlist-card">
-                <button class="btn-remove-wishlist" title="Remove from Wishlist"><i class="fa-solid fa-xmark"></i></button>
-                <a href="product.html" style="display: block; text-decoration: none;">
-                    <div class="product-image" style="background-color: #f7a8b8;"></div>
-                </a>
-                <div class="product-info">
-                    <a href="product.html" style="text-decoration: none; color: inherit;">
-                        <h4>The Midnight Velvet Box</h4>
-                    </a>
-                    <p class="price">₹3,499</p>
-                    <button class="btn-move-cart">Move to Cart</button>
-                </div>
-            </div>
-            
-            <div class="product-card wishlist-card">
-                <button class="btn-remove-wishlist" title="Remove from Wishlist"><i class="fa-solid fa-xmark"></i></button>
-                <a href="product.html" style="display: block; text-decoration: none;">
-                    <div class="product-image" style="background-color: #e4c5c4;"></div>
-                </a>
-                <div class="product-info">
-                    <a href="product.html" style="text-decoration: none; color: inherit;">
-                        <h4>The Golden Hour Hamper</h4>
-                    </a>
-                    <p class="price">₹5,200</p>
-                    <button class="btn-move-cart">Move to Cart</button>
-                </div>
-            </div>
-
-        </div>
-    </main>
+    <main class="wishlist-wrapper" style="padding: 40px 5%; max-width: 1200px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--text-gold);">Your Saved Treasures</h2>
+    </div>
+    
+    <div class="product-grid" id="wishlist-grid"></div>
+</main>
 
     <footer class="zaria-footer">
         <div class="footer-top">
