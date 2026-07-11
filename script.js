@@ -3,7 +3,7 @@
    ========================================================== */
 
 // --- 1. TOAST SYSTEM ---
-window.showToast = (message) => {
+window.showToast = (message, type = 'success') => {
     let container = document.getElementById('toast-container');
     if (!container) {
         container = document.createElement('div');
@@ -22,6 +22,7 @@ window.showToast = (message) => {
 const getData = (key) => JSON.parse(localStorage.getItem(key)) || [];
 const saveData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 
+// Add to Cart
 window.addToCart = (id, name, price, color) => {
     let cart = getData('zaria-cart');
     let existingItem = cart.find(item => item.id === id);
@@ -31,9 +32,11 @@ window.addToCart = (id, name, price, color) => {
     showToast(`${name} added to cart!`);
 };
 
+// Wishlist Logic
 window.toggleWishlist = (id, name, price, color) => {
     let wish = getData('zaria-wishlist');
     const existingIndex = wish.findIndex(item => item.id === id);
+    
     if (existingIndex > -1) {
         wish.splice(existingIndex, 1);
         showToast("Removed from wishlist.");
@@ -42,11 +45,10 @@ window.toggleWishlist = (id, name, price, color) => {
         showToast("Added to treasures! 💖");
     }
     saveData('zaria-wishlist', wish);
-    if (document.getElementById('wishlist-grid')) renderWishlist();
-    if (document.getElementById('product-grid')) updateProductView();
+    if (document.getElementById('wishlist-grid')) renderWishlist(); 
 };
 
-// --- 3. SHOP STATE ---
+// --- 3. STATE MANAGEMENT & SHOP PAGE ---
 const allProducts = [
     { id: '1', name: "Midnight Velvet Box", price: 3499, category: "Wedding Hampers", color: "#d0b8bc" },
     { id: '2', name: "Golden Hour Hamper", price: 5200, category: "Wedding Hampers", color: "#f9f0f0" },
@@ -61,100 +63,122 @@ let currentWorkingList = [...allProducts];
 let currentGridPage = 1;
 const itemsPerPage = 3; 
 
-// --- 4. UI RENDER FUNCTIONS ---
 function updateProductView() {
     const grid = document.getElementById('product-grid');
     if (!grid) return; 
+
     const start = (currentGridPage - 1) * itemsPerPage;
     const paginated = currentWorkingList.slice(start, start + itemsPerPage);
 
     grid.innerHTML = paginated.map(p => {
-        const inWishlist = getData('zaria-wishlist').some(w => w.id === p.id);
         return `
-        <div class="product-card" style="background: var(--bg-wine-dark); border-radius: 12px; overflow: hidden; border: 1px solid rgba(208, 184, 188, 0.05);">
-            <div class="product-image" style="background-color: ${p.color}; height: 280px; position: relative;">
-                <div class="hover-actions" style="position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); display:flex; justify-content:center; align-items:center; gap:15px; opacity:0; transition:0.3s;">
-                    <button type="button" onclick="event.preventDefault(); toggleWishlist('${p.id}', '${p.name}', ${p.price}, '${p.color}')" style="width:45px; height:45px; border-radius:50%; border:none; cursor:pointer; color: ${inWishlist ? '#d9534f' : '#5b1d2a'};"><i class="${inWishlist ? 'fa-solid' : 'fa-regular'} fa-heart"></i></button>
-                    <button type="button" onclick="window.location.href='product.html?id=${p.id}'" style="width:45px; height:45px; border-radius:50%; border:none; cursor:pointer; color: #5b1d2a;"><i class="fa-regular fa-eye"></i></button>
+        <div class="product-card">
+            <div class="product-image" style="background-color: ${p.color};">
+                <div class="hover-actions">
+                    <button type="button" onclick="event.preventDefault(); toggleWishlist('${p.id}', '${p.name}', ${p.price}, '${p.color}')"><i class="fa-regular fa-heart"></i></button>
+                    <button type="button" onclick="window.location.href='product.html?id=${p.id}'"><i class="fa-regular fa-eye"></i></button>
                 </div>
             </div>
-            <div class="product-info" style="padding: 20px; text-align: center;">
-                <h4 style="color: var(--text-pink); margin-bottom: 10px;">${p.name}</h4>
-                <p class="price" style="color: var(--text-pink); font-size: 1.2rem; font-weight: 600; margin-bottom: 15px;">₹${p.price}</p>
-                <button type="button" class="add-to-cart" onclick="event.preventDefault(); addToCart('${p.id}', '${p.name}', ${p.price}, '${p.color}')" style="width: 100%; padding: 10px; background: transparent; border: 2px solid var(--text-gold); color: var(--text-gold); border-radius: 25px; cursor: pointer; text-transform: uppercase; font-weight: bold;">Add to Cart</button>
+            <div class="product-info">
+                <h4>${p.name}</h4>
+                <p class="price">₹${p.price}</p>
+                <button type="button" class="add-to-cart" onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.color}')">Add to Cart</button>
             </div>
         </div>
     `}).join('');
-
-    // Hover effect
-    grid.querySelectorAll('.product-image').forEach(img => {
-        img.addEventListener('mouseenter', () => img.querySelector('.hover-actions').style.opacity = '1');
-        img.addEventListener('mouseleave', () => img.querySelector('.hover-actions').style.opacity = '0');
-    });
 
     const totalPages = Math.ceil(currentWorkingList.length / itemsPerPage);
     const nav = document.querySelector('.pagination');
     if (nav) {
         nav.innerHTML = Array.from({length: totalPages}, (_, i) => 
-            `<button type="button" class="page-btn ${currentGridPage === i+1 ? 'active' : ''}" onclick="goToPage(${i+1})" style="width: 40px; height: 40px; margin: 0 5px; background: ${currentGridPage === i+1 ? 'var(--text-gold)' : 'transparent'}; border: 1px solid var(--text-gold); color: ${currentGridPage === i+1 ? 'var(--bg-wine-dark)' : 'var(--text-muted)'}; cursor: pointer;">${i+1}</button>`
+            `<button type="button" class="page-btn ${currentGridPage === i+1 ? 'active' : ''}" onclick="goToPage(${i+1})">${i+1}</button>`
         ).join('');
+    }
+    
+    const resultCount = document.querySelector('.result-count');
+    if (resultCount) {
+        const end = Math.min(start + itemsPerPage, currentWorkingList.length);
+        resultCount.innerText = `Showing ${currentWorkingList.length === 0 ? 0 : start + 1}-${end} of ${currentWorkingList.length} results`;
     }
 }
 
 window.goToPage = (p) => { currentGridPage = p; updateProductView(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
 function applyFiltersAndSort() {
-    const min = parseInt(document.querySelector('input[placeholder="Min ₹"]').value) || 0;
-    const max = parseInt(document.querySelector('input[placeholder="Max ₹"]').value) || Infinity;
-    const checkedCats = Array.from(document.querySelectorAll('.custom-checkbox input:checked')).map(el => el.parentElement.innerText.trim());
+    const minInput = document.querySelector('input[placeholder="Min ₹"]');
+    const maxInput = document.querySelector('input[placeholder="Max ₹"]');
+    const min = minInput && minInput.value ? parseInt(minInput.value) : 0;
+    const max = maxInput && maxInput.value ? parseInt(maxInput.value) : Infinity;
+    
+    const checkboxes = document.querySelectorAll('.custom-checkbox input:checked');
+    const checkedCats = Array.from(checkboxes).map(el => el.parentElement.innerText.trim());
 
-    currentWorkingList = allProducts.filter(p => (p.price >= min && p.price <= max) && (checkedCats.length === 0 || checkedCats.includes(p.category)));
+    currentWorkingList = allProducts.filter(p => {
+        const matchesPrice = p.price >= min && p.price <= max;
+        const matchesCat = checkedCats.length === 0 || checkedCats.includes(p.category);
+        return matchesPrice && matchesCat;
+    });
 
-    const val = document.querySelector('.sort-dropdown').value;
-    if (val === 'Low to High') currentWorkingList.sort((a, b) => a.price - b.price); 
-    else if (val === 'High to Low') currentWorkingList.sort((a, b) => b.price - a.price); 
+    const sortDropdown = document.querySelector('.sort-dropdown');
+    if (sortDropdown) {
+        if (sortDropdown.value === 'Low to High') currentWorkingList.sort((a, b) => a.price - b.price); 
+        else if (sortDropdown.value === 'High to Low') currentWorkingList.sort((a, b) => b.price - a.price); 
+    }
 
     currentGridPage = 1;
     updateProductView();
 }
 
+// --- 4. RENDER WISHLIST PAGE ---
 window.renderWishlist = () => {
     const grid = document.getElementById('wishlist-grid');
     if (!grid) return;
     const wish = getData('zaria-wishlist');
-    grid.innerHTML = wish.length === 0 ? `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Your wishlist is empty.</p>` : wish.map(p => `<div class="product-card">...</div>`).join('');
+    grid.innerHTML = wish.length === 0 ? `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: 1.2rem; padding: 40px;">Your wishlist is empty.</p>` : wish.map(p => `<div class="product-card"><h4>${p.name}</h4><p>₹${p.price}</p><button type="button" onclick="toggleWishlist('${p.id}'); renderWishlist();">Remove</button></div>`).join('');
 };
 
 window.renderCart = () => {
     const container = document.querySelector('.cart-items-container');
     if (!container) return;
     const cart = getData('zaria-cart');
-    container.innerHTML = cart.map(item => `...`).join('');
+    let subtotal = 0;
+    if (cart.length === 0) { container.innerHTML = `<p>Your cart is empty.</p>`; return; }
+    container.innerHTML = cart.map(item => {
+        subtotal += (item.price * item.quantity);
+        return `<div class="cart-item"><h4>${item.name}</h4><p>₹${item.price}</p></div>`;
+    }).join('');
+    if (document.getElementById('subtotal')) document.getElementById('subtotal').innerText = `₹${subtotal}`;
 };
 
 // --- 5. INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
     updateProductView();
-    if (document.getElementById('wishlist-grid')) renderWishlist();
-    if (document.querySelector('.cart-items-container')) renderCart();
+    renderWishlist();
+    renderCart();
 
-    // Dark Mode Initialization
+    // Dark Mode + Search
     const themeToggle = document.getElementById('theme-toggle');
     if (localStorage.getItem('zaria-dark-mode') === 'true') {
         document.body.classList.add('dark-mode');
         if (themeToggle) themeToggle.innerText = '☀️';
     }
 
-    if (themeToggle) {
-        themeToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            const isDark = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('zaria-dark-mode', isDark);
-            themeToggle.innerText = isDark ? '☀️' : '🌙';
-        });
-    }
+    themeToggle?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isDark = document.body.classList.toggle('dark-mode');
+        localStorage.setItem('zaria-dark-mode', isDark);
+        themeToggle.innerText = isDark ? '☀️' : '🌙';
+    });
 
-    // Sort/Filter Listeners
+    const searchBtn = document.getElementById('nav-search-btn');
+    searchBtn?.addEventListener('click', () => {
+        const query = document.getElementById('nav-search-input').value.toLowerCase();
+        currentWorkingList = allProducts.filter(p => p.name.toLowerCase().includes(query));
+        currentGridPage = 1;
+        updateProductView();
+    });
+
+    // Listeners
     document.querySelector('.sort-dropdown')?.addEventListener('change', applyFiltersAndSort);
     document.querySelector('.btn-apply-filters')?.addEventListener('click', (e) => { e.preventDefault(); applyFiltersAndSort(); });
 
