@@ -30,63 +30,72 @@ document.addEventListener("DOMContentLoaded", () => {
         showToast(`${name} added to cart!`);
     };
 
-    // 3. SORT & FILTER LOGIC (Works on the DOM directly)
-    // --- 3. SORT & FILTER LOGIC (FIXED) ---
-    // --- 3. SORT & FILTER LOGIC (REFINED) ---
+   // --- DATABASE (Replace with fetch('/api/products') later) ---
+const allProducts = [
+    { id: 1, name: "Midnight Velvet Box", price: 3499, color: "#d0b8bc", category: "Wedding Hampers" },
+    { id: 2, name: "Golden Hour Hamper", price: 5200, color: "#f9f0f0", category: "Wedding Hampers" },
+    { id: 3, name: "Classic Silk Essentials", price: 2100, color: "#c69c6d", category: "Festive Specials" },
+    { id: 4, name: "Luxury Corporate Set", price: 2800, color: "#5b1d2a", category: "Corporate Gifting" },
+    { id: 5, name: "Anniversary Bloom Box", price: 3900, color: "#d0b8bc", category: "Anniversary" },
+    { id: 6, name: "Festive Joy Hamper", price: 4500, color: "#c69c6d", category: "Festive Specials" },
+    { id: 7, name: "Extra Special Gift", price: 3200, color: "#3a1119", category: "Wedding Hampers" }
+];
 
-// Helper: Extract ONLY the current (lowest) price from the price text
-const getCurrentPrice = (pCard) => {
-    const priceText = pCard.querySelector('.price').innerText;
-    // Extract all numbers, convert to array of integers
-    const numbers = priceText.match(/\d+/g).map(Number);
-    // Return the minimum (the sale price or the actual price)
-    return Math.min(...numbers);
+let currentPage = 1;
+const itemsPerPage = 6;
+
+function renderProducts(data) {
+    const grid = document.getElementById('product-grid');
+    const start = (currentPage - 1) * itemsPerPage;
+    const paginatedItems = data.slice(start, start + itemsPerPage);
+
+    grid.innerHTML = paginatedItems.map(p => `
+        <div class="product-card">
+            <div class="product-image" style="background-color: ${p.color};">
+                <div class="hover-actions">
+                    <button onclick="toggleWishlist('${p.id}')"><i class="fa-regular fa-heart"></i></button>
+                </div>
+            </div>
+            <div class="product-info">
+                <h4>${p.name}</h4>
+                <p class="price">₹${p.price}</p>
+                <button class="add-to-cart" onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.color}')">Add to Cart</button>
+            </div>
+        </div>
+    `).join('');
+
+    renderPagination(data.length);
+}
+
+function renderPagination(totalItems) {
+    const pageCount = Math.ceil(totalItems / itemsPerPage);
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = Array.from({length: pageCount}, (_, i) => 
+        `<button class="page-btn ${currentPage === i+1 ? 'active' : ''}" onclick="changePage(${i+1})">${i+1}</button>`
+    ).join('');
+}
+
+window.changePage = (page) => {
+    currentPage = page;
+    renderProducts(allProducts);
 };
 
-// SORT LOGIC
-const sortDropdown = document.querySelector('.sort-dropdown');
-if (sortDropdown) {
-    sortDropdown.addEventListener('change', (e) => {
-        const grid = document.querySelector('.product-grid');
-        const products = Array.from(grid.querySelectorAll('.product-card'));
-        const val = e.target.value;
+// --- SORT LOGIC ---
+document.querySelector('.sort-dropdown').addEventListener('change', (e) => {
+    const sorted = [...allProducts].sort((a, b) => e.target.value === 'Low to High' ? a.price - b.price : b.price - a.price);
+    renderProducts(sorted);
+});
 
-        products.sort((a, b) => {
-            const priceA = getCurrentPrice(a);
-            const priceB = getCurrentPrice(b);
-            return val.includes('High') ? priceB - priceA : priceA - priceB;
-        });
+// --- FILTER LOGIC ---
+document.querySelector('.btn-apply-filters').addEventListener('click', () => {
+    const min = parseInt(document.querySelector('input[placeholder="Min ₹"]').value) || 0;
+    const max = parseInt(document.querySelector('input[placeholder="Max ₹"]').value) || Infinity;
+    const filtered = allProducts.filter(p => p.price >= min && p.price <= max);
+    renderProducts(filtered);
+});
 
-        // Re-append sorted elements
-        products.forEach(p => grid.appendChild(p));
-        showToast("Sorted successfully!");
-    });
-}
-
-// FILTER LOGIC
-const filterBtn = document.querySelector('.btn-apply-filters');
-if (filterBtn) {
-    filterBtn.addEventListener('click', () => {
-        const minInput = document.querySelector('input[placeholder="Min ₹"]');
-        const maxInput = document.querySelector('input[placeholder="Max ₹"]');
-        
-        const min = parseInt(minInput.value) || 0;
-        const max = parseInt(maxInput.value) || Infinity;
-        
-        const products = document.querySelectorAll('.product-card');
-
-        products.forEach(p => {
-            const price = getCurrentPrice(p);
-            // Show only if within range
-            if (price >= min && price <= max) {
-                p.style.display = 'block';
-            } else {
-                p.style.display = 'none';
-            }
-        });
-        showToast(`Showing items between ₹${min} and ₹${max}`);
-    });
-}
+// Init
+document.addEventListener("DOMContentLoaded", () => renderProducts(allProducts));
 
     // 4. Global Interactivity (Click Delegation)
     document.addEventListener('click', (e) => {
