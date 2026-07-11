@@ -111,7 +111,7 @@ function applyFiltersAndSort() {
 
     currentWorkingList = allProducts.filter(p => {
         const matchesPrice = p.price >= min && p.price <= max;
-        // If no checkboxes are ticked, show EVERYTHING (Flipkart style)
+        // If no checkboxes are ticked, show EVERYTHING
         const matchesCat = checkedCats.length === 0 || checkedCats.includes(p.category);
         return matchesPrice && matchesCat;
     });
@@ -120,14 +120,11 @@ function applyFiltersAndSort() {
     const sortDropdown = document.querySelector('.sort-dropdown');
     if (sortDropdown) {
         const val = sortDropdown.value;
-        
-        // STRICT matching to fix the High/Low bug
         if (val === 'Price: Low to High') {
-            currentWorkingList.sort((a, b) => a.price - b.price); // Lowest price first
+            currentWorkingList.sort((a, b) => a.price - b.price); 
         } else if (val === 'Price: High to Low') {
-            currentWorkingList.sort((a, b) => b.price - a.price); // Highest price first
+            currentWorkingList.sort((a, b) => b.price - a.price); 
         }
-        // If "Featured" is selected, it leaves the array as-is
     }
 
     // C. Reset to Page 1 and Draw
