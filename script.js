@@ -157,19 +157,24 @@ window.performSearch = () => {
 
     const input = document.getElementById('nav-search-input');
     if (!input) return;
-    const query = input.value.trim().toLowerCase();
+    const query = input.value.trim();
 
-    // product.html (single product page) has no grid to filter — nothing to do there
-    if (!document.getElementById('product-grid')) return;
+    // product.html (single product page) has no grid to filter,
+    // so send the user to the shop page with the search already applied.
+    if (!document.getElementById('product-grid')) {
+        if (query) window.location.href = `products.html?search=${encodeURIComponent(query)}`;
+        return;
+    }
 
-    currentWorkingList = query
-        ? allProducts.filter(p => p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query))
+    const q = query.toLowerCase();
+    currentWorkingList = q
+        ? allProducts.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q))
         : [...allProducts];
 
     currentGridPage = 1;
     updateProductView();
 
-    if (query) showToast(`Showing results for "${input.value.trim()}"`);
+    if (q) showToast(`Showing results for "${query}"`);
     else showToast("Showing all products");
 };
 

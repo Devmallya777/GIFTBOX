@@ -165,8 +165,8 @@
 
         <div class="header-icons">
             <div class="search-container">
-                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts...">
-                <button type="button" id="nav-search-btn" title="Search" onclick="let v = document.getElementById('nav-search-input').value; if(v) showToast('Searching for: ' + v);"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts..." onkeydown="if(event.key === 'Enter'){ event.preventDefault(); performSearch(); }">
+                <button type="button" id="nav-search-btn" title="Search" onclick="performSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <a href="wishlist.html" title="Wishlist"><i class="fa-regular fa-heart"></i></a>
             <a href="cart.html" title="Shopping Cart"><i class="fa-solid fa-bag-shopping"></i></a>
