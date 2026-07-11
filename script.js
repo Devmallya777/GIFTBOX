@@ -32,6 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 3. SORT & FILTER LOGIC (Works on the DOM directly)
     // --- 3. SORT & FILTER LOGIC (FIXED) ---
+    // --- 3. SORT & FILTER LOGIC (REFINED) ---
+
+// Helper: Extract ONLY the current (lowest) price from the price text
+const getCurrentPrice = (pCard) => {
+    const priceText = pCard.querySelector('.price').innerText;
+    // Extract all numbers, convert to array of integers
+    const numbers = priceText.match(/\d+/g).map(Number);
+    // Return the minimum (the sale price or the actual price)
+    return Math.min(...numbers);
+};
+
+// SORT LOGIC
 const sortDropdown = document.querySelector('.sort-dropdown');
 if (sortDropdown) {
     sortDropdown.addEventListener('change', (e) => {
@@ -40,36 +52,39 @@ if (sortDropdown) {
         const val = e.target.value;
 
         products.sort((a, b) => {
-            // This regex extracts all numbers and picks the last one (the current price)
-            const getPrice = (el) => {
-                const priceText = el.querySelector('.price').innerText;
-                const numbers = priceText.match(/\d+/g).map(Number);
-                return Math.min(...numbers); // Returns the actual active price
-            };
-            
-            return val.includes('Low') ? getPrice(a) - getPrice(b) : getPrice(b) - getPrice(a);
+            const priceA = getCurrentPrice(a);
+            const priceB = getCurrentPrice(b);
+            return val.includes('High') ? priceB - priceA : priceA - priceB;
         });
 
+        // Re-append sorted elements
         products.forEach(p => grid.appendChild(p));
-        showToast("Sorted!");
+        showToast("Sorted successfully!");
     });
 }
 
+// FILTER LOGIC
 const filterBtn = document.querySelector('.btn-apply-filters');
 if (filterBtn) {
     filterBtn.addEventListener('click', () => {
-        const min = parseInt(document.querySelector('input[placeholder="Min ₹"]').value) || 0;
-        const max = parseInt(document.querySelector('input[placeholder="Max ₹"]').value) || Infinity;
+        const minInput = document.querySelector('input[placeholder="Min ₹"]');
+        const maxInput = document.querySelector('input[placeholder="Max ₹"]');
+        
+        const min = parseInt(minInput.value) || 0;
+        const max = parseInt(maxInput.value) || Infinity;
+        
         const products = document.querySelectorAll('.product-card');
 
         products.forEach(p => {
-            const priceText = p.querySelector('.price').innerText;
-            const price = Math.min(...priceText.match(/\d+/g).map(Number));
-            
-            // Toggle display based on range
-            p.style.display = (price >= min && price <= max) ? 'block' : 'none';
+            const price = getCurrentPrice(p);
+            // Show only if within range
+            if (price >= min && price <= max) {
+                p.style.display = 'block';
+            } else {
+                p.style.display = 'none';
+            }
         });
-        showToast("Filters applied!");
+        showToast(`Showing items between ₹${min} and ₹${max}`);
     });
 }
 
