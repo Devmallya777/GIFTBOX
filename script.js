@@ -2,6 +2,15 @@
    ZARIA ULTIMATE FUNCTIONAL SCRIPT (LocalStorage Edition)
    ========================================================== */
 
+// --- 0. THEME GUARDIAN (runs instantly on script load, on EVERY page) ---
+// script.js is loaded at the end of <body>, so document.body already exists here.
+// This is what makes dark/light mode global across the whole site instead of per-page.
+(function() {
+    if (localStorage.getItem('zaria-dark-mode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+})();
+
 // --- 1. TOAST SYSTEM ---
 window.showToast = (message, type = 'success') => {
     let container = document.getElementById('toast-container');
@@ -140,6 +149,30 @@ function applyFiltersAndSort() {
     updateProductView();
 }
 
+// --- 3b. SEARCH (only active on products.html / product.html) ---
+window.performSearch = () => {
+    const path = window.location.pathname.toLowerCase();
+    const isShopPage = path.endsWith('products.html') || path.endsWith('product.html');
+    if (!isShopPage) return; // Search does nothing on other pages
+
+    const input = document.getElementById('nav-search-input');
+    if (!input) return;
+    const query = input.value.trim().toLowerCase();
+
+    // product.html (single product page) has no grid to filter — nothing to do there
+    if (!document.getElementById('product-grid')) return;
+
+    currentWorkingList = query
+        ? allProducts.filter(p => p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query))
+        : [...allProducts];
+
+    currentGridPage = 1;
+    updateProductView();
+
+    if (query) showToast(`Showing results for "${input.value.trim()}"`);
+    else showToast("Showing all products");
+};
+
 // --- 4. RENDER WISHLIST PAGE ---
 window.renderWishlist = () => {
     const grid = document.getElementById('wishlist-grid');
@@ -264,15 +297,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const loader = document.getElementById('zaria-loader');
     if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
-    // --- DARK MODE TOGGLE (persists across pages, no flash on load) ---
+    // --- DARK MODE TOGGLE (class already applied globally by the Theme Guardian above) ---
     const themeToggle = document.getElementById('theme-toggle');
     const isDark = localStorage.getItem('zaria-dark-mode') === 'true';
-    if (isDark) {
-        document.body.classList.add('dark-mode');
-        if (themeToggle) themeToggle.innerText = '☀️';
-    } else {
-        if (themeToggle) themeToggle.innerText = '🌙';
-    }
+    if (themeToggle) themeToggle.innerText = isDark ? '☀️' : '🌙';
 
     themeToggle?.addEventListener('click', (e) => {
         e.preventDefault();
