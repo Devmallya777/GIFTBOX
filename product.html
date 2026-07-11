@@ -10,20 +10,19 @@
     <style>
         /* --- 1. HIGH-CONTRAST LUXURY COLOR CODES --- */
         :root {
-    --bg-wine: #5b1d2a;       /* Your exact original ZARIA wine */
-    --bg-wine-dark: #3a1119;  /* Your exact original dark wine */
-    
-    /* YOUR EXACT ORIGINAL GOLD - No yellow! */
-    --text-gold: #c69c6d;     
-    
-    /* Brightened these two so they don't camouflage into the wine background */
-    --text-pink: #f9f0f0;     /* Soft ivory-pink for readable paragraphs */
-    --text-muted: #d0b8bc;    /* Lightened just enough for footer/secondary text */
-}
+            --bg-wine: #5b1d2a;       
+            --bg-wine-dark: #3a1119;  
+            --text-gold: #c69c6d;     
+            --text-pink: #f9f0f0;     
+            --text-muted: #d0b8bc;    
+        }
 
         /* --- GLOBAL RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; transition: background-color 0.3s, color 0.3s; }
+
+        /* Dark Mode Specific Overrides */
+        body.dark-mode { --bg-wine: #1a080c; --bg-wine-dark: #000000; --text-pink: #ffffff; }
 
         /* --- PRELOADER --- */
         #zaria-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-wine-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
@@ -38,9 +37,8 @@
         .announcement-bar:hover .scrolling-text { animation-play-state: paused; cursor: default; }
         @keyframes scroll-left { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
 
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: var(--bg-wine); border-bottom: 1px solid rgba(208, 184, 188, 0.1); }
         .logo-container a { text-decoration: none; }
-        .site-logo { height: 40px; } 
         
         .nav-links { display: flex; gap: 30px; }
         .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; font-weight: 600; }
@@ -55,7 +53,7 @@
         .nav-search-input::placeholder { color: var(--text-muted); }
 
         /* --- PRODUCT PAGE LAYOUT --- */
-        .btn-go-back { background: none; border: none; color: var(--text-gold); cursor: pointer; padding: 15px 5% 0; font-size: 0.95rem; font-weight: 600; transition: 0.3s; text-align: left; }
+        .btn-go-back { background: none; border: none; color: var(--text-gold); cursor: pointer; padding: 15px 5% 0; font-size: 0.95rem; font-weight: 600; transition: 0.3s; text-align: left; display: inline-block; }
         .btn-go-back:hover { color: var(--text-pink); transform: translateX(-5px); }
 
         .single-product-wrapper { padding: 20px 5% 60px; flex: 1; }
@@ -70,8 +68,8 @@
         .product-gallery { flex: 1; }
         .main-image { height: 500px; border-radius: 12px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: background-color 0.3s; }
         .thumbnail-row { display: flex; gap: 15px; }
-        .thumbnail { width: 80px; height: 80px; border-radius: 8px; cursor: pointer; opacity: 0.5; transition: 0.3s; background-size: cover; background-position: center; }
-        .thumbnail.active-thumb, .thumbnail:hover { opacity: 1; border: 2px solid var(--text-gold); transform: translateY(-3px);}
+        .thumbnail { width: 80px; height: 80px; border-radius: 8px; cursor: pointer; opacity: 0.5; transition: 0.3s; background-size: cover; background-position: center; border: 2px solid transparent;}
+        .thumbnail.active-thumb, .thumbnail:hover { opacity: 1; border-color: var(--text-gold); transform: translateY(-3px);}
 
         /* Details */
         .product-details { flex: 1; display: flex; flex-direction: column; }
@@ -132,13 +130,11 @@
 </head>
 <body>
 
-    <!-- 1. LOADING SCREEN -->
     <div id="zaria-loader">
         <div class="loader-logo">ZARIA</div>
         <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;">Curating Elegance...</p>
     </div>
 
-    <!-- 2. ANNOUNCEMENT BAR (Moving Ticker Restored!) -->
     <div class="announcement-bar">
         <div class="scrolling-text">
             <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
@@ -152,7 +148,6 @@
         </div>
     </div>
 
-    <!-- 3. HEADER -->
     <header class="header">
         <div class="logo-container">
             <a href="index.html" style="display: block; text-decoration: none;">
@@ -161,7 +156,7 @@
         </div>
 
         <nav class="nav-links">
-            <a href="index.html" >Home</a>
+            <a href="index.html">Home</a>
             <a href="products.html" class="active">Shop</a>
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
@@ -170,18 +165,17 @@
         <div class="header-icons">
             <div class="search-container">
                 <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts...">
-                <button id="nav-search-btn" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button type="button" id="nav-search-btn" title="Search" onclick="let v = document.getElementById('nav-search-input').value; if(v) showToast('Searching for: ' + v);"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <a href="wishlist.html" title="Wishlist"><i class="fa-regular fa-heart"></i></a>
             <a href="cart.html" title="Shopping Cart"><i class="fa-solid fa-bag-shopping"></i></a>
             <a href="login.html" title="My Account"><i class="fa-regular fa-user"></i></a>
-            <button id="theme-toggle" title="Toggle Dark Mode">🌙</button>
+            <button type="button" id="theme-toggle" title="Toggle Dark Mode">🌙</button>
         </div>
     </header>
 
-    <button onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> GO BACK</button>
+    <button type="button" onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> GO BACK</button>
     
-    <!-- 4. MAIN PRODUCT SECTION -->
     <main class="single-product-wrapper">
         
         <div class="product-breadcrumbs">
@@ -189,7 +183,6 @@
         </div>
 
         <div class="product-layout">
-            <!-- Left Side: Image Gallery -->
             <div class="product-gallery">
                 <div class="main-image" id="mainImage" style="background-color: #D1BFC0;"></div>
                 
@@ -201,7 +194,6 @@
                 </div>
             </div>
 
-            <!-- Right Side: Product Details -->
             <div class="product-details">
                 <h2 class="product-title">The Midnight Velvet Box</h2>
                 
@@ -224,24 +216,23 @@
                     <li><i class="fa-solid fa-check"></i> 100% plastic-free packaging</li>
                 </ul>
 
-                <!-- QUANTITY AND BUTTONS -->
                 <div class="product-actions">
                     <div style="display: flex; gap: 15px; margin-bottom: 10px;">
-                        <button class="btn-add-cart add-to-cart">Add to Cart</button>
-                        <button class="btn-buy-now" onclick="window.location.href='checkout.html'">Buy it Now</button>
+                        <button type="button" class="btn-add-cart" onclick="addToCart('1', 'Midnight Velvet Box', 3499, '#d0b8bc')">Add to Cart</button>
+                        
+                        <button type="button" class="btn-buy-now" onclick="addToCart('1', 'Midnight Velvet Box', 3499, '#d0b8bc'); window.location.href='checkout.html'">Buy it Now</button>
                     </div>
 
-                    <a href="#" class="btn-add-wishlist"><i class="fa-regular fa-heart"></i> Add to VIP Wishlist</a>
+                    <a href="#" class="btn-add-wishlist" onclick="event.preventDefault(); toggleWishlist('1', 'Midnight Velvet Box', 3499, '#d0b8bc')"><i class="fa-regular fa-heart"></i> Add to VIP Wishlist</a>
                 </div>
 
-                <!-- ACCORDIONS -->
                 <div class="accordion-wrapper">
-                    <button class="accordion">What's Inside? <i class="fa-solid fa-chevron-down"></i></button>
+                    <button type="button" class="accordion">What's Inside? <i class="fa-solid fa-chevron-down"></i></button>
                     <div class="panel">
                         <p style="padding: 15px 0;">Each Midnight Velvet Box contains 12 artisan dark chocolates, one vintage brass candle holder, and a signature ZARIA hand-tied silk ribbon.</p>
                     </div>
 
-                    <button class="accordion">Shipping & Returns <i class="fa-solid fa-chevron-down"></i></button>
+                    <button type="button" class="accordion">Shipping & Returns <i class="fa-solid fa-chevron-down"></i></button>
                     <div class="panel">
                         <p style="padding: 15px 0;">We offer free shipping on all orders over ₹2,499. Returns are accepted within 7 days of delivery if the item is in original condition.</p>
                     </div>
@@ -251,7 +242,6 @@
         </div>
     </main>
 
-    <!-- 5. GLOBAL FOOTER -->
     <footer class="zaria-footer">
         <div class="footer-top">
             <div class="footer-column brand-column">
@@ -323,53 +313,14 @@
         </div>
     </footer>
 
-    <!-- 6. SCRIPTS -->
     <script src="script.js"></script>
     <script>
-        // Preloader Logic Fallback
-        document.addEventListener("DOMContentLoaded", () => {
-            const loader = document.getElementById('zaria-loader');
-            if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
-        });
-
-        // Page-Specific Logic: Image Gallery Switcher
+        // Cleaned Inline Logic (Removed conflicting accordion code!)
         function changeImage(element, colorOrImageSrc) {
             document.getElementById('mainImage').style.backgroundColor = colorOrImageSrc;
-            
-            // Manage Active State on Thumbnails
             document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active-thumb'));
             element.classList.add('active-thumb');
         }
-
-        // Page-Specific Logic: Accordions
-        document.addEventListener("DOMContentLoaded", () => {
-            const accordions = document.querySelectorAll(".accordion");
-            accordions.forEach(acc => {
-                acc.addEventListener("click", function() {
-                    this.classList.toggle("active");
-                    const panel = this.nextElementSibling;
-                    const icon = this.querySelector('i');
-                    
-                    if (panel.style.maxHeight) {
-                        panel.style.maxHeight = null;
-                        icon.classList.remove('fa-chevron-up');
-                        icon.classList.add('fa-chevron-down');
-                    } else {
-                        // Close others
-                        document.querySelectorAll('.panel').forEach(p => p.style.maxHeight = null);
-                        document.querySelectorAll('.accordion').forEach(a => {
-                            a.classList.remove('active');
-                            if(a.querySelector('i')) a.querySelector('i').classList.replace('fa-chevron-up', 'fa-chevron-down');
-                        });
-                        
-                        this.classList.add("active");
-                        panel.style.maxHeight = panel.scrollHeight + "px";
-                        icon.classList.remove('fa-chevron-down');
-                        icon.classList.add('fa-chevron-up');
-                    }
-                });
-            });
-        });
     </script>
 </body>
 </html>
