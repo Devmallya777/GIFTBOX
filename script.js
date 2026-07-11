@@ -31,34 +31,47 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // 3. SORT & FILTER LOGIC (Works on the DOM directly)
-    const sortDropdown = document.querySelector('.sort-dropdown');
-    if (sortDropdown) {
-        sortDropdown.addEventListener('change', (e) => {
-            const grid = document.querySelector('.product-grid');
-            const products = Array.from(grid.querySelectorAll('.product-card'));
-            const val = e.target.value;
+    // --- 3. SORT & FILTER LOGIC (FIXED) ---
+const sortDropdown = document.querySelector('.sort-dropdown');
+if (sortDropdown) {
+    sortDropdown.addEventListener('change', (e) => {
+        const grid = document.querySelector('.product-grid');
+        const products = Array.from(grid.querySelectorAll('.product-card'));
+        const val = e.target.value;
 
-            products.sort((a, b) => {
-                let pA = parseInt(a.querySelector('.price').innerText.replace(/\D/g, ''));
-                let pB = parseInt(b.querySelector('.price').innerText.replace(/\D/g, ''));
-                return val.includes('Low') ? pA - pB : pB - pA;
-            });
-
-            products.forEach(p => grid.appendChild(p));
-            showToast("Sorted!");
+        products.sort((a, b) => {
+            // This regex extracts all numbers and picks the last one (the current price)
+            const getPrice = (el) => {
+                const priceText = el.querySelector('.price').innerText;
+                const numbers = priceText.match(/\d+/g).map(Number);
+                return Math.min(...numbers); // Returns the actual active price
+            };
+            
+            return val.includes('Low') ? getPrice(a) - getPrice(b) : getPrice(b) - getPrice(a);
         });
-    }
 
-    const filterBtn = document.querySelector('.btn-apply-filters');
-    if (filterBtn) {
-        filterBtn.addEventListener('click', () => {
-            const grid = document.querySelector('.product-grid');
-            const products = grid.querySelectorAll('.product-card');
-            // This example hides products if they don't match (simple logic)
-            products.forEach(p => p.style.display = 'block'); 
-            showToast("Filters applied!");
+        products.forEach(p => grid.appendChild(p));
+        showToast("Sorted!");
+    });
+}
+
+const filterBtn = document.querySelector('.btn-apply-filters');
+if (filterBtn) {
+    filterBtn.addEventListener('click', () => {
+        const min = parseInt(document.querySelector('input[placeholder="Min ₹"]').value) || 0;
+        const max = parseInt(document.querySelector('input[placeholder="Max ₹"]').value) || Infinity;
+        const products = document.querySelectorAll('.product-card');
+
+        products.forEach(p => {
+            const priceText = p.querySelector('.price').innerText;
+            const price = Math.min(...priceText.match(/\d+/g).map(Number));
+            
+            // Toggle display based on range
+            p.style.display = (price >= min && price <= max) ? 'block' : 'none';
         });
-    }
+        showToast("Filters applied!");
+    });
+}
 
     // 4. Global Interactivity (Click Delegation)
     document.addEventListener('click', (e) => {
