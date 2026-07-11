@@ -285,6 +285,35 @@ window.proceedToCheckout = () => {
 
     window.location.href = "checkout.html";
 };
+window.buyNow = (id, name, price, color) => {
+
+    // Clear old cart
+    localStorage.setItem("zaria-cart", JSON.stringify([
+        {
+            id,
+            name,
+            price,
+            color,
+            quantity: 1
+        }
+    ]));
+
+    // Check login
+    if (localStorage.getItem("zariaLoggedIn") !== "true") {
+
+        localStorage.setItem("redirectAfterLogin", "checkout.html");
+
+        showToast("Please login first.");
+
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1200);
+
+        return;
+    }
+
+    window.location.href = "checkout.html";
+};
 };
 
 // --- 6. GLOBAL EVENT LISTENERS & INITIALIZATION ---
