@@ -67,22 +67,44 @@
 
     <div id="zaria-loader"><div class="loader-logo">ZARIA</div></div>
 
+    <!-- 2. ANNOUNCEMENT BAR (Moving News Ticker) -->
     <div class="announcement-bar">
         <div class="scrolling-text">
             <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
             <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
+            <!-- We duplicate the text exactly so the loop is seamless! -->
+            <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
+            <span>+ HANDCRAFTED WITH LOVE IN INDIA</span>
+            <span>+ SAME-DAY DISPATCH ON SELECT CITIES</span>
+            <span>+ PERSONALISED GIFTING AVAILABLE</span>
         </div>
     </div>
 
-    <header class="header">
+        <header class="header">
         <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
-            <div class="logo-text"><h1>ZARIA</h1></div>
+            <div class="logo-text">
+                <h1>ZARIA</h1>
+                <span>The Art of Gifting</span>
+            </div>
         </div>
+
         <nav class="nav-links">
-            <a href="index.html">Home</a><a href="products.html">Shop</a><a href="contact.html">Contact</a>
+            <a href="index.html">Home</a>
+            <a href="products.html" class="active">Shop</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
         </nav>
-        <div class="header-icons"><a href="cart.html" style="color: var(--text-gold);"><i class="fa-solid fa-bag-shopping"></i></a></div>
+
+        <div class="header-icons">
+            <i class="fa-solid fa-magnifying-glass" title="Search"></i>
+            <a href="wishlist.html" style="color: inherit; text-decoration: none;"><i class="fa-regular fa-heart" title="Wishlist"></i></a>
+            <a href="cart.html" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-bag-shopping" title="Cart"></i></a>
+            <!-- Replace your old theme-toggle button with this -->
+            <button type="button" id="theme-toggle" title="Toggle Dark Mode" style="background:none; border:none; cursor:pointer; font-size:1.2rem; color:inherit;">🌙</button>
+        </div>
     </header>
 
     <main class="cart-wrapper">

@@ -264,19 +264,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const loader = document.getElementById('zaria-loader');
     if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
-    // Dark Mode Memory Check
-    if (localStorage.getItem('zaria-dark-mode') === 'true') document.body.classList.add('dark-mode');
-
-    // Dark Mode Toggle Logic
+    // --- UPDATED DARK MODE TOGGLE (With Sun/Moon Icon logic) ---
+document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById('theme-toggle');
+    
+    // Apply saved mode immediately
+    if (localStorage.getItem('zaria-dark-mode') === 'true') {
+        document.body.classList.add('dark-mode');
+        if (themeToggle) themeToggle.innerText = '☀️'; // Show Sun if dark mode is active
+    }
+
     if (themeToggle) {
         themeToggle.addEventListener('click', (e) => {
             e.preventDefault();
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('zaria-dark-mode', document.body.classList.contains('dark-mode'));
+            const isDark = document.body.classList.toggle('dark-mode');
+            
+            // Save preference
+            localStorage.setItem('zaria-dark-mode', isDark);
+            
+            // Update Icon
+            themeToggle.innerText = isDark ? '☀️' : '🌙';
         });
     }
-
+});
     // Accordions
     document.querySelectorAll(".accordion").forEach(acc => {
         acc.addEventListener("click", function() {
