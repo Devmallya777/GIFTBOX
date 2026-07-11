@@ -171,7 +171,7 @@
             <a href="cart.html" title="Shopping Cart"><i class="fa-solid fa-bag-shopping"></i></a>
             <a href="login.html" title="My Account"><i class="fa-regular fa-user"></i></a>
             <!-- Replace your old theme-toggle button with this -->
-<button type="button" id="theme-toggle" title="Toggle Dark Mode" style="background:none; border:none; cursor:pointer; font-size:1.2rem; color:inherit;">🌙</button>
+            <button type="button" id="theme-toggle" title="Toggle Dark Mode" style="background:none; border:none; cursor:pointer; font-size:1.2rem; color:inherit;">🌙</button>
         </div>
     </header>
 
@@ -322,6 +322,26 @@
             document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active-thumb'));
             element.classList.add('active-thumb');
         }
+        document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+        
+        // This array must match your script.js 'allProducts' list exactly
+        const allProducts = [
+            { id: '1', name: "Midnight Velvet Box", price: 3499, color: "#d0b8bc" },
+            { id: '2', name: "Golden Hour Hamper", price: 5200, color: "#f9f0f0" }
+        ];
+
+        const product = allProducts.find(p => p.id === productId);
+        
+        if (product) {
+            document.querySelector('.product-title').innerText = product.name;
+            document.querySelector('.product-price').innerText = "₹" + product.price;
+            document.getElementById('mainImage').style.backgroundColor = product.color;
+            // Update Add to Cart button dynamically
+            document.querySelector('.btn-add-cart').setAttribute('onclick', `addToCart('${product.id}', '${product.name}', ${product.price}, '${product.color}')`);
+        }
+    });
     </script>
 </body>
 </html>
