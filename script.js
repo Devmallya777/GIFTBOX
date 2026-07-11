@@ -264,27 +264,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const loader = document.getElementById('zaria-loader');
     if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
-    // --- UPDATED DARK MODE TOGGLE (Ensures persistence) ---
-document.addEventListener("DOMContentLoaded", () => {
+    // --- DARK MODE TOGGLE (persists across pages, no flash on load) ---
     const themeToggle = document.getElementById('theme-toggle');
-    
-    // Set initial icon based on saved preference
     const isDark = localStorage.getItem('zaria-dark-mode') === 'true';
-    if (themeToggle) {
-        themeToggle.innerText = isDark ? '☀️' : '🌙';
+    if (isDark) {
+        document.body.classList.add('dark-mode');
+        if (themeToggle) themeToggle.innerText = '☀️';
+    } else {
+        if (themeToggle) themeToggle.innerText = '🌙';
     }
 
     themeToggle?.addEventListener('click', (e) => {
         e.preventDefault();
         const newState = document.body.classList.toggle('dark-mode');
-        
-        // Save the setting
         localStorage.setItem('zaria-dark-mode', newState);
-        
-        // Update icon
         themeToggle.innerText = newState ? '☀️' : '🌙';
     });
-});
+
     // Accordions
     document.querySelectorAll(".accordion").forEach(acc => {
         acc.addEventListener("click", function() {
