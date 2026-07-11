@@ -34,10 +34,10 @@ window.toggleWishlist = (id) => {
 };
 
 
-// --- 3. STATE MANAGEMENT (Products, Sort, Filter, Pagination) ---
-let products = [
+// --- 3. STATE MANAGEMENT & FLIPKART-STYLE FILTERING ---
+const allProducts = [
     { id: 1, name: "Midnight Velvet Box", price: 3499, category: "Wedding Hampers", color: "#d0b8bc" },
-    { id: 2, name: "Golden Hour Hamper", price: 5200, color: "#f9f0f0", category: "Wedding Hampers" },
+    { id: 2, name: "Golden Hour Hamper", price: 5200, category: "Wedding Hampers", color: "#f9f0f0" },
     { id: 3, name: "Classic Silk Essentials", price: 2100, category: "Festive Specials", color: "#c69c6d" },
     { id: 4, name: "Luxury Corporate Set", price: 2800, category: "Corporate Gifting", color: "#5b1d2a" },
     { id: 5, name: "Anniversary Bloom Box", price: 3900, category: "Anniversary", color: "#d0b8bc" },
@@ -45,88 +45,116 @@ let products = [
     { id: 7, name: "Extra Special Gift", price: 3200, category: "Wedding Hampers", color: "#3a1119" }
 ];
 
-let filteredProducts = [...products];
-let currentPage = 1;
-const itemsPerPage = 3; // Exactly 3 products per page
+let currentWorkingList = [...allProducts]; // The actively displayed list
+let currentGridPage = 1;
+const itemsPerPage = 3; 
 
-function render() {
+// The Master Function that draws the products onto the screen
+function updateProductView() {
     const grid = document.getElementById('product-grid');
-    if (!grid) return; // Prevent errors on non-shop pages
-    
-    const start = (currentPage - 1) * itemsPerPage;
-    const paginated = filteredProducts.slice(start, start + itemsPerPage);
+    if (!grid) return;
 
+    // 1. Slice array for pagination (e.g., items 1 to 3)
+    const start = (currentGridPage - 1) * itemsPerPage;
+    const paginated = currentWorkingList.slice(start, start + itemsPerPage);
+
+    // 2. Draw Cards (Added type="button" to prevent page reload bugs!)
     grid.innerHTML = paginated.map(p => `
         <div class="product-card">
             <div class="product-image" style="background-color: ${p.color};">
                 <div class="hover-actions">
-                    <button onclick="toggleWishlist('${p.id}')"><i class="fa-regular fa-heart"></i></button>
-                    <button onclick="alert('Quick View!')"><i class="fa-regular fa-eye"></i></button>
+                    <button type="button" onclick="event.preventDefault(); toggleWishlist('${p.id}')"><i class="fa-regular fa-heart"></i></button>
                 </div>
             </div>
             <div class="product-info">
                 <h4>${p.name}</h4>
                 <p class="price">₹${p.price}</p>
-                <button class="add-to-cart" onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.color}')">Add to Cart</button>
+                <button type="button" class="add-to-cart" onclick="event.preventDefault(); addToCart('${p.id}', '${p.name}', ${p.price}, '${p.color}')">Add to Cart</button>
             </div>
         </div>
     `).join('');
 
-    renderPagination();
-}
-
-function renderPagination() {
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    // 3. Draw Pagination Buttons
+    const totalPages = Math.ceil(currentWorkingList.length / itemsPerPage);
     const nav = document.querySelector('.pagination');
-    if (!nav) return;
+    if (nav) {
+        nav.innerHTML = Array.from({length: totalPages}, (_, i) => 
+            `<button type="button" class="page-btn ${currentGridPage === i+1 ? 'active' : ''}" onclick="goToPage(${i+1})">${i+1}</button>`
+        ).join('');
+    }
     
-    nav.innerHTML = Array.from({length: totalPages}, (_, i) => 
-        `<button class="page-btn ${currentPage === i+1 ? 'active' : ''}" onclick="changePage(${i+1})">${i+1}</button>`
-    ).join('');
+    // 4. Update the "Showing 1-3 of 7 results" text dynamically
+    const resultCount = document.querySelector('.result-count');
+    if (resultCount) {
+        const end = Math.min(start + itemsPerPage, currentWorkingList.length);
+        resultCount.innerText = `Showing ${currentWorkingList.length === 0 ? 0 : start + 1}-${end} of ${currentWorkingList.length} results`;
+    }
 }
 
-window.changePage = (p) => { currentPage = p; render(); };
+// Function to change page and scroll smoothly to the top of the products
+window.goToPage = (p) => { 
+    currentGridPage = p; 
+    updateProductView(); 
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+};
 
+// The Master Engine that handles Both Filtering AND Sorting together
+function applyFiltersAndSort() {
+    // A. Apply Filters (Price + Categories)
+    const minInput = document.querySelector('input[placeholder="Min ₹"]');
+    const maxInput = document.querySelector('input[placeholder="Max ₹"]');
+    const min = minInput && minInput.value ? parseInt(minInput.value) : 0;
+    const max = maxInput && maxInput.value ? parseInt(maxInput.value) : Infinity;
+    
+    const checkboxes = document.querySelectorAll('.custom-checkbox input:checked');
+    const checkedCats = Array.from(checkboxes).map(el => el.parentElement.innerText.trim());
+
+    currentWorkingList = allProducts.filter(p => {
+        const matchesPrice = p.price >= min && p.price <= max;
+        // If no checkboxes are ticked, show EVERYTHING (Flipkart style)
+        const matchesCat = checkedCats.length === 0 || checkedCats.includes(p.category);
+        return matchesPrice && matchesCat;
+    });
+
+    // B. Apply Sort to the newly filtered list
+    const sortDropdown = document.querySelector('.sort-dropdown');
+    if (sortDropdown) {
+        const val = sortDropdown.value;
+        if (val.includes('Low')) {
+            currentWorkingList.sort((a, b) => a.price - b.price); // Lowest first
+        } else if (val.includes('High')) {
+            currentWorkingList.sort((a, b) => b.price - a.price); // Highest first
+        }
+    }
+
+    // C. Reset to Page 1 and Draw
+    currentGridPage = 1;
+    updateProductView();
+}
 
 // --- 4. GLOBAL EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => {
     
-    // Trigger initial render for shop page
-    render();
-
-    // --- SORT & FILTER ---
+    // Listen for Sort Changes
     const sortDropdown = document.querySelector('.sort-dropdown');
     if (sortDropdown) {
-        sortDropdown.addEventListener('change', (e) => {
-            const val = e.target.value;
-            filteredProducts.sort((a, b) => val === 'Price: Low to High' ? a.price - b.price : b.price - a.price);
-            currentPage = 1; // Reset to page 1
-            render();
-        });
+        sortDropdown.addEventListener('change', applyFiltersAndSort);
     }
 
+    // Listen for Filter Button Click
     const filterBtn = document.querySelector('.btn-apply-filters');
     if (filterBtn) {
-        filterBtn.addEventListener('click', () => {
-            const min = parseInt(document.querySelector('input[placeholder="Min ₹"]').value) || 0;
-            const max = parseInt(document.querySelector('input[placeholder="Max ₹"]').value) || Infinity;
-            
-            // Get checked categories
-            const checked = Array.from(document.querySelectorAll('.custom-checkbox input:checked')).map(el => el.parentElement.innerText.trim());
-
-            filteredProducts = products.filter(p => {
-                const matchesPrice = p.price >= min && p.price <= max;
-                const matchesCat = checked.length === 0 || checked.includes(p.category);
-                return matchesPrice && matchesCat;
-            });
-
-            currentPage = 1;
-            render();
+        filterBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // SUPER IMPORTANT: Stops the page from refreshing!
+            applyFiltersAndSort();
             showToast("Filters applied!");
         });
     }
-
-    // --- PRELOADER ---
+    
+    // Draw the grid when the page first loads
+    updateProductView();
+    
+        // --- PRELOADER ---
     const loader = document.getElementById('zaria-loader');
     if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
@@ -162,3 +190,5 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+
