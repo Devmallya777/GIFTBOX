@@ -151,33 +151,23 @@ function applyFiltersAndSort() {
 
 // --- 3b. SEARCH (only active on products.html / product.html) ---
 window.performSearch = () => {
-    const path = window.location.pathname.toLowerCase();
-    const isShopPage = path.endsWith('products.html') || path.endsWith('product.html');
-    if (!isShopPage) return; // Search does nothing on other pages
-
-    const input = document.getElementById('nav-search-input');
+    const input = document.getElementById("nav-search-input");
     if (!input) return;
-    const query = input.value.trim();
 
-    // product.html (single product page) has no grid to filter,
-    // so send the user to the shop page with the search already applied.
-    if (!document.getElementById('product-grid')) {
-        if (query) window.location.href = `products.html?search=${encodeURIComponent(query)}`;
-        return;
+    const query = input.value.trim().toLowerCase();
+
+    if (query === "") {
+        currentWorkingList = [...allProducts];
+    } else {
+        currentWorkingList = allProducts.filter(product =>
+            product.name.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query)
+        );
     }
-
-    const q = query.toLowerCase();
-    currentWorkingList = q
-        ? allProducts.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q))
-        : [...allProducts];
 
     currentGridPage = 1;
     updateProductView();
-
-    if (q) showToast(`Showing results for "${query}"`);
-    else showToast("Showing all products");
 };
-
 // --- 4. RENDER WISHLIST PAGE ---
 window.renderWishlist = () => {
     const grid = document.getElementById('wishlist-grid');
@@ -278,6 +268,32 @@ window.loadCheckoutSummary = () => {
 
 // --- 6. GLOBAL EVENT LISTENERS & INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
+   const searchInput = document.getElementById("nav-search-input");
+
+if (searchInput) {
+
+    searchInput.addEventListener("input", function () {
+
+        const value = this.value.trim();
+
+        if (document.getElementById("product-grid")) {
+
+            performSearch();
+
+            if (value === "")
+                history.replaceState({}, "", "products.html");
+            else
+                history.replaceState({}, "", "?search=" + encodeURIComponent(value));
+
+        } else {
+
+            window.location.href = "products.html?search=" + encodeURIComponent(value);
+
+        }
+
+    });
+
+}
     
     // Page Initializers
     updateProductView();
