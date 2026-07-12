@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    
     <style>
         /* --- 1. HIGH-CONTRAST ORIGINAL ZARIA COLORS --- */
         :root {
@@ -18,28 +17,28 @@
             --text-muted: #d0b8bc;    
         }
         /* Styling for the Skip button */
-.btn-secondary {
-    display: inline-block;
-    padding: 15px;
-    background: transparent;
-    border: 1px solid var(--text-gold); /* Gold outline */
-    color: var(--text-gold);            /* Gold text */
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    text-align: center;
-    text-decoration: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-}
+        .btn-secondary {
+            display: inline-block;
+            padding: 15px;
+            background: transparent;
+            border: 1px solid var(--text-gold); /* Gold outline */
+            color: var(--text-gold);            /* Gold text */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
 
-.btn-secondary:hover {
-    background: var(--text-gold);      /* Fills with gold on hover */
-    color: var(--bg-wine-dark);        /* Text turns dark wine */
-}
+        .btn-secondary:hover {
+            background: var(--text-gold);      /* Fills with gold on hover */
+            color: var(--bg-wine-dark);        /* Text turns dark wine */
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
         
@@ -90,13 +89,11 @@
 </head>
 <body class="auth-body">
 
-    <!-- PRELOADER -->
     <div id="zaria-loader">
         <div class="loader-logo">ZARIA</div>
         <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;">Authenticating...</p>
     </div>
 
-    <!-- NEWS TICKER -->
     <div class="announcement-bar">
         <div class="scrolling-text">
             <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
@@ -107,7 +104,7 @@
     </div>
 
     <header class="header">
-        <div class="logo-container" onclick="window.location.href='#'">
+        <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
             <div class="logo-text">
                 <h1>ZARIA</h1>
@@ -118,16 +115,16 @@
 
     <main class="auth-wrapper">
         <div class="auth-box">
-            <button type="button" onclick="skipLogin()" class="btn-secondary" style="margin-top:10px; width:100%;">Skip for now</button>
+            <button type="button" onclick="window.location.href='index.html'" class="btn-secondary" style="margin-top:10px; width:100%;">Skip for now</button>
             <h2 class="auth-title">Welcome Back</h2>
             <p class="auth-subtitle">Sign in to access your ZARIA account, track orders, and view your wishlist.</p>
             
             <form class="auth-form" id="zaria-login-form">
                 <div class="input-group">
-                    <input type="email" placeholder="Email Address" required>
+                    <input type="email" id="email" placeholder="Email Address" required>
                 </div>
                 <div class="input-group">
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="Password" required>
                 </div>
                 
                 <div class="auth-extras">
@@ -156,37 +153,39 @@
             const loader = document.getElementById('zaria-loader');
             if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
-            document.querySelector('form').addEventListener('submit', async (e) => {
-    e.preventDefault();
+            // Targeted via specific form ID
+            document.getElementById('zaria-login-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
 
-    try {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
+                try {
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
 
-        const data = await response.json();
+                    const data = await response.json();
 
-        if (data.success) {
-            // Save the secure JWT token and user info to utilize for cart/wishlist requests later
-            localStorage.setItem('zaria_token', data.token);
-            localStorage.setItem('zaria_user', JSON.stringify(data.user));
-            
-            window.location.href = 'index.html';
-        } else {
-            alert(data.message || 'Invalid credentials');
-        }
-    } catch (err) {
-        console.error('Login Error:', err);
-        alert('Connection error. Is your server running?');
-    }
-});
+                    if (data.success) {
+                        // Store verification data inside local application storage
+                        localStorage.setItem('zaria_token', data.token);
+                        localStorage.setItem('zaria_user', JSON.stringify(data.user));
+                        
+                        alert('Login Successful!');
+                        window.location.href = 'index.html';
+                    } else {
+                        alert(data.message || 'Invalid credentials');
+                    }
+                } catch (err) {
+                    console.error('Login Error:', err);
+                    alert('Connection error. Is your local server active on port 10000?');
+                }
+            });
         });
     </script>
 </body>
