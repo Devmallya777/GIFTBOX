@@ -164,6 +164,10 @@
         </nav>
 
         <div class="header-icons">
+            <div class="search-container">
+                <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search gifts..." onkeydown="if(event.key === 'Enter'){ event.preventDefault(); performSearch(); }">
+                <button type="button" id="nav-search-btn" title="Search" onclick="performSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
             <a href="wishlist.html" title="Wishlist"><i class="fa-regular fa-heart"></i></a>
             <a href="cart.html" title="Shopping Cart"><i class="fa-solid fa-bag-shopping"></i></a>
             <a href="login.html" title="My Account"><i class="fa-regular fa-user"></i></a>
@@ -218,7 +222,7 @@
                     <div style="display: flex; gap: 15px; margin-bottom: 10px;">
                         <button type="button" class="btn-add-cart" onclick="addToCart('1', 'Midnight Velvet Box', 3499, '#d0b8bc')">Add to Cart</button>
                         
-                        <button type="button" class="btn-buy-now" onclick="addToCart('1', 'Midnight Velvet Box', 3499, '#d0b8bc'); window.location.href='checkout.html'">Buy it Now</button>
+                        <button type="button" class="btn-buy-now" onclick="buyNow('1', 'Midnight Velvet Box', 3499, '#d0b8bc')">Buy it Now</button>
                     </div>
 
                     <a href="#" class="btn-add-wishlist" onclick="event.preventDefault(); toggleWishlist('1', 'Midnight Velvet Box', 3499, '#d0b8bc')"><i class="fa-regular fa-heart"></i> Add to VIP Wishlist</a>

@@ -70,15 +70,18 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="script.js"></script>
-</body>
-<script>
-        // Ensure this triggers the database fetch on load
-        document.addEventListener("DOMContentLoaded", renderCheckout);
+    <script>
+        // NOTE: the real function is loadCheckoutSummary (defined in script.js).
+        // "renderCheckout" never existed, which threw a ReferenceError here and
+        // silently broke everything after it on this page, including dark mode.
+        document.addEventListener("DOMContentLoaded", loadCheckoutSummary);
+
         // Theme Guardian: Runs instantly on every page load
-    (function() {
-        if (localStorage.getItem('zaria-dark-mode') === 'true') {
-            document.body.classList.add('dark-mode');
-        }
-    })();
+        (function() {
+            if (localStorage.getItem('zaria-dark-mode') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+        })();
     </script>
+</body>
 </html>

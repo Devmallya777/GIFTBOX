@@ -151,23 +151,32 @@ function applyFiltersAndSort() {
 
 // --- 3b. SEARCH (only active on products.html / product.html) ---
 window.performSearch = () => {
+    const path = window.location.pathname.toLowerCase();
+    const isShopPage = path.endsWith('products.html') || path.endsWith('product.html');
+    if (!isShopPage) return;
+
     const input = document.getElementById("nav-search-input");
     if (!input) return;
+    const query = input.value.trim();
 
-    const query = input.value.trim().toLowerCase();
-
-    if (query === "") {
-        currentWorkingList = [...allProducts];
-    } else {
-        currentWorkingList = allProducts.filter(product =>
-            product.name.toLowerCase().includes(query) ||
-            product.category.toLowerCase().includes(query)
-        );
+    // product.html has no grid to filter — send the user to the shop page with the query applied
+    if (!document.getElementById("product-grid")) {
+        if (query) window.location.href = `products.html?search=${encodeURIComponent(query)}`;
+        return;
     }
+
+    const q = query.toLowerCase();
+    currentWorkingList = q
+        ? allProducts.filter(product =>
+            product.name.toLowerCase().includes(q) ||
+            product.category.toLowerCase().includes(q)
+          )
+        : [...allProducts];
 
     currentGridPage = 1;
     updateProductView();
 };
+
 // --- 4. RENDER WISHLIST PAGE ---
 window.renderWishlist = () => {
     const grid = document.getElementById('wishlist-grid');
@@ -264,106 +273,91 @@ window.loadCheckoutSummary = () => {
     
     if (document.getElementById('subtotal')) document.getElementById('subtotal').innerText = `₹${subtotal}`;
     if (document.getElementById('total')) document.getElementById('total').innerText = `₹${subtotal}`;
-    /* ==========================================================
-   LOGIN CHECK BEFORE CHECKOUT
+};
+
+/* ==========================================================
+   LOGIN CHECK BEFORE CHECKOUT (now truly global — these must
+   NOT live inside loadCheckoutSummary, or they only exist on
+   checkout.html after it has already rendered once)
 ========================================================== */
-
 window.proceedToCheckout = () => {
-
     if (localStorage.getItem("zariaLoggedIn") !== "true") {
-
         localStorage.setItem("redirectAfterLogin", "checkout.html");
-
         showToast("Please login first.");
-
         setTimeout(() => {
             window.location.href = "login.html";
         }, 1200);
-
         return;
     }
-
     window.location.href = "checkout.html";
 };
+
 window.buyNow = (id, name, price, color) => {
+    // Replace cart with just this one item
+    saveData("zaria-cart", [{ id, name, price, color, quantity: 1 }]);
 
-    // Clear old cart
-    localStorage.setItem("zaria-cart", JSON.stringify([
-        {
-            id,
-            name,
-            price,
-            color,
-            quantity: 1
-        }
-    ]));
-
-    // Check login
     if (localStorage.getItem("zariaLoggedIn") !== "true") {
-
         localStorage.setItem("redirectAfterLogin", "checkout.html");
-
         showToast("Please login first.");
-
         setTimeout(() => {
             window.location.href = "login.html";
         }, 1200);
-
         return;
     }
 
     window.location.href = "checkout.html";
 };
+
+/* ==========================================================
+   LOGIN / LOGOUT (global — used by login.html, register.html,
+   and any "Skip for now" button)
+========================================================== */
+window.skipLogin = () => {
+    localStorage.removeItem("zariaLoggedIn");
+    localStorage.removeItem("redirectAfterLogin");
+    window.location.href = "index.html";
+};
+
+window.logout = () => {
+    localStorage.removeItem("zariaLoggedIn");
+    showToast("Logged out successfully.");
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 1000);
 };
 
 // --- 6. GLOBAL EVENT LISTENERS & INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
-   const searchInput = document.getElementById("nav-search-input");
 
-if (searchInput) {
+    const searchInput = document.getElementById("nav-search-input");
+    if (searchInput) {
+        searchInput.addEventListener("input", function () {
+            const value = this.value.trim();
+            if (document.getElementById("product-grid")) {
+                performSearch();
+                if (value === "") history.replaceState({}, "", "products.html");
+                else history.replaceState({}, "", "?search=" + encodeURIComponent(value));
+            }
+        });
+    }
 
-    searchInput.addEventListener("input", function () {
-
-        const value = this.value.trim();
-
-        if (document.getElementById("product-grid")) {
-
-            performSearch();
-
-            if (value === "")
-                history.replaceState({}, "", "products.html");
-            else
-                history.replaceState({}, "", "?search=" + encodeURIComponent(value));
-
-        } else {
-
-            window.location.href = "products.html?search=" + encodeURIComponent(value);
-
-        }
-
-    });
-
-}
-    
     // Page Initializers
     updateProductView();
+
     // AUTO SEARCH FROM URL
-const params = new URLSearchParams(window.location.search);
-const search = params.get("search");
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get("search");
+    if (search && document.getElementById("product-grid")) {
+        const input = document.getElementById("nav-search-input");
+        if (input) input.value = search;
+        currentWorkingList = allProducts.filter(product =>
+            product.name.toLowerCase().includes(search.toLowerCase()) ||
+            product.category.toLowerCase().includes(search.toLowerCase())
+        );
+        currentGridPage = 1;
+        updateProductView();
+    }
 
-if (search && document.getElementById("product-grid")) {
-
-    const input = document.getElementById("nav-search-input");
-    if (input) input.value = search;
-
-    currentWorkingList = allProducts.filter(product =>
-        product.name.toLowerCase().includes(search.toLowerCase()) ||
-        product.category.toLowerCase().includes(search.toLowerCase())
-    );
-
-    currentGridPage = 1;
-    updateProductView();
-}
     renderWishlist();
     renderCart();
     if (document.getElementById('checkout-items')) loadCheckoutSummary();

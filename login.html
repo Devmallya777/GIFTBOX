@@ -157,51 +157,33 @@
             if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
             // Login Logic
-            // Login Logic
-document.getElementById('zaria-login-form').addEventListener('submit', (e) => {
-    e.preventDefault();
+            document.getElementById('zaria-login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
 
-    // Save login status
-    localStorage.setItem("zariaLoggedIn", "true");
+                // Save login status
+                localStorage.setItem("zariaLoggedIn", "true");
 
-    if (typeof showToast === "function") {
-        showToast("Login successful! Welcome back.", "success");
-    }
+                if (typeof showToast === "function") {
+                    showToast("Login successful! Welcome back.", "success");
+                }
 
-    setTimeout(() => {
+                setTimeout(() => {
+                    // Check if user came here from checkout
+                    const redirect = localStorage.getItem("redirectAfterLogin");
 
-        // Check if user came here from checkout
-        const redirect = localStorage.getItem("redirectAfterLogin");
+                    if (redirect) {
+                        localStorage.removeItem("redirectAfterLogin");
+                        window.location.href = redirect;
+                    } else {
+                        window.location.href = "index.html";
+                    }
+                }, 1200);
+            });
 
-        if (redirect) {
-            localStorage.removeItem("redirectAfterLogin");
-            window.location.href = redirect;
-        } else {
-            window.location.href = "index.html";
-        }
-
-    }, 1200);
-});
-function skipLogin() {
-    localStorage.removeItem("zariaLoggedIn");
-    localStorage.removeItem("redirectAfterLogin");
-    window.location.href = "index.html";
-}
-function logout() {
-    localStorage.removeItem("zariaLoggedIn");
-    showToast("Logged out successfully.");
-
-    setTimeout(() => {
-        window.location.href = "index.html";
-    }, 1000);
-}
+            // NOTE: skipLogin() and logout() are defined globally in script.js
+            // (window.skipLogin / window.logout) so they work from this page,
+            // register.html, and anywhere else in the site.
         });
-        // Theme Guardian: Runs instantly on every page load
-    (function() {
-        if (localStorage.getItem('zaria-dark-mode') === 'true') {
-            document.body.classList.add('dark-mode');
-        }
-    })();
     </script>
 </body>
 </html>
