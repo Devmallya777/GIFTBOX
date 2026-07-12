@@ -1,10 +1,8 @@
 /* ==========================================================
-   ZARIA ULTIMATE FUNCTIONAL SCRIPT (LocalStorage Edition)
+   ZARIA ULTIMATE FUNCTIONAL SCRIPT (MongoDB Sync Edition)
    ========================================================== */
 
 // --- 0. THEME GUARDIAN (runs instantly on script load, on EVERY page) ---
-// script.js is loaded at the end of <body>, so document.body already exists here.
-// This is what makes dark/light mode global across the whole site instead of per-page.
 (function() {
     if (localStorage.getItem('zaria-dark-mode') === 'true') {
         document.body.classList.add('dark-mode');
@@ -27,22 +25,43 @@ window.showToast = (message, type = 'success') => {
     setTimeout(() => toast.remove(), 3000);
 };
 
-// --- 2. LOCALSTORAGE HELPERS ---
+// --- 2. DATABASE & LOCALSTORAGE HELPERS ---
 const getData = (key) => JSON.parse(localStorage.getItem(key)) || [];
 const saveData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 
-// Add to Cart
-window.addToCart = (id, name, price, color) => {
+// NEW: Global Async Cloud Synchronization Pipe
+async function syncCloudData(type, arrayData) {
+    const userData = localStorage.getItem("zaria_user");
+    if (!userData) return; // Ignore if user is browsing as a guest
+    
+    const user = JSON.parse(userData);
+    try {
+        await fetch(`/api/user/${type}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: user.email, [type]: arrayData })
+        });
+    } catch (err) {
+        console.error(`Failed to synchronize ${type} state to MongoDB:`, err);
+    }
+}
+
+// Add to Cart (UPDATED with Mongo Live Sync)
+window.addToCart = async (id, name, price, color) => {
     let cart = getData('zaria-cart');
     let existingItem = cart.find(item => item.id === id);
     if (existingItem) existingItem.quantity += 1;
     else cart.push({ id, name, price, color, quantity: 1 });
+    
     saveData('zaria-cart', cart);
     showToast(`${name} added to cart!`);
+    
+    // Sync update immediately to user database document array
+    await syncCloudData('cart', cart);
 };
 
-// Wishlist Logic
-window.toggleWishlist = (id, name, price, color) => {
+// Wishlist Logic (UPDATED with Mongo Live Sync)
+window.toggleWishlist = async (id, name, price, color) => {
     let wish = getData('zaria-wishlist');
     const existingIndex = wish.findIndex(item => item.id === id);
     
@@ -53,8 +72,12 @@ window.toggleWishlist = (id, name, price, color) => {
         wish.push({ id, name, price, color });
         showToast("Added to treasures! 💖");
     }
+    
     saveData('zaria-wishlist', wish);
-    if (document.getElementById('wishlist-grid')) renderWishlist(); // Auto-refresh wishlist page
+    if (document.getElementById('wishlist-grid')) renderWishlist(); // Auto-refresh page view
+    
+    // Sync update immediately to user database document array
+    await syncCloudData('wishlist', wish);
 };
 
 // --- 3. STATE MANAGEMENT & SHOP PAGE ---
@@ -80,7 +103,6 @@ function updateProductView() {
     const paginated = currentWorkingList.slice(start, start + itemsPerPage);
 
     grid.innerHTML = paginated.map(p => {
-        // Check if item is already in wishlist to color the heart
         const inWishlist = getData('zaria-wishlist').some(w => w.id === p.id);
         const heartClass = inWishlist ? 'fa-solid' : 'fa-regular';
         
@@ -101,7 +123,6 @@ function updateProductView() {
         </div>
     `}).join('');
 
-    // Re-attach hover effects manually since inline styles can be tricky
     grid.querySelectorAll('.product-image').forEach(img => {
         img.addEventListener('mouseenter', () => img.querySelector('.hover-actions').style.opacity = '1');
         img.addEventListener('mouseleave', () => img.querySelector('.hover-actions').style.opacity = '0');
@@ -149,7 +170,6 @@ function applyFiltersAndSort() {
     updateProductView();
 }
 
-// --- 3b. SEARCH (only active on products.html / product.html) ---
 window.performSearch = () => {
     const path = window.location.pathname.toLowerCase();
     const isShopPage = path.endsWith('products.html') || path.endsWith('product.html');
@@ -159,7 +179,6 @@ window.performSearch = () => {
     if (!input) return;
     const query = input.value.trim();
 
-    // product.html has no grid to filter — send the user to the shop page with the query applied
     if (!document.getElementById("product-grid")) {
         if (query) window.location.href = `products.html?search=${encodeURIComponent(query)}`;
         return;
@@ -203,7 +222,7 @@ window.renderWishlist = () => {
 };
 
 // --- 5. RENDER CART PAGE ---
-window.updateCartQty = (id, change) => {
+window.updateCartQty = async (id, change) => {
     let cart = getData('zaria-cart');
     let item = cart.find(i => i.id === id);
     if (item) {
@@ -211,6 +230,9 @@ window.updateCartQty = (id, change) => {
         if (item.quantity <= 0) cart = cart.filter(i => i.id !== id);
         saveData('zaria-cart', cart);
         renderCart();
+        
+        // Synchronize dynamic quantities to cloud profile document array
+        await syncCloudData('cart', cart);
     }
 };
 
@@ -276,12 +298,10 @@ window.loadCheckoutSummary = () => {
 };
 
 /* ==========================================================
-   LOGIN CHECK BEFORE CHECKOUT (now truly global — these must
-   NOT live inside loadCheckoutSummary, or they only exist on
-   checkout.html after it has already rendered once)
+   LOGIN CHECK BEFORE CHECKOUT (MongoDB Token Edition)
 ========================================================== */
 window.proceedToCheckout = () => {
-    if (localStorage.getItem("zariaLoggedIn") !== "true") {
+    if (!localStorage.getItem("zaria_token")) {
         localStorage.setItem("redirectAfterLogin", "checkout.html");
         showToast("Please login first.");
         setTimeout(() => {
@@ -292,11 +312,11 @@ window.proceedToCheckout = () => {
     window.location.href = "checkout.html";
 };
 
-window.buyNow = (id, name, price, color) => {
-    // Replace cart with just this one item
-    saveData("zaria-cart", [{ id, name, price, color, quantity: 1 }]);
+window.buyNow = async (id, name, price, color) => {
+    const singleProductCart = [{ id, name, price, color, quantity: 1 }];
+    saveData("zaria-cart", singleProductCart);
 
-    if (localStorage.getItem("zariaLoggedIn") !== "true") {
+    if (!localStorage.getItem("zaria_token")) {
         localStorage.setItem("redirectAfterLogin", "checkout.html");
         showToast("Please login first.");
         setTimeout(() => {
@@ -305,21 +325,25 @@ window.buyNow = (id, name, price, color) => {
         return;
     }
 
+    // Sync the buy now item to the database cloud immediately
+    await syncCloudData('cart', singleProductCart);
     window.location.href = "checkout.html";
 };
 
 /* ==========================================================
-   LOGIN / LOGOUT (global — used by login.html, register.html,
-   and any "Skip for now" button)
+   LOGIN / LOGOUT MANAGEMENT (MongoDB Token Edition)
 ========================================================== */
 window.skipLogin = () => {
-    localStorage.removeItem("zariaLoggedIn");
+    localStorage.removeItem("zaria_token");
+    localStorage.removeItem("zaria_user");
     localStorage.removeItem("redirectAfterLogin");
     window.location.href = "index.html";
 };
 
 window.logout = () => {
-    localStorage.removeItem("zariaLoggedIn");
+    localStorage.removeItem("zaria_token");
+    localStorage.removeItem("zaria_user");
+    localStorage.removeItem("redirectAfterLogin");
     showToast("Logged out successfully.");
     setTimeout(() => {
         window.location.href = "index.html";
@@ -328,6 +352,48 @@ window.logout = () => {
 
 // --- 6. GLOBAL EVENT LISTENERS & INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
+
+    // --- ADDED: DYNAMIC NAVBAR & LIVE MONGODB DOWNLOAD SYNC ---
+    const token = localStorage.getItem("zaria_token");
+    const userData = localStorage.getItem("zaria_user");
+    
+    if (token && userData) {
+        try {
+            const user = JSON.parse(userData);
+            
+            // Fetch live truth state from MongoDB on profile load
+            fetch("/api/user/sync", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: user.email })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Overwrite backup storage with live cloud data array records
+                    saveData('zaria-cart', data.cart || []);
+                    saveData('zaria-wishlist', data.wishlist || []);
+                    // Dynamic visual trigger updates
+                    renderCart();
+                    if (document.getElementById('wishlist-grid')) renderWishlist();
+                    updateProductView(); 
+                }
+            })
+            .catch(err => console.error("Error pulling database state profile:", err));
+
+            const loginLink = document.querySelector('a[href="login.html"]');
+            if (loginLink) {
+                loginLink.innerHTML = `<i class="fa-solid fa-user"></i> Logout (${user.name.split(' ')[0]})`;
+                loginLink.setAttribute("href", "#");
+                loginLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    window.logout();
+                });
+            }
+        } catch (e) {
+            console.error("Error parsing user data session state:", e);
+        }
+    }
 
     const searchInput = document.getElementById("nav-search-input");
     if (searchInput) {
@@ -341,10 +407,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Page Initializers
     updateProductView();
 
-    // AUTO SEARCH FROM URL
     const params = new URLSearchParams(window.location.search);
     const search = params.get("search");
     if (search && document.getElementById("product-grid")) {
@@ -362,7 +426,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCart();
     if (document.getElementById('checkout-items')) loadCheckoutSummary();
 
-    // Filters and Sort Listeners
     const sortDropdown = document.querySelector('.sort-dropdown');
     if (sortDropdown) sortDropdown.addEventListener('change', applyFiltersAndSort);
 
@@ -375,11 +438,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     
-    // Preloader
     const loader = document.getElementById('zaria-loader');
     if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
-    // --- DARK MODE TOGGLE (class already applied globally by the Theme Guardian above) ---
     const themeToggle = document.getElementById('theme-toggle');
     const isDark = localStorage.getItem('zaria-dark-mode') === 'true';
     if (themeToggle) themeToggle.innerText = isDark ? '☀️' : '🌙';
@@ -391,7 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
         themeToggle.innerText = newState ? '☀️' : '🌙';
     });
 
-    // Accordions
     document.querySelectorAll(".accordion").forEach(acc => {
         acc.addEventListener("click", function() {
             this.classList.toggle("active");
