@@ -17,28 +17,28 @@
             --text-muted: #d0b8bc;    
         }
         /* Styling for the Skip button */
-.btn-secondary {
-    display: inline-block;
-    padding: 15px;
-    background: transparent;
-    border: 1px solid var(--text-gold); /* Gold outline */
-    color: var(--text-gold);            /* Gold text */
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    text-align: center;
-    text-decoration: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-}
+        .btn-secondary {
+            display: inline-block;
+            padding: 15px;
+            background: transparent;
+            border: 1px solid var(--text-gold); /* Gold outline */
+            color: var(--text-gold);            /* Gold text */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
 
-.btn-secondary:hover {
-    background: var(--text-gold);      /* Fills with gold on hover */
-    color: var(--bg-wine-dark);        /* Text turns dark wine */
-}
+        .btn-secondary:hover {
+            background: var(--text-gold);      /* Fills with gold on hover */
+            color: var(--bg-wine-dark);        /* Text turns dark wine */
+        }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-wine); color: var(--text-pink); min-height: 100vh; display: flex; flex-direction: column; }
@@ -78,20 +78,15 @@
         .auth-switch a { color: var(--text-gold); text-decoration: none; font-weight: 600; }
 
         .btn-go-back { background: none; border: none; color: var(--text-gold); cursor: pointer; padding: 20px 5% 0; font-size: 0.95rem; font-weight: 600; }
-
-        /* --- FOOTER --- */
-        .zaria-footer { background-color: var(--bg-wine-dark); padding: 40px 5%; text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: auto; border-top: 1px solid rgba(208, 184, 188, 0.1); }
     </style>
 </head>
 <body class="auth-body">
 
-    <!-- PRELOADER -->
     <div id="zaria-loader">
         <div class="loader-logo">ZARIA</div>
         <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;">Entering ZARIA...</p>
     </div>
 
-    <!-- NEWS TICKER -->
     <div class="announcement-bar">
         <div class="scrolling-text">
             <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
@@ -102,7 +97,7 @@
     </div>
 
     <header class="header">
-        <div class="logo-container" onclick="window.location.href='#'">
+        <div class="logo-container" onclick="window.location.href='index.html'">
             <div class="logo-circle">Z</div>
             <div class="logo-text">
                 <h1>ZARIA</h1>
@@ -115,17 +110,17 @@
 
     <main class="auth-wrapper">
         <div class="auth-box">
-            <button type="button" onclick="skipLogin()" class="btn-secondary" style="margin-top:10px; width:100%;">Skip for now</button>
+            <button type="button" onclick="window.location.href='index.html'" class="btn-secondary" style="margin-top:10px; width:100%;">Skip for now</button>
             <h2 class="auth-title">Join ZARIA</h2>
             <p class="auth-subtitle">Create an account to track your orders, save your wishlist, and experience the fine art of gifting.</p>
             
             <form class="register-form" id="zaria-register-form">
                 <div style="display: flex; gap: 15px;">
-                    <div class="input-group" style="flex: 1;"><input type="text" placeholder="First Name" required></div>
-                    <div class="input-group" style="flex: 1;"><input type="text" placeholder="Last Name" required></div>
+                    <div class="input-group" style="flex: 1;"><input type="text" id="firstName" placeholder="First Name" required></div>
+                    <div class="input-group" style="flex: 1;"><input type="text" id="lastName" placeholder="Last Name" required></div>
                 </div>
-                <div class="input-group"><input type="email" placeholder="Email Address" required></div>
-                <div class="input-group"><input type="password" placeholder="Create Password" required></div>
+                <div class="input-group"><input type="email" id="email" placeholder="Email Address" required></div>
+                <div class="input-group"><input type="password" id="password" placeholder="Create Password" required></div>
                 
                 <button type="submit" class="btn-auth">Create Account</button>
             </form>
@@ -140,37 +135,46 @@
         <p>&copy; 2026 ZARIA. All Rights Reserved.</p>
     </footer>
 
-    <script src="script.js"></script>
     <script>
-        document.querySelector('form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    try {
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, email, password })
+        // Make sure the preloader hides nicely on window load
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('zaria-loader');
+            if (loader) loader.classList.add('hidden');
         });
 
-        const data = await response.json();
+        document.getElementById('zaria-register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Combine fields to populate full name profile schema requirements
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const name = `${firstName} ${lastName}`;
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
 
-        if (data.success) {
-            alert(data.message); // "Registration Successful"
-            window.location.href = 'login.html';
-        } else {
-            alert(data.message || 'Registration failed');
-        }
-    } catch (err) {
-        console.error('Registration Error:', err);
-        alert('Something went wrong. Please try again.');
-    }
-});
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message); 
+                    window.location.href = 'login.html';
+                } else {
+                    alert(data.message || 'Registration failed');
+                }
+            } catch (err) {
+                console.error('Registration Error:', err);
+                alert('Could not reach the ZARIA server. Make sure it is running on port 10000.');
+            }
+        });
     </script>
 </body>
 </html>
