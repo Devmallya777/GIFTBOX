@@ -142,22 +142,35 @@
 
     <script src="script.js"></script>
     <script>
-        // Registration Logic
-        document.getElementById('zaria-register-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (typeof showToast === "function") {
-                showToast("Account created successfully! Welcome to ZARIA.", "success");
-            } else {
-                alert("Account created successfully! Welcome to ZARIA.");
-            }
-            window.location.href = "login.html";
+        document.querySelector('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, password })
         });
-        // Theme Guardian: Runs instantly on every page load
-    (function() {
-        if (localStorage.getItem('zaria-dark-mode') === 'true') {
-            document.body.classList.add('dark-mode');
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert(data.message); // "Registration Successful"
+            window.location.href = 'login.html';
+        } else {
+            alert(data.message || 'Registration failed');
         }
-    })();
+    } catch (err) {
+        console.error('Registration Error:', err);
+        alert('Something went wrong. Please try again.');
+    }
+});
     </script>
 </body>
 </html>

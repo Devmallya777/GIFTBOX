@@ -156,33 +156,37 @@
             const loader = document.getElementById('zaria-loader');
             if (loader) window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 800));
 
-            // Login Logic
-            document.getElementById('zaria-login-form').addEventListener('submit', (e) => {
-                e.preventDefault();
+            document.querySelector('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-                // Save login status
-                localStorage.setItem("zariaLoggedIn", "true");
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-                if (typeof showToast === "function") {
-                    showToast("Login successful! Welcome back.", "success");
-                }
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-                setTimeout(() => {
-                    // Check if user came here from checkout
-                    const redirect = localStorage.getItem("redirectAfterLogin");
+        const data = await response.json();
 
-                    if (redirect) {
-                        localStorage.removeItem("redirectAfterLogin");
-                        window.location.href = redirect;
-                    } else {
-                        window.location.href = "index.html";
-                    }
-                }, 1200);
-            });
-
-            // NOTE: skipLogin() and logout() are defined globally in script.js
-            // (window.skipLogin / window.logout) so they work from this page,
-            // register.html, and anywhere else in the site.
+        if (data.success) {
+            // Save the secure JWT token and user info to utilize for cart/wishlist requests later
+            localStorage.setItem('zaria_token', data.token);
+            localStorage.setItem('zaria_user', JSON.stringify(data.user));
+            
+            window.location.href = 'index.html';
+        } else {
+            alert(data.message || 'Invalid credentials');
+        }
+    } catch (err) {
+        console.error('Login Error:', err);
+        alert('Connection error. Is your server running?');
+    }
+});
         });
     </script>
 </body>
