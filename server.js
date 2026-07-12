@@ -115,56 +115,28 @@ app.get("/api/product/:id", async (req, res) => {
     res.json(product);
 });
 app.post("/api/auth/register", async (req, res) => {
-
     try {
-
         const { name, email, password } = req.body;
+        
+        // ADD THIS LINE HERE TO TRACK DATA:
+        console.log("Data received at backend:", { name, email });
 
         const exists = await User.findOne({ email });
-
         if (exists) {
-
-            return res.json({
-                success:false,
-                message:"Email already exists"
-            });
-
+            return res.json({ success: false, message: "Email already exists" });
         }
 
-        const hashedPassword = await bcrypt.hash(password,10);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({ name, email, password: hashedPassword });
+        
+        // ADD THIS LINE HERE TO CONFIRM SAVE:
+        console.log("User successfully saved to DB:", user);
 
-        const user = await User.create({
-
-            name,
-
-            email,
-
-            password:hashedPassword
-
-        });
-
-        res.json({
-
-            success:true,
-
-            message:"Registration Successful"
-
-        });
-
+        res.json({ success: true, message: "Registration Successful" });
+    } catch(err) {
+        console.error("Registration API Error:", err);
+        res.status(500).json({ success: false, message: err.message });
     }
-
-    catch(err){
-
-        res.status(500).json({
-
-            success:false,
-
-            message:err.message
-
-        });
-
-    }
-
 });
 app.post("/api/auth/login", async (req,res)=>{
 
