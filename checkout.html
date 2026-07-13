@@ -75,8 +75,7 @@
 
             <aside class="checkout-summary">
                 <h3 style="font-family: 'Playfair Display', serif; color: var(--text-gold); margin-bottom: 20px;">Order Summary</h3>
-                <div id="checkout-items">
-                    </div>
+                <div id="checkout-items"></div>
                 <div class="summary-divider"></div>
                 <div class="summary-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
                 <div class="summary-row"><span>Shipping</span><span style="color: #5cb85c; font-weight: 600;">FREE</span></div>
@@ -122,7 +121,6 @@
                 const streetAddress = document.getElementById("address").value.trim();
                 const pinCode = document.getElementById("pin").value.trim();
                 
-                // Read the computed payment sum numbers directly from UI text
                 const totalText = document.getElementById("total").innerText;
                 const totalAmount = parseInt(totalText.replace(/[^\d]/g, ''));
 
@@ -135,46 +133,64 @@
                 const fullShippingAddress = `${streetAddress}, PIN: ${pinCode}`;
                 const payButton = document.getElementById("pay-btn");
                 
-                // Disable interface buttons to block dual submissions
                 payButton.disabled = true;
-                payButton.innerText = "Processing Transaction...";
+                payButton.innerText = "Opening Secure Gateway...";
 
-                // Simulate Razorpay Callback Engine Loop Generation
-                const randomPaymentId = "pay_rzp_" + Math.random().toString(36).substring(2, 15).toUpperCase();
+                // ─── OFFICIAL RAZORPAY OPENER POPUP INITIALIZATION ───
+                const options = {
+                    "key": "rzp_test_YOUR_ACTUAL_KEY_HERE", // Paste your Razorpay Test Key ID here
+                    "amount": totalAmount * 100, // Razorpay calculates transactions in Paisa
+                    "currency": "INR",
+                    "name": "ZARIA",
+                    "description": "Premium Curated Keepsake Purchase",
+                    "image": "https://d6xcmfyh68wv8.cloudfront.net/docs/payments/payment-gateway/web-integration/standard/troubleshooting-faqs",
+                    "prefill": {
+                        "email": email
+                    },
+                    "theme": {
+                        "color": "#5b1d2a"
+                    },
+                    "handler": async function (razorpayResponse) {
+                        payButton.innerText = "Finalizing Order Sync...";
+                        try {
+                            const response = await fetch('/api/order', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: email,
+                                    total: totalAmount,
+                                    address: fullShippingAddress,
+                                    paymentId: razorpayResponse.razorpay_payment_id
+                                })
+                            });
 
-                try {
-                    const response = await fetch('/api/order', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            email: email,
-                            total: totalAmount,
-                            address: fullShippingAddress,
-                            paymentId: randomPaymentId
-                        })
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        // 1. Wipe client fallback storage to sync states perfectly
-                        localStorage.setItem("zaria-cart", JSON.stringify([]));
-                        
-                        alert(`Transaction Approved!\nOrder Confirmation #${result.orderId} sent successfully.`);
-                        window.location.href = "index.html";
-                    } else {
-                        alert(result.message || "Order tracking registration dropped.");
-                        payButton.disabled = false;
-                        payButton.innerText = "Complete Payment";
+                            const result = await response.json();
+                            if (result.success) {
+                                localStorage.setItem("zaria-cart", JSON.stringify([])); // Purge local copy
+                                alert(`Payment Successful!\nOrder #${result.orderId} logged successfully.`);
+                                window.location.href = "index.html";
+                            } else {
+                                alert(result.message || "Order tracking registration dropped.");
+                                payButton.disabled = false;
+                                payButton.innerText = "Complete Payment";
+                            }
+                        } catch (err) {
+                            console.error("Database order routing drop error:", err);
+                            alert("Unable to reach transaction processing nodes.");
+                            payButton.disabled = false;
+                            payButton.innerText = "Complete Payment";
+                        }
+                    },
+                    "modal": {
+                        "ondismiss": function() {
+                            payButton.disabled = false;
+                            payButton.innerText = "Complete Payment";
+                        }
                     }
-                } catch (err) {
-                    console.error("Checkout Request Error:", err);
-                    alert("Unable to reach transaction processing nodes.");
-                    payButton.disabled = false;
-                    payButton.innerText = "Complete Payment";
-                }
+                };
+
+                const rzp1 = new Razorpay(options);
+                rzp1.open();
             });
         });
     </script>
