@@ -81,19 +81,38 @@ window.toggleWishlist = async (id, name, price, color) => {
 };
 
 // --- 3. STATE MANAGEMENT & SHOP PAGE ---
-const allProducts = [
-    { id: '1', name: "Midnight Velvet Box", price: 3499, category: "Wedding Hampers", color: "#d0b8bc" },
-    { id: '2', name: "Golden Hour Hamper", price: 5200, category: "Wedding Hampers", color: "#f9f0f0" },
-    { id: '3', name: "Classic Silk Essentials", price: 2100, category: "Festive Specials", color: "#c69c6d" },
-    { id: '4', name: "Luxury Corporate Set", price: 2800, category: "Corporate Gifting", color: "#5b1d2a" },
-    { id: '5', name: "Anniversary Bloom Box", price: 3900, category: "Anniversary", color: "#d0b8bc" },
-    { id: '6', name: "Festive Joy Hamper", price: 4500, category: "Festive Specials", color: "#c69c6d" },
-    { id: '7', name: "Extra Special Gift", price: 3200, category: "Wedding Hampers", color: "#3a1119" }
-];
-
-let currentWorkingList = [...allProducts];
+// --- 3. DYNAMIC STATE MANAGEMENT & CATALOG PIPELINE ---
+let allProducts = []; // Now starts completely empty, waiting for MongoDB
+let currentWorkingList = [];
 let currentGridPage = 1;
 const itemsPerPage = 3; 
+
+// NEW: Dynamic database loader function
+async function loadCatalogFromDatabase() {
+    try {
+        const response = await fetch("/api/products");
+        const products = await response.json();
+        
+        // Map MongoDB database records into our functional engine structure
+        allProducts = products.map(p => ({
+            id: p._id, // Assign database Object ID
+            name: p.name,
+            price: p.price,
+            category: p.category,
+            color: p.color
+        }));
+        
+        // Check if there is an active query filter in the URL before resetting the list
+        const params = new URLSearchParams(window.location.search);
+        const search = params.get("search");
+        if (!search) {
+            currentWorkingList = [...allProducts];
+            updateProductView();
+        }
+    } catch (err) {
+        console.error("Failed to download catalog items from MongoDB cluster:", err);
+    }
+}
 
 function updateProductView() {
     const grid = document.getElementById('product-grid');
@@ -352,10 +371,14 @@ window.logout = () => {
 
 // --- 6. GLOBAL EVENT LISTENERS & INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
+    
+    // NEW: Load items live from MongoDB database right when the DOM boots up
+    loadCatalogFromDatabase();
 
-    // --- ADDED: DYNAMIC NAVBAR & LIVE MONGODB DOWNLOAD SYNC ---
     const token = localStorage.getItem("zaria_token");
     const userData = localStorage.getItem("zaria_user");
+    
+    // ... rest of the existing script file layout continues exactly as before
     
     if (token && userData) {
         try {

@@ -209,16 +209,67 @@ app.post("/api/upload", upload.single("image"), (req, res) => {
     res.json({ image: "/uploads/" + req.file.filename });
 });
 
+// --- NEW: PRODUCT CATALOG DATABASE SEEDER ---
+// Run this route ONCE in your browser (http://localhost:10000/api/products/seed) to populate your database!
+app.get("/api/products/seed", async (req, res) => {
+    try {
+        const sampleProducts = [
+            { name: "Midnight Velvet Box", price: 3499, category: "Wedding Hampers", color: "#d0b8bc", description: "Luxury wedding hamper curated with premium essentials.", featured: true, trending: true, stock: 50 },
+            { name: "Golden Hour Hamper", price: 5200, category: "Wedding Hampers", color: "#f9f0f0", description: "A radiant gold-themed box celebrating beautiful milestones.", featured: true, trending: false, stock: 35 },
+            { name: "Classic Silk Essentials", price: 2100, category: "Festive Specials", color: "#c69c6d", description: "Elegant handcrafted silk elements for traditional celebrations.", featured: false, trending: true, stock: 100 },
+            { name: "Luxury Corporate Set", price: 2800, category: "Corporate Gifting", color: "#5b1d2a", description: "Sophisticated alignment choices for executive distributions.", featured: false, trending: false, stock: 20 },
+            { name: "Anniversary Bloom Box", price: 3900, category: "Anniversary", color: "#d0b8bc", description: "Timeless floral accents merged with artisanal treat layers.", featured: true, trending: true, stock: 15 },
+            { name: "Festive Joy Hamper", price: 4500, category: "Festive Specials", color: "#c69c6d", description: "Spreading warmth and celebratory abundance across seasons.", featured: false, trending: true, stock: 60 },
+            { name: "Extra Special Gift", price: 3200, category: "Wedding Hampers", color: "#3a1119", description: "Our dark wine signature keepsake presentation masterpiece.", featured: true, trending: false, stock: 10 }
+        ];
+        
+        await Product.deleteMany({}); // Clears out any old items
+        await Product.insertMany(sampleProducts);
+        res.json({ success: true, message: "Product catalog seeded into MongoDB successfully!" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// --- NEW: PRODUCT CATALOG DATABASE SEEDER ---
+// Run this route ONCE in your browser (http://localhost:10000/api/products/seed) to populate your database!
+app.get("/api/products/seed", async (req, res) => {
+    try {
+        const sampleProducts = [
+            { name: "Midnight Velvet Box", price: 3499, category: "Wedding Hampers", color: "#d0b8bc", description: "Luxury wedding hamper curated with premium essentials.", featured: true, trending: true, stock: 50 },
+            { name: "Golden Hour Hamper", price: 5200, category: "Wedding Hampers", color: "#f9f0f0", description: "A radiant gold-themed box celebrating beautiful milestones.", featured: true, trending: false, stock: 35 },
+            { name: "Classic Silk Essentials", price: 2100, category: "Festive Specials", color: "#c69c6d", description: "Elegant handcrafted silk elements for traditional celebrations.", featured: false, trending: true, stock: 100 },
+            { name: "Luxury Corporate Set", price: 2800, category: "Corporate Gifting", color: "#5b1d2a", description: "Sophisticated alignment choices for executive distributions.", featured: false, trending: false, stock: 20 },
+            { name: "Anniversary Bloom Box", price: 3900, category: "Anniversary", color: "#d0b8bc", description: "Timeless floral accents merged with artisanal treat layers.", featured: true, trending: true, stock: 15 },
+            { name: "Festive Joy Hamper", price: 4500, category: "Festive Specials", color: "#c69c6d", description: "Spreading warmth and celebratory abundance across seasons.", featured: false, trending: true, stock: 60 },
+            { name: "Extra Special Gift", price: 3200, category: "Wedding Hampers", color: "#3a1119", description: "Our dark wine signature keepsake presentation masterpiece.", featured: true, trending: false, stock: 10 }
+        ];
+        
+        await Product.deleteMany({}); // Clears out any old items
+        await Product.insertMany(sampleProducts);
+        res.json({ success: true, message: "Product catalog seeded into MongoDB successfully!" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// --- UPDATED: ORDERS ROUTE (Purges Cart array on Success) ---
 app.post("/api/order", async (req, res) => {
     try {
         const { email, total, address, paymentId } = req.body;
+        
+        // 1. Log the new order transaction record
         const newOrder = await Order.create({ email, total, address, paymentId });
 
+        // 2. NEW: Automatically purge the active user's cart array inside MongoDB
+        await User.findOneAndUpdate({ email }, { cart: [] });
+
+        // 3. Dispatch the customer alert email notification
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: email,
             subject: "Order Confirmation - ZARIA",
-            text: `Dear Customer, your order #${newOrder._id} for ${total} INR has been received.`
+            text: `Dear Customer, your order #${newOrder._id} for ${total} INR has been received. Your cart has been safely checked out.`
         });
 
         res.json({ success: true, orderId: newOrder._id });
@@ -227,7 +278,6 @@ app.post("/api/order", async (req, res) => {
         res.status(500).json({ success: false, message: err.message });
     }
 });
-
 // ==========================================================
 // --- STATIC FILE DELIVERY INTERCEPTORS (At the very bottom) ---
 // ==========================================================
