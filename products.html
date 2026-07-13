@@ -190,6 +190,16 @@
     </style>
 </head>
 <body>
+    <div id="zaria-loader" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #3a1119; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.6s ease, visibility 0.6s ease;">
+    
+    <img src="logo.png" 
+         alt="ZARIA Loader Logo" 
+         style="width: 120px; height: 120px; border-radius: 50%; border: 2px solid #c69c6d; object-fit: cover; box-shadow: 0 0 20px rgba(198, 156, 109, 0.4); display: block;">
+    
+    <p style="color: #c69c6d; margin-top: 25px; font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 600; font-family: 'Inter', sans-serif; text-align: center; margin-left: 4px;">
+        Curating Elegance...
+    </p>
+</div>
 
     <div class="announcement-bar">
         <div class="scrolling-text">
@@ -206,13 +216,15 @@
     </div>
 
     <header class="header">
-        <div class="logo-container" onclick="window.location.href='index.html'">
-            <div class="logo-circle">Z</div>
-            <div class="logo-text">
-                <h1>ZARIA</h1>
-                <span>The Art of Gifting</span>
-            </div>
-        </div>
+        <div class="logo-container" onclick="window.location.href='index.html'" style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+    <img src="logo.png" 
+         alt="ZARIA Custom Logo" 
+         style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid var(--text-gold);">
+    <div class="logo-text">
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--text-gold); letter-spacing: 2px; margin: 0;">ZARIA</h1>
+        <span style="font-size: 0.6rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; display: block; margin-top: 2px;">The Art of Gifting</span>
+    </div>
+</div>
 
         <nav class="nav-links">
             <a href="index.html">Home</a>
@@ -315,12 +327,15 @@
     <footer class="zaria-footer">
         <div class="footer-top">
             <div class="footer-column brand-column">
-                <div class="logo-container" style="margin-bottom: 20px;">
-                    <div class="logo-circle" style="background: transparent; border: 1px solid var(--text-gold);">Z</div>
-                    <div class="logo-text">
-                        <h1 style="color: var(--text-gold);">ZARIA</h1>
-                    </div>
-                </div>
+                <div class="logo-container" onclick="window.location.href='index.html'" style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+    <img src="logo.png" 
+         alt="ZARIA Custom Logo" 
+         style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid var(--text-gold);">
+    <div class="logo-text">
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--text-gold); letter-spacing: 2px; margin: 0;">ZARIA</h1>
+        <span style="font-size: 0.6rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; display: block; margin-top: 2px;">The Art of Gifting</span>
+    </div>
+</div>
                 <p>The Art of Gifting. Handcrafted hampers for the moments that matter, curated with intention and delivered with warmth.</p>
                 <div class="social-icons">
                     <a href="#"><i class="fa-brands fa-facebook-f"></i></a>

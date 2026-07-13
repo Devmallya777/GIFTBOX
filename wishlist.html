@@ -49,6 +49,10 @@
             100% { transform: translateX(-50%); } 
         }
     </style>
+    <div id="zaria-loader">
+    <img src="logo.png" alt="ZARIA Loader Logo" class="loader-logo-img">
+    <p style="color: var(--text-gold); margin-top: 20px; font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 600;">Curating Elegance...</p>
+</div>
     <div class="announcement-bar">
         <div class="scrolling-text">
             <span>+ FREE SHIPPING ON ORDERS ABOVE ₹2,499</span>
@@ -99,12 +103,15 @@
         <footer class="zaria-footer">
         <div class="footer-top">
             <div class="footer-column brand-column">
-                <div class="logo-container" style="margin-bottom: 20px;">
-                    <img src="logo.png" alt="ZARIA Logo" class="logo-img">
-                    <div class="logo-text">
-                        <h1 style="color: var(--text-gold);">ZARIA</h1>
-                    </div>
-                </div>
+                <div class="logo-container" onclick="window.location.href='index.html'" style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+    <img src="logo.png" 
+         alt="ZARIA Custom Logo" 
+         style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid var(--text-gold);">
+    <div class="logo-text">
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--text-gold); letter-spacing: 2px; margin: 0;">ZARIA</h1>
+        <span style="font-size: 0.6rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; display: block; margin-top: 2px;">The Art of Gifting</span>
+    </div>
+</div>
                 <p>The Art of Gifting. Handcrafted hampers for the moments that matter, curated with intention and delivered with warmth.</p>
                 <div class="social-icons">
                     <a href="#"><i class="fa-brands fa-facebook-f"></i></a>

@@ -1960,44 +1960,48 @@ body.wishlist-body {
 /* =========================================
    17. LUXURY PRELOADER
    ========================================= */
-.zaria-loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--bg-wine);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999; /* Forces it to the absolute top layer */
-    transition: opacity 0.8s ease, visibility 0.8s ease;
+/* --- UPDATED LUXURY LOGO PRELOADER ANIMATION --- */
+#zaria-loader { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: var(--bg-wine-dark); 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 99999; /* Keeps it strictly above all overlays */
+    transition: opacity 0.6s ease, visibility 0.6s ease; 
+}
+#zaria-loader.hidden { 
+    opacity: 0; 
+    visibility: hidden; 
 }
 
-.loader-logo {
-    text-align: center;
-    animation: pulseLogo 1.5s infinite alternate ease-in-out;
+/* Pulsing and glowing loop animation for your logo */
+.loader-logo-img { 
+    width: 100px; 
+    height: 100px; 
+    border-radius: 50%; 
+    border: 2px solid var(--text-gold);
+    object-fit: cover;
+    animation: luxuryPulse 1.8s infinite ease-in-out; 
+    box-shadow: 0 0 20px rgba(198, 156, 109, 0.2);
 }
 
-@keyframes pulseLogo {
-    0% { transform: scale(0.95); opacity: 0.7; }
-    100% { transform: scale(1.05); opacity: 1; }
-}
-
-/* JavaScript will add this class to fade it out smoothly */
-.zaria-loader.hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-.site-logo {
-    height: 50px; /* Adjust this number to make your logo bigger or smaller */
-    width: auto;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-}
-
-.site-logo:hover {
-    transform: scale(1.05); /* Gives it a slight pop when hovered */
+@keyframes luxuryPulse { 
+    0%, 100% { 
+        transform: scale(0.92); 
+        box-shadow: 0 0 15px rgba(198, 156, 109, 0.2);
+        opacity: 0.8; 
+    } 
+    50% { 
+        transform: scale(1.05); 
+        box-shadow: 0 0 30px rgba(198, 156, 109, 0.5);
+        opacity: 1; 
+    } 
 }
 /* =========================================
    18. PRODUCT PAGE ACCORDION (FIXED)
