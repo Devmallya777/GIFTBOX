@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Midnight Velvet Box | ZARIA</title>
+    <title>Product Treasures | ZARIA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     
     <style>
         /* --- 1. HIGH-CONTRAST LUXURY COLOR CODES --- */
@@ -54,7 +53,7 @@
         .nav-search-input::placeholder { color: var(--text-muted); }
 
         /* --- PRODUCT PAGE LAYOUT --- */
-        .btn-go-back { background: none; border: none; color: var(--text-gold); cursor: pointer; padding: 15px 5% 0; font-size: 0.95rem; font-weight: 600; transition: 0.3s; text-align: left; display: inline-block; }
+        .btn-go-back { background: none; border: none; color: var(--text-gold); cursor: pointer; padding: 15px 5% 0; font-size: 0.95rem; font-weight: 600; transition: 0.3s; text-align: left; display: inline-block; text-decoration: none; }
         .btn-go-back:hover { color: var(--text-pink); transform: translateX(-5px); }
 
         .single-product-wrapper { padding: 20px 5% 60px; flex: 1; }
@@ -67,9 +66,9 @@
         
         /* Gallery */
         .product-gallery { flex: 1; }
-        .main-image { height: 500px; border-radius: 12px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: background-color 0.3s; }
+        .main-image { height: 500px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: background-color 0.3s; }
         .thumbnail-row { display: flex; gap: 15px; }
-        .thumbnail { width: 80px; height: 80px; border-radius: 8px; cursor: pointer; opacity: 0.5; transition: 0.3s; background-size: cover; background-position: center; border: 2px solid transparent;}
+        .thumbnail { width: 80px; height: 80px; border-radius: 8px; cursor: pointer; opacity: 0.5; transition: 0.3s; border: 2px solid transparent;}
         .thumbnail.active-thumb, .thumbnail:hover { opacity: 1; border-color: var(--text-gold); transform: translateY(-3px);}
 
         /* Details */
@@ -171,33 +170,31 @@
             <a href="wishlist.html" title="Wishlist"><i class="fa-regular fa-heart"></i></a>
             <a href="cart.html" title="Shopping Cart"><i class="fa-solid fa-bag-shopping"></i></a>
             <a href="login.html" title="My Account"><i class="fa-regular fa-user"></i></a>
-            <!-- Replace your old theme-toggle button with this -->
             <button type="button" id="theme-toggle" title="Toggle Dark Mode" style="background:none; border:none; cursor:pointer; font-size:1.2rem; color:inherit;">🌙</button>
         </div>
     </header>
 
-    <button type="button" onclick="window.history.back()" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> GO BACK</button>
+    <a href="products.html" class="btn-go-back"><i class="fa-solid fa-arrow-left"></i> GO BACK</a>
     
     <main class="single-product-wrapper">
-        
         <div class="product-breadcrumbs">
-            <a href="index.html">Home</a> / <a href="products.html">Shop All</a> / <span>The Midnight Velvet Box</span>
+            <a href="index.html">Home</a> / <a href="products.html">Shop All</a> / <span class="breadcrumb-current">Keepsake Treasure</span>
         </div>
 
         <div class="product-layout">
             <div class="product-gallery">
-                <div class="main-image" id="mainImage" style="background-color: #D1BFC0;"></div>
+                <div class="main-image" id="mainImage" style="background-color: #3a1119;"></div>
                 
                 <div class="thumbnail-row">
-                    <div class="thumbnail active-thumb" style="background-color: #D1BFC0;" onclick="changeImage(this, '#D1BFC0')"></div>
-                    <div class="thumbnail" style="background-color: #D4AF37;" onclick="changeImage(this, '#D4AF37')"></div>
-                    <div class="thumbnail" style="background-color: #F9F6F0;" onclick="changeImage(this, '#F9F6F0')"></div>
-                    <div class="thumbnail" style="background-color: #3a1119;" onclick="changeImage(this, '#3a1119')"></div>
+                    <div class="thumbnail active-thumb" id="thumb-1" style="background-color: #3a1119;"></div>
+                    <div class="thumbnail" id="thumb-2" style="background-color: #D4AF37;"></div>
+                    <div class="thumbnail" id="thumb-3" style="background-color: #F9F6F0;"></div>
+                    <div class="thumbnail" id="thumb-4" style="background-color: #c69c6d;"></div>
                 </div>
             </div>
 
             <div class="product-details">
-                <h2 class="product-title">The Midnight Velvet Box</h2>
+                <h2 class="product-title">Loading Box...</h2>
                 
                 <div class="product-reviews">
                     <div class="stars">
@@ -206,10 +203,10 @@
                     <span class="review-count">(128 Customer Reviews)</span>
                 </div>
 
-                <p class="product-price">₹3,499</p>
+                <p class="product-price">₹0</p>
 
                 <p class="product-description">
-                    The ultimate expression of luxury. Encased in a handcrafted velvet box, this hamper features artisanal dark chocolates, a vintage brass candle holder, and our signature ZARIA silk ribbon. Perfect for weddings and grand milestones.
+                    Retrieving description details directly from our premium MongoDB cloud database cluster records...
                 </p>
 
                 <ul class="product-features">
@@ -220,18 +217,16 @@
 
                 <div class="product-actions">
                     <div style="display: flex; gap: 15px; margin-bottom: 10px;">
-                        <button type="button" class="btn-add-cart" onclick="addToCart('1', 'Midnight Velvet Box', 3499, '#d0b8bc')">Add to Cart</button>
-                        
-                        <button type="button" class="btn-buy-now" onclick="buyNow('1', 'Midnight Velvet Box', 3499, '#d0b8bc')">Buy it Now</button>
+                        <button type="button" class="btn-add-cart" id="dynamic-add-cart-btn">Add to Cart</button>
+                        <button type="button" class="btn-buy-now" id="dynamic-buy-btn">Buy it Now</button>
                     </div>
-
-                    <a href="#" class="btn-add-wishlist" onclick="event.preventDefault(); toggleWishlist('1', 'Midnight Velvet Box', 3499, '#d0b8bc')"><i class="fa-regular fa-heart"></i> Add to VIP Wishlist</a>
+                    <a href="#" class="btn-add-wishlist" id="dynamic-wish-btn"><i class="fa-regular fa-heart"></i> Add to VIP Wishlist</a>
                 </div>
 
                 <div class="accordion-wrapper">
                     <button type="button" class="accordion">What's Inside? <i class="fa-solid fa-chevron-down"></i></button>
                     <div class="panel">
-                        <p style="padding: 15px 0;">Each Midnight Velvet Box contains 12 artisan dark chocolates, one vintage brass candle holder, and a signature ZARIA hand-tied silk ribbon.</p>
+                        <p style="padding: 15px 0;" id="dynamic-inside-content">Each premium presentation hamper is hand-tied with custom silk ribbons and includes curated artisanal additions.</p>
                     </div>
 
                     <button type="button" class="accordion">Shipping & Returns <i class="fa-solid fa-chevron-down"></i></button>
@@ -239,7 +234,6 @@
                         <p style="padding: 15px 0;">We offer free shipping on all orders over ₹2,499. Returns are accepted within 7 days of delivery if the item is in original condition.</p>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
@@ -317,38 +311,78 @@
 
     <script src="script.js"></script>
     <script>
-        // Cleaned Inline Logic (Removed conflicting accordion code!)
-        function changeImage(element, colorOrImageSrc) {
-            document.getElementById('mainImage').style.backgroundColor = colorOrImageSrc;
+        // Color Thumbnail Switcher Engine
+        function changeImage(element, targetColor) {
+            document.getElementById('mainImage').style.backgroundColor = targetColor;
             document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active-thumb'));
             element.classList.add('active-thumb');
         }
-        document.addEventListener("DOMContentLoaded", () => {
-        const params = new URLSearchParams(window.location.search);
-        const productId = params.get('id');
-        
-        // This array must match your script.js 'allProducts' list exactly
-        const allProducts = [
-            { id: '1', name: "Midnight Velvet Box", price: 3499, color: "#d0b8bc" },
-            { id: '2', name: "Golden Hour Hamper", price: 5200, color: "#f9f0f0" }
-        ];
 
-        const product = allProducts.find(p => p.id === productId);
-        
-        if (product) {
-            document.querySelector('.product-title').innerText = product.name;
-            document.querySelector('.product-price').innerText = "₹" + product.price;
-            document.getElementById('mainImage').style.backgroundColor = product.color;
-            // Update Add to Cart button dynamically
-            document.querySelector('.btn-add-cart').setAttribute('onclick', `addToCart('${product.id}', '${product.name}', ${product.price}, '${product.color}')`);
-        }
-    });
-    // Theme Guardian: Runs instantly on every page load
-    (function() {
-        if (localStorage.getItem('zaria-dark-mode') === 'true') {
-            document.body.classList.add('dark-mode');
-        }
-    })();
+        document.addEventListener("DOMContentLoaded", async () => {
+            // 1. Extract the unique Object ID parameters from the URL string
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                alert("No product specified. Returning to shop gallery.");
+                window.location.href = "products.html";
+                return;
+            }
+
+            try {
+                // 2. Query your live backend endpoint
+                const response = await fetch(`/api/product/${productId}`);
+                const product = await response.json();
+
+                if (!product || product.message) {
+                    alert("Product records not found inside our database catalog.");
+                    window.location.href = "products.html";
+                    return;
+                }
+
+                // 3. Populate your layout elements with live data truth
+                document.querySelector('.product-title').innerText = product.name;
+                document.querySelector('.product-price').innerText = "₹" + product.price.toLocaleString('en-IN');
+                document.querySelector('.product-description').innerText = product.description || "A luxury signature presentation keepsake from the premium ZARIA collections.";
+                document.querySelector('.breadcrumb-current').innerText = product.name;
+                
+                // Set main container colors based on current selection
+                const mainColor = product.color || "#3a1119";
+                document.getElementById('mainImage').style.backgroundColor = mainColor;
+
+                // Sync accordion inner context descriptive texts dynamically
+                document.getElementById('dynamic-inside-content').innerText = `Each ${product.name} container includes curated artisanal choices tailored to its themed classification.`;
+
+                // Setup dynamic interaction thumbnail color palettes
+                document.getElementById('thumb-1').style.backgroundColor = mainColor;
+                document.getElementById('thumb-1').onclick = function() { changeImage(this, mainColor); };
+                document.getElementById('thumb-4').style.backgroundColor = mainColor;
+                document.getElementById('thumb-4').onclick = function() { changeImage(this, mainColor); };
+
+                // 4. Bind global data pipes cleanly to button clicks
+                document.getElementById('dynamic-add-cart-btn').onclick = () => {
+                    if (typeof window.addToCart === "function") {
+                        window.addToCart(product._id, product.name, product.price, mainColor);
+                    }
+                };
+
+                document.getElementById('dynamic-buy-btn').onclick = () => {
+                    if (typeof window.buyNow === "function") {
+                        window.buyNow(product._id, product.name, product.price, mainColor);
+                    }
+                };
+
+                document.getElementById('dynamic-wish-btn').onclick = (e) => {
+                    e.preventDefault();
+                    if (typeof window.toggleWishlist === "function") {
+                        window.toggleWishlist(product._id, product.name, product.price, mainColor);
+                    }
+                };
+
+            } catch (err) {
+                console.error("Failed to load custom product view:", err);
+            }
+        });
     </script>
 </body>
 </html>
