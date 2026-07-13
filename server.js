@@ -258,20 +258,27 @@ app.post("/api/order", async (req, res) => {
     try {
         const { email, total, address, paymentId } = req.body;
         
-        // 1. Log the new order transaction record
+        // 1. Log the order record safely into MongoDB
         const newOrder = await Order.create({ email, total, address, paymentId });
 
-        // 2. NEW: Automatically purge the active user's cart array inside MongoDB
+        // 2. Clear out the cloud cart array inside MongoDB Atlas
         await User.findOneAndUpdate({ email }, { cart: [] });
 
-        // 3. Dispatch the customer alert email notification
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: "Order Confirmation - ZARIA",
-            text: `Dear Customer, your order #${newOrder._id} for ${total} INR has been received. Your cart has been safely checked out.`
-        });
+        // 3. Wrap email delivery in a separate try-catch so it doesn't crash checkout if Gmail fails
+        try {
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: "Order Confirmation - ZARIA",
+                text: `Dear Customer, your order #${newOrder._id} for ${total} INR has been received.`
+            });
+            console.log("Confirmation email dispatched smoothly.");
+        } catch (emailErr) {
+            // Logs the mail error to your terminal panel, but lets the code continue!
+            console.error("Nodemailer routing failure, proceeding anyway:", emailErr.message);
+        }
 
+        // Return a clean success status to trigger frontend cart wipes
         res.json({ success: true, orderId: newOrder._id });
     } catch (err) {
         console.error("Order API Error:", err);
