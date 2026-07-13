@@ -2,12 +2,38 @@
    ZARIA ULTIMATE FUNCTIONAL SCRIPT (MongoDB Sync Edition)
    ========================================================== */
 
+// --- AUTOMATED INJECTOR ENGINE FOR RESPONSIVE LAYER ---
+/* ==========================================================
+   ZARIA ULTIMATE FUNCTIONAL SCRIPT (MongoDB Sync Edition)
+   ========================================================== */
+
+// --- SMART CONDITIONAL INJECTOR ENGINE FOR RESPONSIVE LAYER ---
+(function injectResponsiveStyles() {
+    // 1. Check if the page is ALREADY connected to your main style.css file
+    const hasMainStyleSheet = !!document.querySelector('link[href*="style.css"]');
+    
+    // 2. If it DOES NOT have style.css, check if responsive.css is missing, then inject it
+    if (!hasMainStyleSheet) {
+        if (!document.querySelector('link[href="responsive.css"]')) {
+            const linkElement = document.createElement("link");
+            linkElement.rel = "stylesheet";
+            linkElement.type = "text/css";
+            linkElement.href = "responsive.css";
+            document.head.appendChild(linkElement);
+            console.log("ZARIA Routing Engine: Detected unlinked page. Injected responsive.css fallback.");
+        }
+    } else {
+        console.log("ZARIA Routing Engine: Page is native to style.css. Skipping duplicate injection.");
+    }
+})();
+
 // --- 0. THEME GUARDIAN (runs instantly on script load, on EVERY page) ---
 (function() {
     if (localStorage.getItem('zaria-dark-mode') === 'true') {
         document.body.classList.add('dark-mode');
     }
 })();
+
 
 // --- 1. TOAST SYSTEM ---
 window.showToast = (message, type = 'success') => {
@@ -80,7 +106,6 @@ window.toggleWishlist = async (id, name, price, color) => {
     await syncCloudData('wishlist', wish);
 };
 
-// --- 3. STATE MANAGEMENT & SHOP PAGE ---
 // --- 3. DYNAMIC STATE MANAGEMENT & CATALOG PIPELINE ---
 let allProducts = []; // Now starts completely empty, waiting for MongoDB
 let currentWorkingList = [];
@@ -377,8 +402,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const token = localStorage.getItem("zaria_token");
     const userData = localStorage.getItem("zaria_user");
-    
-    // ... rest of the existing script file layout continues exactly as before
     
     if (token && userData) {
         try {

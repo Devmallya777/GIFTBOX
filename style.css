@@ -3804,4 +3804,149 @@ body.faq-body {
 .btn-go-back:hover {
     color: var(--bg-wine);
 }
+/* ==========================================================
+   ZARIA CORE SHOP MEDIA ENGINE: MOBILE RESPONSIVE LAYER
+   ========================================================== */
 
+@media screen and (max-width: 768px) {
+    
+    /* 1. GLOBAL LAYOUT BOUNDARY RESET */
+    * {
+        box-sizing: border-box !important;
+    }
+    body {
+        padding: 0 !important;
+        overflow-x: hidden !important;
+    }
+
+    /* 2. HEADER NAVIGATION STACKING */
+    .header {
+        flex-direction: column !important;
+        gap: 15px !important;
+        padding: 15px 5% !important;
+        text-align: center !important;
+    }
+    .nav-links {
+        gap: 12px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    .nav-links a {
+        font-size: 0.75rem !important;
+        letter-spacing: 1px !important;
+    }
+    .header-icons {
+        width: 100% !important;
+        justify-content: center !important;
+        gap: 15px !important;
+    }
+    .search-container {
+        width: 100% !important;
+        max-width: 200px !important;
+    }
+
+    /* 3. PRODUCTS GRID MANAGEMENT (products.html) */
+    #product-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+        justify-content: center !important;
+        width: 100% !important;
+        padding: 10px !important;
+    }
+    .product-card {
+        width: 100% !important;
+        max-width: 320px !important;
+        margin: 0 auto !important;
+    }
+    .product-card .product-image {
+        height: 240px !important;
+    }
+
+    /* 4. PRODUCT SINGLE DETAIL MATRIX (product.html) */
+    .product-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 25px !important;
+        padding: 10px !important;
+    }
+    .product-gallery, .product-details {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    .main-image {
+        height: 280px !important;
+    }
+    .thumbnail-row {
+        gap: 8px !important;
+    }
+    .thumbnail {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    .product-title {
+        font-size: 1.8rem !important;
+    }
+
+    /* 5. SECURE CHECKOUT PAGE CONTROL (checkout.html) */
+    .checkout-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+    .checkout-forms {
+        order: 1 !important;
+        width: 100% !important;
+    }
+    .checkout-summary {
+        order: 2 !important;
+        width: 100% !important;
+        padding: 20px !important;
+    }
+
+    /* 6. DYNAMIC CART LAYOUT (cart.html) */
+    .cart-header {
+        display: none !important;
+    }
+    .cart-item {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
+    .item-info {
+        flex-direction: column !important;
+        text-align: center !important;
+    }
+    .item-quantity {
+        display: flex !important;
+        justify-content: center !important;
+    }
+    .item-total {
+        text-align: center !important;
+        padding-top: 5px !important;
+    }
+
+    /* 7. LUXURY FOOTER ROW RESPONSIVENESS */
+    .footer-top {
+        grid-template-columns: 1fr !important;
+        gap: 25px !important;
+        text-align: center !important;
+    }
+    .newsletter-form {
+        max-width: 100% !important;
+    }
+    .social-icons, .payment-icons {
+        justify-content: center !important;
+    }
+    .footer-bottom {
+        flex-direction: column !important;
+        gap: 10px !important;
+        text-align: center !important;
+    }
+    .legal-links a {
+        margin: 0 8px !important;
+    }
+}
